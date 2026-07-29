@@ -1,0 +1,25 @@
+{
+  "name": "motocortex",
+  "version": "0.0.1",
+  "description": "把一个粗糙的 goal,经收集 context 与追问澄清,产出一套可交给自动 agent 运行的文档(VISION / DOR / DOD / LOOP / PROGRESS),并驱动它自主跑到完成。",
+  "author": {
+    "name": "DJJ"
+  },
+  "repository": "https://github.com/TokenRollAI/motocortex",
+  "license": "MIT",
+  "keywords": [
+    "agent-coding",
+    "skills",
+    "workflow",
+    "definition-of-done",
+    "definition-of-ready",
+    "autonomous-agent"
+  ],
+  "skills": [
+    "./skills/start",
+    "./skills/grill",
+    "./skills/frame",
+    "./skills/loop",
+    "./skills/goal"
+  ]
+}
