@@ -1,0 +1,20 @@
+{
+  "name": "motocortex",
+  "interface": {
+    "displayName": "motocortex"
+  },
+  "plugins": [
+    {
+      "name": "motocortex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/motocortex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "engineering"
+    }
+  ]
+}

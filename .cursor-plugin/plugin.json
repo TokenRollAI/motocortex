@@ -1,0 +1,6 @@
+{
+  "name": "motocortex",
+  "description": "把粗糙 goal 变成可交给自动 agent 运行的文档流程(VISION / DOR / DOD / LOOP / PROGRESS),并驱动它自主跑到完成或只剩 blocker。",
+  "version": "1.0.0",
+  "skills": "./skills/"
+}

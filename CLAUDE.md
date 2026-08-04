@@ -36,14 +36,19 @@ model-invoked 的 `description` 保留富 trigger 措辞("Use when …");user-in
 - `.claude-plugin/plugin.json` 的 `skills` 数组。
 - 若日后加 router skill,它的路由图必须随之同步——路由里有它没提的 skill、或指向已删的 skill,就是个会撒谎的路由。
 
-## 只维护 claude 这一份,其余 runtime 由 acplugin 生成
+## 只维护 claude 这一份,其余 runtime 由 acplugin 生成后一并提交
 
-source of truth 只有 `skills/` + `.claude-plugin/`。Codex / OpenCode / Cursor / Antigravity / pi 这些 runtime 的 plugin 目录(`.agent/`、`.agents/`、`.codex-plugin/`、`.cursor-plugin/`、`.opencode/`、`.pi/`)都是生成物,已在 `.gitignore` 里忽略——别手改它们,改了也会被下次生成覆盖。
+source of truth 只有 `skills/` + `.claude-plugin/`。Codex / OpenCode / Cursor / Antigravity / pi 这些 runtime 的 plugin 目录(`.agents/`、`.codex-plugin/`、`.cursor-plugin/`、`.opencode/`、`.pi/`)都是生成物——**别手改它们,改了也会被下次生成覆盖**。（Cursor 复用顶层 `skills/`,那是源不是镜像。)
 
-改完 claude 的 skill 或 plugin 后,重新生成其余格式:
+这些生成目录**提交进仓库**,让用户 clone 即用、不依赖 acplugin。脏活维护者扛:改完 claude 的 skill 或 plugin 后,重新生成其余格式再一起提交:
 
 ```
 npx -y acplugin convert . --to codex,opencode,cursor,antigravity,pi --all
 ```
+
+跑完注意两件事:
+
+1. acplugin 会把 `.gitignore` 覆盖成只剩 `.llmdoc-tmp/`——正好是我们要的,但若它以后又开始往里塞生成目录,`git checkout .gitignore` 恢复。
+2. 生成目录已在 `.gitattributes` 里标成 `linguist-generated`,GitHub review 时默认折叠、你只需盯 `skills/` + `.claude-plugin/`。新增 runtime 目录时记得往 `.gitattributes` 补一行。
 
 （[acplugin](https://github.com/tokenRollAI/acplugin) 把 Claude Code plugin 转成其他 agent runtime 的格式。跑之前先 `npx -y acplugin scan .` 确认扫到的 skill 齐了。）

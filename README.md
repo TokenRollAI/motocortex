@@ -58,11 +58,14 @@ Or symlink the directories under `skills/` into your skills directory (e.g. `~/.
 
 ### Other runtimes (Codex / OpenCode / Cursor / Antigravity / pi)
 
-This repo only ships the Claude format. The source of truth is `skills/` + `.claude-plugin/`; every other runtime's format is generated on demand with [acplugin](https://github.com/tokenRollAI/acplugin) rather than committed here. Convert straight from GitHub into your own machine:
+Each runtime's format is already generated and committed — clone and use it, no acplugin needed. Point your runtime at the matching directory:
 
-```
-# pick your target(s): codex,opencode,cursor,antigravity,pi
-npx -y acplugin convert TokenRollAI/motocortex --to cursor -o ~/some/dir --all
-```
+| runtime | entry / skills dir |
+|---|---|
+| Codex | `.codex-plugin/plugin.json` (skills under `.agents/skills/`) |
+| Antigravity | `.agents/` (`.agents/plugins/marketplace.json`) |
+| Cursor | `.cursor-plugin/` + top-level `skills/` |
+| OpenCode | `.opencode/skills/` |
+| pi | `.pi/skills/` |
 
-Then point that runtime at the generated directory (Cursor and Codex also get a `marketplace.json`). Run `npx -y acplugin scan TokenRollAI/motocortex` first to confirm all five skills are picked up.
+These are [acplugin](https://github.com/tokenRollAI/acplugin) mirrors generated from `skills/` + `.claude-plugin/` — don't edit them by hand.

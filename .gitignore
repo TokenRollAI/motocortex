@@ -1,9 +1,1 @@
 .llmdoc-tmp/
-
-# Generated harness distribution mirrors (source of truth is skills/ + .claude-plugin/)
-.agent/
-.agents/
-.codex-plugin/
-.cursor-plugin/
-.opencode/
-.pi/

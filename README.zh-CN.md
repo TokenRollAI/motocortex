@@ -57,11 +57,14 @@
 
 ### 其他 runtime(Codex / OpenCode / Cursor / Antigravity / pi)
 
-本仓库只发布 Claude 格式。source of truth 是 `skills/` + `.claude-plugin/`;其余 runtime 的格式不进仓库,而是用 [acplugin](https://github.com/tokenRollAI/acplugin) 按需现转。可以直接从 GitHub 转到你本地:
+各 runtime 的格式已经生成好、直接躺在仓库里,clone 即用,不需要装 acplugin。把对应目录接到你的 runtime 就行:
 
-```
-# 目标平台自选:codex,opencode,cursor,antigravity,pi
-npx -y acplugin convert TokenRollAI/motocortex --to cursor -o ~/某目录 --all
-```
+| runtime | 入口 / skills 目录 |
+|---|---|
+| Codex | `.codex-plugin/plugin.json`(skills 在 `.agents/skills/`) |
+| Antigravity | `.agents/`(`.agents/plugins/marketplace.json`) |
+| Cursor | `.cursor-plugin/` + 顶层 `skills/` |
+| OpenCode | `.opencode/skills/` |
+| pi | `.pi/skills/` |
 
-转完把对应 runtime 指向生成目录即可(Cursor、Codex 还会带一份 `marketplace.json`)。转之前可先 `npx -y acplugin scan TokenRollAI/motocortex` 确认五个 skill 都被扫到。
+这些目录都是 [acplugin](https://github.com/tokenRollAI/acplugin) 从 `skills/` + `.claude-plugin/` 生成的镜像,别手改。
