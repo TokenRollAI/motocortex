@@ -68,3 +68,17 @@
 | pi | `.pi/skills/` |
 
 这些目录都是 [acplugin](https://github.com/tokenRollAI/acplugin) 从 `skills/` + `.claude-plugin/` 生成的镜像,别手改。
+
+#### Codex CLI
+
+Codex 从 `.agents/skills/` 读 skill——既扫仓库级(从 `$CWD` 向上到仓库根),也扫用户级(`$HOME/.agents/skills`),并且跟随软链接。所以有两种装法:
+
+- **按仓库(零配置)**:把 motocortex clone 进你的项目(或加为 submodule),让 `.agents/skills/` 位于你启动 Codex 的目录或其上层。Codex 会自动发现这五个 skill;没出现就重启 Codex。
+- **全局(所有仓库)**:把生成的 skill 软链到 home 目录。
+
+  ```
+  mkdir -p ~/.agents/skills
+  ln -s "$(pwd)"/.agents/skills/* ~/.agents/skills/
+  ```
+
+两种都基于 [Codex 的 skill 发现机制](https://developers.openai.com/codex/skills)。想临时停用某个 skill 又不删,在 `~/.codex/config.toml` 里加 `[[skills.config]]` 条目。

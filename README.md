@@ -69,3 +69,17 @@ Each runtime's format is already generated and committed — clone and use it, n
 | pi | `.pi/skills/` |
 
 These are [acplugin](https://github.com/tokenRollAI/acplugin) mirrors generated from `skills/` + `.claude-plugin/` — don't edit them by hand.
+
+#### Codex CLI
+
+Codex reads skills from `.agents/skills/` — repo-level (`$CWD` up to repo root) and user-level (`$HOME/.agents/skills`), and it follows symlinks. So you have two options:
+
+- **Per repo (zero config):** clone motocortex into your project (or add it as a submodule) so `.agents/skills/` sits at or above where you launch Codex. Codex discovers the five skills automatically; restart Codex if they don't show up.
+- **Globally (all repos):** symlink the generated skills into your home folder.
+
+  ```
+  mkdir -p ~/.agents/skills
+  ln -s "$(pwd)"/.agents/skills/* ~/.agents/skills/
+  ```
+
+Both are backed by [Codex's skill discovery](https://developers.openai.com/codex/skills). To disable one without deleting it, add a `[[skills.config]]` entry in `~/.codex/config.toml`.
