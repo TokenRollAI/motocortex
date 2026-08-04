@@ -2,6 +2,8 @@
 
 这里是 skill 的仓库。改它时维持下面的不变量。
 
+`AGENTS.md` 是指向本文件的软链接(`ln -s CLAUDE.md AGENTS.md`),给不读 `CLAUDE.md` 的 runtime 用。两者永远同一份内容,只改这个文件,别把 `AGENTS.md` 变成独立副本。
+
 ## 分层:SKILL.md 只讲怎么想,模板单独放
 
 每个 SKILL.md 只写 **discipline(纪律与判断力)**——怎么想、怎么判定、边界在哪。**要照抄的交付物骨架不写进 SKILL.md**,收到该 skill 目录下的 `templates/` 子目录(一个产物一个文件,如 `templates/VISION.md`),SKILL.md 用一句话把它指出来(context pointer)。
@@ -33,3 +35,15 @@ model-invoked 的 `description` 保留富 trigger 措辞("Use when …");user-in
 - `README.md` 与 `README.zh-CN.md` 的 skills 表(两份都改)。
 - `.claude-plugin/plugin.json` 的 `skills` 数组。
 - 若日后加 router skill,它的路由图必须随之同步——路由里有它没提的 skill、或指向已删的 skill,就是个会撒谎的路由。
+
+## 只维护 claude 这一份,其余 runtime 由 acplugin 生成
+
+source of truth 只有 `skills/` + `.claude-plugin/`。Codex / OpenCode / Cursor / Antigravity / pi 这些 runtime 的 plugin 目录(`.agent/`、`.agents/`、`.codex-plugin/`、`.cursor-plugin/`、`.opencode/`、`.pi/`)都是生成物,已在 `.gitignore` 里忽略——别手改它们,改了也会被下次生成覆盖。
+
+改完 claude 的 skill 或 plugin 后,重新生成其余格式:
+
+```
+npx -y acplugin convert . --to codex,opencode,cursor,antigravity,pi --all
+```
+
+（[acplugin](https://github.com/tokenRollAI/acplugin) 把 Claude Code plugin 转成其他 agent runtime 的格式。跑之前先 `npx -y acplugin scan .` 确认扫到的 skill 齐了。）
