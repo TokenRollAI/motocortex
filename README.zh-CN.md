@@ -2,13 +2,15 @@
 
 > all skill you need for agent coding.
 
-**motocortex 是 [TokenRoll](https://github.com/TokenRollAI) 面向开发的通用 skill/plugin。** 它不绑定任何具体产品——把它放进任意仓库,就能把一个粗糙的想法变成一套可以直接交给自动 agent 运行的文档。
+**motocortex 是 [TokenRoll](https://github.com/TokenRollAI) 面向开发的通用 skill/plugin。** 它不绑定任何具体产品——把它放进任意仓库,既能把一个粗糙的想法变成一套可以直接交给自动 agent 运行的文档,也能把粗糙或脆弱的 prompt 变成精简、可评测的任务契约。
 
 其它语言:[English](./README.md)
 
 ## 它做什么
 
 你只需要跑一条命令 `/start`,剩下的它带着你走:先把项目现状读进来,再就你**没意识到**的关键问题逐个追问,最后落下五份文档——`VISION.md` / `DOR.md` / `DOD.md` / `LOOP.md` / `PROGRESS.md`。之后 `/goal` 驱动仓库一轮接一轮跑:agent 挑一个未勾选项,用可复现证据验证,勾掉它,继续,直到全部完成或只剩 blocker。
+
+当 prompt 本身需要处理时,`better-prompt` 用一个精简的共通契约加上相关领域指南来生成或优化它。它覆盖直接回答、推理、调研、创意、编码与制品、工具型 agent,不会强迫每份 prompt 套进同一个巨型模板。
 
 ## 流程
 
@@ -24,6 +26,10 @@
   按 LOOP.md 的状态机一轮接一轮:啃一个 DoD 项 → 可复现证据验证 → 勾选
   直到全部完成,或只剩 blocker 时停下把清单留给你
   (没装成命令?把 LOOP.md 顶部"如何启动"那段粘进任意 agent 会话)
+
+better-prompt                            ← 独立的可复用纪律
+  从粗糙目标生成,或诊断优化现有 prompt → 只加载相关领域指南
+  → 返回可复制 prompt + runtime 建议 + 最小评测
 ```
 
 ## skills
@@ -34,15 +40,17 @@
 | `grill` | 模型自动 | 收集 context + 追问未澄清的高质量问题,直到边界清空 | `DECISIONS.md` |
 | `frame` | 模型自动 | 把 DECISIONS 写成需求真源与就绪清单 | `VISION.md` `DOR.md` |
 | `loop` | 模型自动 | 从 goal 生成自动执行引擎 | `DOD.md` `LOOP.md` `PROGRESS.md` |
+| `better-prompt` | 模型自动 | 用领域渐进式暴露生成、诊断与优化 prompt | 优化后的 prompt、runtime 建议、最小评测 |
 | `goal` | 人手动 | 驱动已备好的仓库,按 LOOP 状态机跑到完成或只剩 blocker | 追加 `PROGRESS.md` |
 
-两层结构:`start`/`goal` 负责**编排**(人手动触发),`grill`/`frame`/`loop` 是**可复用纪律**(被 `start` 拉入)。
+两层结构:`start`/`goal` 负责**编排**(人手动触发),`grill`/`frame`/`loop`/`better-prompt` 是**可复用纪律**(模型自动触发)。`start` 拉入前三个;只有 prompt 本身是产物或问题时,`better-prompt` 才独立触发。
 
 ## 设计原则
 
 - **事实自己查,决策交给你**:能从环境查到的,不问;真正要你拍板的,一次一个、每问附推荐答案。
 - **不追问已定型的**:项目已有成熟技术栈或既有约定,记录并确认,不重新访谈。
 - **勾选靠证据**:`DOD.md` 里每一项的勾选依据,是可复现的证据(命令及其输出),不是"我觉得写完了"。
+- **Prompt 是契约,不是咒语**:可移植核心保持精简,只加载会改变行为的领域指南,并用代表性样例验证优化。
 
 ## 安装
 
@@ -73,7 +81,7 @@
 
 Codex 从 `.agents/skills/` 读 skill——既扫仓库级(从 `$CWD` 向上到仓库根),也扫用户级(`$HOME/.agents/skills`),并且跟随软链接。所以有两种装法:
 
-- **按仓库(零配置)**:把 motocortex clone 进你的项目(或加为 submodule),让 `.agents/skills/` 位于你启动 Codex 的目录或其上层。Codex 会自动发现这五个 skill;没出现就重启 Codex。
+- **按仓库(零配置)**:把 motocortex clone 进你的项目(或加为 submodule),让 `.agents/skills/` 位于你启动 Codex 的目录或其上层。Codex 会自动发现这六个 skill;没出现就重启 Codex。
 - **全局(所有仓库)**:把生成的 skill 软链到 home 目录。
 
   ```

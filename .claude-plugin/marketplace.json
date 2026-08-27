@@ -4,17 +4,19 @@
     "name": "TokenRollAI",
     "url": "https://github.com/TokenRollAI"
   },
-  "description": "all skill you need for agent coding.",
+  "description": "Agent coding workflows and prompt optimization for high-performance models.",
   "plugins": [
     {
       "name": "motocortex",
       "source": "./",
-      "description": "把粗糙 goal 变成可交给自动 agent 运行的文档流程(VISION / DOR / DOD / LOOP / PROGRESS),并驱动它自主跑到完成或只剩 blocker。",
+      "description": "把粗糙 goal 变成可自主执行的开发流程并驱动到完成;也能按任务领域生成、诊断与优化适合高性能模型的 prompt。",
       "category": "engineering",
       "keywords": [
         "agent-coding",
         "workflow",
-        "skills"
+        "skills",
+        "prompt-engineering",
+        "prompt-optimization"
       ]
     }
   ]
