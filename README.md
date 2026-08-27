@@ -1,93 +1,107 @@
 # motocortex
 
-> all skill you need for agent coding.
+> Agent skills for turning rough goals into executable plans—and brittle prompts into reliable contracts.
 
-**motocortex is [TokenRoll](https://github.com/TokenRollAI)'s general-purpose skill/plugin for development.** It is not tied to any one product — drop it into any repo to turn a rough idea into a set of documents an autonomous agent can run on its own, or to turn a rough or brittle prompt into a lean, testable task contract.
+**motocortex is a skills-only collection for agent-driven development.** Its six composable skills help you clarify an idea, frame a verifiable project, generate an autonomous execution loop, drive that loop to completion, or improve a prompt without locking you into one agent or runtime.
 
 Read in another language: [简体中文](./README.zh-CN.md)
 
-## What it does
+## Quick start
 
-You run one command, `/start`, and it walks you through the setup: it reads the current state of your project, interviews you about the decisions you may not realize are still open, and lands five documents — `VISION.md` / `DOR.md` / `DOD.md` / `LOOP.md` / `PROGRESS.md`. After that, `/goal` drives the repo round after round: an agent picks an unchecked item, verifies it with reproducible evidence, checks it off, and keeps going until everything is done or only blockers remain.
+Install from GitHub with the open [`skills` CLI](https://github.com/vercel-labs/skills):
 
-When the prompt itself needs work, `better-prompt` drafts or optimizes it using a small shared contract plus only the relevant domain guidance. It supports direct responses, reasoning, research, creative work, coding and artifacts, and tool-using agents without forcing every prompt through one giant template.
-
-## Flow
-
+```bash
+npx skills add TokenRollAI/motocortex
 ```
-/start                                   ← authoring phase: the one command to remember
-  1. gather context   (read the repo, existing conventions, the settled stack)
-  2. /grill           ← interview until nothing is silently assumed → land DECISIONS.md
-  3. /frame           ← produce VISION.md (what to build) + DOR.md (readiness risk list)
-  4. /loop            ← from the goal, generate DOD.md (what counts as done)
-                        + LOOP.md (how each round runs) + PROGRESS.md (the ledger)
 
-/goal                                    ← execution phase: drive the repo autonomously
-  run the LOOP state machine round by round: pick a DoD item → verify with
-  reproducible evidence → check it off, until everything's done or only blockers
-  remain (not installed as a command? paste the "How to start" block at the top
-  of LOOP.md into any agent session)
+The installer discovers the `SKILL.md` files directly, then lets you choose the skills, target agents, and installation scope. No motocortex package or runtime-specific adapter is required.
 
-better-prompt                             ← independent reusable discipline
-  draft from a rough intent, or diagnose and optimize an existing prompt → load
-  only the relevant domain guide → return a copy-ready prompt + runtime notes + evals
+Useful variants:
+
+```bash
+# Preview the six available skills
+npx skills add TokenRollAI/motocortex --list
+
+# Install only the orchestration skills
+npx skills add TokenRollAI/motocortex --skill start --skill goal
+
+# Install for your user account instead of the current project
+npx skills add TokenRollAI/motocortex --global
 ```
+
+## Workflows
+
+motocortex has two independent paths:
+
+```text
+rough project goal
+└── start
+    ├── grill  → DECISIONS.md
+    ├── frame  → VISION.md + DOR.md
+    └── loop   → DOD.md + LOOP.md + PROGRESS.md
+
+prepared project
+└── goal       → run the LOOP state machine until done or blocked
+
+rough or existing prompt
+└── better-prompt → copy-ready prompt + runtime notes + minimal evals
+```
+
+`DECISIONS.md` preserves the clarification handoff. The five execution documents—`VISION.md`, `DOR.md`, `DOD.md`, `LOOP.md`, and `PROGRESS.md`—form the package another agent can pick up and run.
 
 ## Skills
 
 | skill | invocation | responsibility | artifacts |
 |---|---|---|---|
-| `start` | user | orchestration entry: chains the steps below | all five documents |
-| `grill` | model | gather context + interview for the unasked questions until the frontier is empty | `DECISIONS.md` |
-| `frame` | model | synthesize DECISIONS into the source of truth and the readiness list | `VISION.md` `DOR.md` |
-| `loop` | model | generate the autonomous execution engine from the goal | `DOD.md` `LOOP.md` `PROGRESS.md` |
-| `better-prompt` | model | draft, diagnose, and optimize prompts with domain-specific progressive disclosure | optimized prompt, runtime notes, minimal evals |
-| `goal` | user | drive a prepared repo through the LOOP state machine to done or blockers | appends `PROGRESS.md` |
+| `start` | user | orchestrate goal clarification, framing, and loop generation | all five execution documents |
+| `grill` | model | inspect context and settle every material open decision | `DECISIONS.md` |
+| `frame` | model | turn settled decisions into the source of truth and readiness risks | `VISION.md`, `DOR.md` |
+| `loop` | model | turn the goal into a verifiable autonomous execution engine | `DOD.md`, `LOOP.md`, `PROGRESS.md` |
+| `goal` | user | drive a prepared repository through the loop to done or blockers | updates `PROGRESS.md` |
+| `better-prompt` | model | draft, diagnose, or optimize prompts with focused domain guidance | optimized prompt, runtime notes, minimal evals |
 
-Two layers: `start`/`goal` handle **orchestration** (user-invoked), while `grill`/`frame`/`loop`/`better-prompt` are **reusable discipline** (model-invoked). `start` pulls in the first three; `better-prompt` activates independently when the prompt itself is the artifact or problem.
+`start` and `goal` are user-invoked orchestration skills. `grill`, `frame`, and `loop` are reusable disciplines composed by `start`; `better-prompt` activates independently when the prompt itself is the artifact or problem.
+
+## How to use it
+
+After installation, ask your agent to use `start` with a rough project goal:
+
+```text
+Use start to turn this goal into an autonomous execution plan: <your goal>
+```
+
+Some hosts expose user-invoked skills as slash commands, so the same action may appear as `/start`. Answer the decision questions, review the generated documents, then invoke `goal` to execute them:
+
+```text
+Use goal to drive this repository until the definition of done is complete or only blockers remain.
+```
+
+For prompt work, give `better-prompt` either a rough intent or an existing prompt. It loads only the domain guidance relevant to that task instead of expanding every prompt into one universal template.
 
 ## Design principles
 
-- **Look up facts, leave decisions to the user.** Anything discoverable from the environment gets looked up, not asked. Real judgment calls go to you — one at a time, each with a recommended answer.
-- **Don't re-litigate what's settled.** An existing mature stack or convention is recorded and confirmed, not re-interviewed.
-- **Checking off means evidence.** Every DoD item is checked off on reproducible evidence — a command and its output, not "I think it's done."
-- **Prompts are contracts, not incantations.** Keep the portable core lean, load domain guidance only when it changes behavior, and validate improvements on representative cases.
+- **Look up facts; leave decisions to the user.** Discoverable context is inspected. Material judgment calls are surfaced one at a time with a recommendation.
+- **Do not re-litigate settled choices.** Existing stacks and conventions are recorded and reused.
+- **Checking off means evidence.** Every definition-of-done item requires a reproducible command or user case, not a confidence statement.
+- **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
+- **Files carry state.** Decisions, readiness risks, completion criteria, execution rules, and progress survive across agents and context windows.
 
-## Install
+## Repository structure
 
-As a Claude plugin (v0.0.1):
-
+```text
+skills/
+├── start/
+├── grill/
+├── frame/
+├── loop/
+├── goal/
+└── better-prompt/
 ```
-/plugin marketplace add TokenRollAI/motocortex
-/plugin install motocortex
+
+`skills/` is the only distribution source of truth. Each skill keeps its decision-making discipline in `SKILL.md` and puts copyable artifact skeletons under its own `templates/` directory.
+
+When adding or removing a skill, update the skills tables in both READMEs and verify discovery locally:
+
+```bash
+npx -y skills add . --list
 ```
-
-Or symlink the directories under `skills/` into your skills directory (e.g. `~/.claude/skills`).
-
-### Other runtimes (Codex / OpenCode / Cursor / Antigravity / pi)
-
-Each runtime's format is already generated and committed — clone and use it, no acplugin needed. Point your runtime at the matching directory:
-
-| runtime | entry / skills dir |
-|---|---|
-| Codex | `.codex-plugin/plugin.json` (skills under `.agents/skills/`) |
-| Antigravity | `.agents/` (`.agents/plugins/marketplace.json`) |
-| Cursor | `.cursor-plugin/` + top-level `skills/` |
-| OpenCode | `.opencode/skills/` |
-| pi | `.pi/skills/` |
-
-These are [acplugin](https://github.com/tokenRollAI/acplugin) mirrors generated from `skills/` + `.claude-plugin/` — don't edit them by hand.
-
-#### Codex CLI
-
-Codex reads skills from `.agents/skills/` — repo-level (`$CWD` up to repo root) and user-level (`$HOME/.agents/skills`), and it follows symlinks. So you have two options:
-
-- **Per repo (zero config):** clone motocortex into your project (or add it as a submodule) so `.agents/skills/` sits at or above where you launch Codex. Codex discovers the six skills automatically; restart Codex if they don't show up.
-- **Globally (all repos):** symlink the generated skills into your home folder.
-
-  ```
-  mkdir -p ~/.agents/skills
-  ln -s "$(pwd)"/.agents/skills/* ~/.agents/skills/
-  ```
-
-Both are backed by [Codex's skill discovery](https://developers.openai.com/codex/skills). To disable one without deleting it, add a `[[skills.config]]` entry in `~/.codex/config.toml`.

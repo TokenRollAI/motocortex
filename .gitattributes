@@ -1,8 +1,0 @@
-# 其他 runtime 的 plugin 目录都是 acplugin 从 skills/ + .claude-plugin/ 生成的。
-# 提交进仓库让用户 clone 即用,但标记为 generated:GitHub 在 PR diff 里默认折叠、
-# 不计入语言统计。review 只看 skills/ 和 .claude-plugin/。
-.agents/**        linguist-generated=true
-.codex-plugin/**  linguist-generated=true
-.cursor-plugin/** linguist-generated=true
-.opencode/**      linguist-generated=true
-.pi/**            linguist-generated=true
