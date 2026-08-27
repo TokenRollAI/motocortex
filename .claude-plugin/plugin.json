@@ -1,7 +1,7 @@
 {
   "name": "motocortex",
   "version": "0.0.1",
-  "description": "把一个粗糙的 goal,经收集 context 与追问澄清,产出一套可交给自动 agent 运行的文档(VISION / DOR / DOD / LOOP / PROGRESS),并驱动它自主跑到完成。",
+  "description": "把粗糙 goal 变成可自主执行的开发文档流程并驱动到完成;也能按任务领域生成、诊断与优化适合高性能模型的 prompt。",
   "author": {
     "name": "DJJ"
   },
@@ -13,13 +13,16 @@
     "workflow",
     "definition-of-done",
     "definition-of-ready",
-    "autonomous-agent"
+    "autonomous-agent",
+    "prompt-engineering",
+    "prompt-optimization"
   ],
   "skills": [
     "./skills/start",
     "./skills/grill",
     "./skills/frame",
     "./skills/loop",
+    "./skills/better-prompt",
     "./skills/goal"
   ]
 }
