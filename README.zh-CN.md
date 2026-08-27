@@ -1,92 +1,107 @@
 # motocortex
 
-> all skill you need for agent coding.
+> 把粗糙目标变成可执行计划，把脆弱 prompt 变成可靠契约的一组 agent skills。
 
-**motocortex 是 [TokenRoll](https://github.com/TokenRollAI) 面向开发的通用 skill/plugin。** 它不绑定任何具体产品——把它放进任意仓库,既能把一个粗糙的想法变成一套可以直接交给自动 agent 运行的文档,也能把粗糙或脆弱的 prompt 变成精简、可评测的任务契约。
+**motocortex 是一套面向 agent 开发的纯 skills 集合。** 六个可组合的 skill 帮你澄清想法、定义可验收项目、生成自主执行循环并把它跑到完成；也可以独立优化 prompt，不绑定任何特定 agent 或 runtime。
 
-其它语言:[English](./README.md)
+其它语言：[English](./README.md)
 
-## 它做什么
+## 快速开始
 
-你只需要跑一条命令 `/start`,剩下的它带着你走:先把项目现状读进来,再就你**没意识到**的关键问题逐个追问,最后落下五份文档——`VISION.md` / `DOR.md` / `DOD.md` / `LOOP.md` / `PROGRESS.md`。之后 `/goal` 驱动仓库一轮接一轮跑:agent 挑一个未勾选项,用可复现证据验证,勾掉它,继续,直到全部完成或只剩 blocker。
+使用开放的 [`skills` CLI](https://github.com/vercel-labs/skills) 直接从 GitHub 安装：
 
-当 prompt 本身需要处理时,`better-prompt` 用一个精简的共通契约加上相关领域指南来生成或优化它。它覆盖直接回答、推理、调研、创意、编码与制品、工具型 agent,不会强迫每份 prompt 套进同一个巨型模板。
-
-## 流程
-
-```
-/start                                   ← 生成阶段:你唯一要记的命令
-  1. 收集 context   (读 repo、既有约定、已定型的技术栈)
-  2. /grill         ← 追问澄清,直到没有静默假设 → 落成 DECISIONS.md
-  3. /frame         ← 产出 VISION.md(要做什么)+ DOR.md(开工前的就绪风险清单)
-  4. /loop          ← 从 goal 生成 DOD.md(什么算完成)
-                      + LOOP.md(每轮怎么干)+ PROGRESS.md(进度账本)
-
-/goal                                    ← 执行阶段:驱动仓库自主跑
-  按 LOOP.md 的状态机一轮接一轮:啃一个 DoD 项 → 可复现证据验证 → 勾选
-  直到全部完成,或只剩 blocker 时停下把清单留给你
-  (没装成命令?把 LOOP.md 顶部"如何启动"那段粘进任意 agent 会话)
-
-better-prompt                            ← 独立的可复用纪律
-  从粗糙目标生成,或诊断优化现有 prompt → 只加载相关领域指南
-  → 返回可复制 prompt + runtime 建议 + 最小评测
+```bash
+npx skills add TokenRollAI/motocortex
 ```
 
-## skills
+安装器会直接发现仓库中的 `SKILL.md`，再让你选择需要的 skills、目标 agents 和安装范围。motocortex 不需要 npm package，也不需要任何 runtime 专用适配层。
 
-| skill | 触发 | 职责 | 产物 |
+常用变体：
+
+```bash
+# 预览全部六个 skills
+npx skills add TokenRollAI/motocortex --list
+
+# 只安装两个编排 skills
+npx skills add TokenRollAI/motocortex --skill start --skill goal
+
+# 安装到用户级，而不是当前项目
+npx skills add TokenRollAI/motocortex --global
+```
+
+## 工作流
+
+motocortex 包含两条彼此独立的路径：
+
+```text
+粗糙的项目目标
+└── start
+    ├── grill  → DECISIONS.md
+    ├── frame  → VISION.md + DOR.md
+    └── loop   → DOD.md + LOOP.md + PROGRESS.md
+
+准备好的项目
+└── goal       → 运行 LOOP 状态机，直到完成或只剩 blocker
+
+粗糙或已有的 prompt
+└── better-prompt → 可复制 prompt + runtime 建议 + 最小评测
+```
+
+`DECISIONS.md` 保存澄清阶段的交接信息。五份执行文档——`VISION.md`、`DOR.md`、`DOD.md`、`LOOP.md`、`PROGRESS.md`——组成另一位 agent 拿到即可运行的完整包。
+
+## Skills
+
+| skill | 触发方式 | 职责 | 产物 |
 |---|---|---|---|
-| `start` | 人手动 | 编排入口:把下面几步串起来 | 全部五份文档 |
-| `grill` | 模型自动 | 收集 context + 追问未澄清的高质量问题,直到边界清空 | `DECISIONS.md` |
-| `frame` | 模型自动 | 把 DECISIONS 写成需求真源与就绪清单 | `VISION.md` `DOR.md` |
-| `loop` | 模型自动 | 从 goal 生成自动执行引擎 | `DOD.md` `LOOP.md` `PROGRESS.md` |
-| `better-prompt` | 模型自动 | 用领域渐进式暴露生成、诊断与优化 prompt | 优化后的 prompt、runtime 建议、最小评测 |
-| `goal` | 人手动 | 驱动已备好的仓库,按 LOOP 状态机跑到完成或只剩 blocker | 追加 `PROGRESS.md` |
+| `start` | 用户触发 | 编排目标澄清、需求定型和循环生成 | 全部五份执行文档 |
+| `grill` | 模型触发 | 检查 context，拍板所有会影响结果的开放决策 | `DECISIONS.md` |
+| `frame` | 模型触发 | 把已定决策写成需求真源和就绪风险清单 | `VISION.md`、`DOR.md` |
+| `loop` | 模型触发 | 把目标变成可验证的自主执行引擎 | `DOD.md`、`LOOP.md`、`PROGRESS.md` |
+| `goal` | 用户触发 | 驱动准备好的仓库，跑到完成或只剩 blocker | 更新 `PROGRESS.md` |
+| `better-prompt` | 模型触发 | 用聚焦的领域指南生成、诊断或优化 prompt | 优化后的 prompt、runtime 建议、最小评测 |
 
-两层结构:`start`/`goal` 负责**编排**(人手动触发),`grill`/`frame`/`loop`/`better-prompt` 是**可复用纪律**(模型自动触发)。`start` 拉入前三个;只有 prompt 本身是产物或问题时,`better-prompt` 才独立触发。
+`start` 和 `goal` 是用户触发的编排 skill。`grill`、`frame`、`loop` 是由 `start` 组合起来的可复用纪律；只有 prompt 本身是产物或问题时，`better-prompt` 才独立触发。
+
+## 怎么使用
+
+安装后，把一个粗糙项目目标交给 agent，并明确让它使用 `start`：
+
+```text
+使用 start，把这个目标变成可以自主执行的计划：<你的目标>
+```
+
+有些宿主会把用户触发的 skill 显示成斜杠命令，此时同一个动作可能显示为 `/start`。回答决策问题、检查生成的文档，然后调用 `goal` 开始执行：
+
+```text
+使用 goal 驱动这个仓库，直到 Definition of Done 全部完成或只剩 blocker。
+```
+
+处理 prompt 时，把粗糙意图或已有 prompt 交给 `better-prompt`。它只加载当前任务相关的领域指南，不会把每个 prompt 都扩成同一个万能模板。
 
 ## 设计原则
 
-- **事实自己查,决策交给你**:能从环境查到的,不问;真正要你拍板的,一次一个、每问附推荐答案。
-- **不追问已定型的**:项目已有成熟技术栈或既有约定,记录并确认,不重新访谈。
-- **勾选靠证据**:`DOD.md` 里每一项的勾选依据,是可复现的证据(命令及其输出),不是"我觉得写完了"。
-- **Prompt 是契约,不是咒语**:可移植核心保持精简,只加载会改变行为的领域指南,并用代表性样例验证优化。
+- **事实自己查，决策交给用户。** 能发现的 context 由 agent 检查；真正影响结果的判断一次提出一个，并附推荐答案。
+- **不重新争论已定选择。** 既有技术栈和约定直接记录并复用。
+- **勾选必须有证据。** 每个 Definition of Done 条目都要有可复现命令或 User Case，不能只靠“我觉得完成了”。
+- **Prompt 是契约，不是咒语。** 可移植核心保持精简，只加入会改变行为的指南，并用代表性样例验证。
+- **用文件承载状态。** 决策、就绪风险、完成标准、执行规则和进度可以跨 agent、跨 context window 延续。
 
-## 安装
+## 仓库结构
 
-作为 Claude 插件安装(v0.0.1):
-
+```text
+skills/
+├── start/
+├── grill/
+├── frame/
+├── loop/
+├── goal/
+└── better-prompt/
 ```
-/plugin marketplace add TokenRollAI/motocortex
-/plugin install motocortex
+
+`skills/` 是唯一的分发真源。每个 skill 在 `SKILL.md` 中保留判断纪律，把需要照抄的产物骨架放在自己的 `templates/` 目录中。
+
+增删 skill 时，同步更新两份 README 的 skills 表，并在本地验证发现结果：
+
+```bash
+npx -y skills add . --list
 ```
-
-或把 `skills/` 下的目录软链到你的 skills 目录(如 `~/.claude/skills`)。
-
-### 其他 runtime(Codex / OpenCode / Cursor / Antigravity / pi)
-
-各 runtime 的格式已经生成好、直接躺在仓库里,clone 即用,不需要装 acplugin。把对应目录接到你的 runtime 就行:
-
-| runtime | 入口 / skills 目录 |
-|---|---|
-| Codex | `.codex-plugin/plugin.json`(skills 在 `.agents/skills/`) |
-| Antigravity | `.agents/`(`.agents/plugins/marketplace.json`) |
-| Cursor | `.cursor-plugin/` + 顶层 `skills/` |
-| OpenCode | `.opencode/skills/` |
-| pi | `.pi/skills/` |
-
-这些目录都是 [acplugin](https://github.com/tokenRollAI/acplugin) 从 `skills/` + `.claude-plugin/` 生成的镜像,别手改。
-
-#### Codex CLI
-
-Codex 从 `.agents/skills/` 读 skill——既扫仓库级(从 `$CWD` 向上到仓库根),也扫用户级(`$HOME/.agents/skills`),并且跟随软链接。所以有两种装法:
-
-- **按仓库(零配置)**:把 motocortex clone 进你的项目(或加为 submodule),让 `.agents/skills/` 位于你启动 Codex 的目录或其上层。Codex 会自动发现这六个 skill;没出现就重启 Codex。
-- **全局(所有仓库)**:把生成的 skill 软链到 home 目录。
-
-  ```
-  mkdir -p ~/.agents/skills
-  ln -s "$(pwd)"/.agents/skills/* ~/.agents/skills/
-  ```
-
-两种都基于 [Codex 的 skill 发现机制](https://developers.openai.com/codex/skills)。想临时停用某个 skill 又不删,在 `~/.codex/config.toml` 里加 `[[skills.config]]` 条目。

@@ -1,6 +1,0 @@
-{
-  "name": "motocortex",
-  "description": "把粗糙 goal 变成可自主执行的开发流程并驱动到完成;也能按任务领域生成、诊断与优化适合高性能模型的 prompt。",
-  "version": "1.0.0",
-  "skills": "./skills/"
-}
