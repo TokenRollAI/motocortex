@@ -1,26 +1,26 @@
-# 创意工作
+# Creative Work
 
-适用于构思、文案、故事、品牌表达、视觉方向与开放式设计。这里的主要风险是约束过密压平创意,或缺少事实边界导致作品用虚构细节冒充真实信息。
+Applies to ideation, copywriting, stories, brand expression, visual direction, and open-ended design. The dominant risks here are constraints packed so densely they flatten the creativity, or missing factual boundaries letting the work pass off invented details as real information.
 
-## 优化方法
+## How to optimize
 
-说明作品的目的、受众、媒介、使用场景和必须表达的事实。把要求分成三类:必须保留、明确禁区、可自由发挥。自由区越清楚,模型越能在正确地方探索。
+State the work's purpose, audience, medium, usage context, and the facts it must convey. Split the requirements into three classes: must keep, explicit no-go, and free to explore. The clearer the free zone, the better the model explores in the right places.
 
-把“高级”“有感染力”“像某品牌”拆成可观察的写作或设计选择,例如节奏、句长、信息密度、视角、色彩关系与情绪曲线。避免依赖在世艺术家的直接风格模仿;描述可组合的视觉或语言特征。
+Unpack "premium", "compelling", or "like brand X" into observable writing or design choices — rhythm, sentence length, information density, point of view, color relationships, emotional arc. Avoid direct style imitation of living artists; describe composable visual or verbal characteristics instead.
 
-示例会强烈锚定结果。需要一致性时给少量代表例;需要发散时先要求若干差异明显的方向,用选择标准挑选后再扩写,不要一开始塞入大量参考成品。
+Examples anchor results strongly. For consistency, give a few representative examples; for divergence, first ask for several clearly different directions, pick with selection criteria, then expand — do not front-load a pile of finished references.
 
-事实材料与创作空间分开。允许创造的名字、情节与数字要标明;产品能力、客户结果、日期、引用和研究结论不能为了文案效果而编造。
+Keep factual material and creative space separate. Mark the names, plots, and numbers that may be invented; product capabilities, customer results, dates, quotes, and research conclusions must not be fabricated for copy effect.
 
-修改已有作品时,列出必须保留的事实、结构、长度、体裁与品牌声音,再说明允许改动的部分。不要把“润色”默认为扩写、加标题或改变营销强度。
+When revising existing work, list the facts, structure, length, genre, and brand voice that must be preserved, then state what may change. Do not let "polish" default to expansion, added headings, or a shifted marketing register.
 
-## 最小评测
+## Minimal evals
 
-- 是否满足目的、受众和媒介;
-- 必须项、禁区和事实边界是否遵守;
-- 多个方向是否真正有差异;
-- 风格是否可识别且不过度模板化;
-- 修改任务是否保留原作语义与结构;
-- 人类偏好评审是否与自动检查分开。
+- does it satisfy the purpose, audience, and medium;
+- are the must-keeps, no-gos, and factual boundaries respected;
+- are the multiple directions genuinely different;
+- is the style recognizable without being over-templated;
+- does a revision preserve the original's meaning and structure;
+- is human preference review separated from automated checks.
 
-Done when:创作边界与自由空间同时清楚,事实不被创意污染,结果可按用途与偏好选择而不是只按格式打勾。
+Done when: the creative boundaries and the free space are both clear, facts stay uncontaminated by invention, and results can be chosen by purpose and preference rather than checked off by format alone.

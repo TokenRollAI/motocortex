@@ -3,33 +3,33 @@ name: grill
 description: >-
   Gather the project's context, then interview the user one question at a time
   about the decisions they may not realize are open, until every branch is
-  settled and nothing is silently assumed. Prepares the ground for DOR. Use when
-  a goal is still rough and needs pinning down before any work, or when another
-  skill needs the context clarified.
+  settled and nothing is silently assumed. Writes the conclusions to
+  DECISIONS.md. Use when a goal is still rough and needs pinning down before
+  any work, or when another skill needs the context clarified.
 ---
 
-先把 context 吃进来,再把没澄清的东西问干净。这一步是在为 DOR 备料——问得越透,后面的自动 agent 越不会跑偏。
+Take the context in first, then question everything still unsettled until it is clean. This work stocks the shelves for DOR — the more thoroughly you ask now, the less an autonomous agent drifts later.
 
-## 先收集,别先问
+## Collect before you ask
 
-提问之前先把能拿到的 context 读进来——仓库结构、既有文档、技术栈(package.json / 配置 / CI)、既有约定、git log 近期热点。**能从环境查到的事实,自己查,不问用户。** 读完把结论分成两堆:**已定型** 和 **还没定**。(若 `/start` 已经收集过,直接用它的结论,不重复读。)
+Before asking anything, read in every piece of context you can reach: repository structure, existing docs, the technology stack (package.json / configs / CI), established conventions, recent hotspots in the git log. **Look up yourself any fact the environment can answer — never ask the user for it.** Sort the findings into two piles: **settled** and **open**. (If `start-a-goal` already collected this, use its conclusions — do not read everything twice.)
 
-已定型的技术栈或既有约定,记录并向用户一句话确认即可,不重新访谈。追问只花在悬空的决策上。
+For a settled stack or existing convention, record it and confirm with the user in one sentence — do not re-interview. Spend the questioning budget only on decisions left hanging.
 
-## 追问悬空的决策
+## Interrogate the open decisions
 
-对"还没定的"那一堆逐个追问。目标是提出**用户可能自己都没意识到**的问题——边界情况、失败路径、隐含前提、相互冲突的需求。
+Work through the open pile one decision at a time. The aim is to surface questions **the user may not realize are open**: edge cases, failure paths, implicit premises, requirements that contradict each other.
 
-用 **AskUserQuestion** 承载:一次一个决策,推荐答案放第一个选项并标"(推荐)",其余放真实的替代分支。问之前先给一句话说清这个决策为什么悬空、为什么现在要定,让用户带着 context 选。无法枚举成选项的才退回散文提问。
+Carry the questions with **AskUserQuestion**: one decision per question, the recommended answer as the first option marked "(Recommended)", the remaining options as genuine alternative branches. Before each question, give one sentence on why this decision is open and why it must be settled now, so the user chooses with context. Fall back to prose only for questions that cannot be enumerated into options.
 
-决策交给用户;事实缺口自己去环境里补。
+Decisions belong to the user; factual gaps you fill yourself from the environment.
 
-用户暂时不可达时不要卡死:取最贴合现有 context 的默认值,把假设显式记下来,继续往下,回头让用户一次性追认。
+When the user is temporarily unreachable, do not deadlock: take the default that best fits the existing context, record the assumption explicitly, keep moving, and have the user ratify the batch later.
 
-## 落盘,别只留在对话里
+## Write it down — do not leave it in the conversation
 
-达成的共识不要只活在会话上下文里——那会被自动压缩冲掉,`/frame` 也就无从依赖。把澄清结论写进 `DECISIONS.md`:三段就够——**已定型**(现有栈/约定)、**已拍板**(逐条:决策 + 一句理由)、**记录在案的假设**(用户不在场时取的默认值,待追认)。`/frame` 读它来写 VISION 与 DOR,不必回放对话。
+Consensus that lives only in session context gets wiped by automatic compaction, and the framing step then has nothing to build on. Write the conclusions into `DECISIONS.md` — three sections suffice: **Settled** (existing stack / conventions), **Decided** (one line each: decision + one-sentence reason), **Assumptions on record** (defaults taken while the user was away, pending ratification). The framing step reads this file to write VISION and DOR; it never replays the conversation.
 
 ## Done when
 
-frontier 清空:决策树每个分支都被走到,没有静默假设;`DECISIONS.md` 已落盘。在用户确认达成共识之前,不要往下写文档。交给 `/frame`。
+The frontier is empty: every branch of the decision tree has been walked, nothing is silently assumed, and `DECISIONS.md` is on disk. Do not write further documents until the user confirms the consensus. Hand off to the framing step.

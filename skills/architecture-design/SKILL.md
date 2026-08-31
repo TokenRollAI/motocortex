@@ -11,38 +11,38 @@ description: >-
   not materially affect system structure.
 ---
 
-架构设计是在不确定性下安排**哪些决定现在必须做、哪些变化以后仍然付得起**。它的价值不在于画出更多层或套上流行模式,而在于让系统以足够简单的结构满足真正重要的需求,并把昂贵的变化限制在清楚的边界内。
+Architecture is the arrangement, under uncertainty, of **which decisions must be made now and which changes must stay affordable later**. Its value is not more layers or fashionable patterns — it is a system simple enough to meet what actually matters, with expensive change confined behind clear boundaries.
 
-## 从驱动力出发
+## Start from the driving forces
 
-先理解系统要产生的业务结果、关键用户路径、业务不变量与现有约束。把会塑造结构的质量要求说成具体场景:在什么负载、故障或变化下,系统必须作出什么可观察响应。"高性能"、"可扩展"、"高可用"本身不能指导设计;只有带环境、尺度与结果的要求才能参与取舍。
+First understand the business outcomes the system must produce, the critical user paths, the business invariants, and the existing constraints. Turn structure-shaping quality requirements into concrete scenarios: under what load, failure, or change must the system make what observable response. "High performance", "scalable", "highly available" cannot guide design by themselves; only requirements with an environment, a scale, and an outcome can enter a trade-off.
 
-先读现有代码、配置、文档、依赖与运行环境。能从环境查到的事实自己查,已被证明能满足需求的技术和约定优先延续。只在现有方案出现明确缺口时扩大候选范围,避免为理论优势支付迁移、学习与运维成本。
+Read the existing code, configuration, docs, dependencies, and runtime environment first. Look up whatever the environment can answer yourself, and prefer continuing technologies and conventions already proven to meet the need. Widen the candidate set only when the current approach shows a clear gap — do not pay migration, learning, and operations costs for theoretical advantages.
 
-区分普通实现选择与架构重要决策。核心技术栈、数据所有权、模块或服务边界、一致性模型、关键集成方式和难以退出的依赖若仍悬空,先调查并把取舍交给用户拍板,再推进依赖它的实现。局部、可逆、不会改变系统结构的选择自行决定,不要把普通开发变成架构会议。
+Separate ordinary implementation choices from architecturally significant decisions. If the core stack, data ownership, module or service boundaries, consistency model, key integration style, or a hard-to-exit dependency is still open, investigate first and hand the trade-off to the user to settle before advancing the work that depends on it. Decide local, reversible, structure-neutral choices yourself — do not turn everyday development into an architecture meeting.
 
-## 让每个结构为代价负责
+## Make every structure answer for its cost
 
-围绕业务不变量、数据所有权、独立变化与故障隔离划边界。边界的目的应能用一句因果关系说明:它保护了什么规则、隔离了什么变化,或阻止了什么故障扩散。
+Draw boundaries around business invariants, data ownership, independent change, and failure isolation. A boundary's purpose should be stateable as one causal sentence: what rule it protects, what change it isolates, or what failure propagation it stops.
 
-只有能封装策略、转换模型、保护变化或隔离依赖的层才吸收了真实复杂度。只转发调用、重复命名,或让一个修改散落到更多文件的层是在搬运复杂度;合并它。反过来,业务规则、基础设施和接口变化互相牵连时,建立边界把它们分开。
+Only a layer that encapsulates policy, transforms a model, shields change, or isolates a dependency has absorbed real complexity. A layer that merely forwards calls, duplicates names, or spreads one modification across more files is hauling complexity around — merge it. Conversely, when business rules, infrastructure, and interface changes keep entangling each other, introduce the boundary that separates them.
 
-把模式当作解决已知作用力的工具,不是起点。微服务、事件驱动、DDD、Clean Architecture、插件系统或任何框架都必须购买当前需要的能力,并同时核算协调、一致性、调试、部署和认知成本。选择满足驱动力的最简单完整方案,不因模式流行或模型熟悉就采用它。
+Treat patterns as tools that resolve known forces, never as starting points. Microservices, event-driven designs, DDD, Clean Architecture, plugin systems, or any framework must buy a capability needed now, with the coordination, consistency, debugging, deployment, and cognitive costs accounted for. Choose the simplest complete design that satisfies the forces; adopt nothing because it is popular or familiar.
 
-## 把扩展性留在可信的变化前沿
+## Keep extensibility on the credible change frontier
 
-同时评估一个变化发生的可信度与未来修改的代价。已知路线、业务波动、外部依赖、法规边界或昂贵的一次性承诺能形成可信的变化前沿;两者都高时,用稳定接口、信息隐藏或可替换边界把变化局部化,并说明这份灵活性保护了什么。
+Weigh both how credible a change is and how costly it would be to make later. Known roadmaps, business volatility, external dependencies, regulatory edges, or expensive one-way commitments form a credible change frontier; when both credibility and cost are high, localize the change behind stable interfaces, information hiding, or replaceable boundaries — and state what that flexibility protects.
 
-想象中的未来不是驱动力。若变化尚无证据,或未来重构很便宜,保持设计简单,不要提前建设通用框架、插件机制、配置层或未被使用的能力。简单不等于僵硬:清楚的职责、测试与低耦合让以后修改付得起,无需提前实现未来功能。
+An imagined future is not a driving force. When a change has no evidence, or refactoring later would be cheap, keep the design simple: no premature generic frameworks, plugin mechanisms, configuration layers, or unused capabilities. Simple is not rigid — clear responsibilities, tests, and low coupling keep later modification affordable without building future features today.
 
-## 用证据做技术与结构选择
+## Choose technology and structure on evidence
 
-只比较真正有机会胜出的候选。按当前驱动力考察它们的能力、团队适配、生态与维护状态、运维和迁移成本、互操作性、退出路径以及失败影响,而不是强制凑出固定数量的方案或评分矩阵。
+Compare only candidates that genuinely stand a chance. Examine them against the current driving forces: capability, team fit, ecosystem and maintenance status, operations and migration cost, interoperability, exit path, and failure impact — not a forced quota of options or a scoring matrix.
 
-版本、限制、支持周期、价格与生态状态会变化,从当前官方资料核实。资料无法证明但会决定方案成败的假设,用最小 prototype、benchmark 或 spike 验证;验证代码用于学习,不要默认把它当生产实现。让结论写清选择理由、接受的代价,以及什么条件变化后应重新审视。
+Versions, limits, support windows, prices, and ecosystem health change; verify them against current official sources. For assumptions the sources cannot settle but the design's success depends on, validate with a minimal prototype, benchmark, or spike; treat that code as learning material, not production by default. Write the conclusion with the reason for the choice, the costs accepted, and the condition changes that should trigger a re-examination.
 
-沿代表性的用户路径、数据流、失败路径和未来变化各走一遍设计。这样可以发现同步链、共享状态、隐含所有权与跨边界协调,却不需要为每个项目机械补齐一份架构检查表。需要落盘时遵循仓库已有的 ADR 或架构文档惯例;用户没有要求、仓库也没有惯例时,不自创文档体系。
+Walk the design once along a representative user path, data flow, failure path, and future change. This surfaces synchronous chains, shared state, implicit ownership, and cross-boundary coordination without imposing a mechanical architecture checklist on every project. When a written record is warranted, follow the repository's existing ADR or architecture-doc conventions; if the user has not asked and the repository has none, do not invent a documentation system.
 
 ## Done when
 
-每个架构重要选择都能追溯到功能目标、质量场景或真实约束;技术事实已经核验,决定成败的未知已验证或明确暴露;边界和层次都说明了自己吸收的复杂度;扩展点对应可信且昂贵的变化,推测性抽象已被排除;主要代价、退出路径与重审条件清楚;所有会改变架构且难逆转的未决事项都在相关实现开始前交给用户拍板。
+Every architecturally significant choice traces to a functional goal, a quality scenario, or a real constraint; technical facts are verified and success-critical unknowns are validated or explicitly exposed; every boundary and layer states the complexity it absorbs; extension points correspond to credible, expensive change, with speculative abstraction excluded; the major costs, exit paths, and re-examination triggers are clear; and every open decision that would change the architecture irreversibly has been handed to the user before the implementation that depends on it begins.
