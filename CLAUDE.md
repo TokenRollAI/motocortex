@@ -14,9 +14,13 @@
 
 ## 两层 invocation
 
-- **user-invoked**（`disable-model-invocation: true`）：负责编排，由人明确触发。目前是 `start`、`goal`。
-- **model-invoked**（默认）：提供可复用纪律，由上层 skill 或模型按任务拉入。目前是 `grill`、`frame`、`loop`、`better-prompt`。
+- **user-invoked**（`disable-model-invocation: true`）：负责编排，由人明确触发。目前是 `start-a-goal`。
+- **model-invoked**（默认）：提供可复用纪律，由上层 skill 或模型按任务拉入。目前是 `grill`、`architecture-design`、`performance-optimization`、`better-prompt`。
 - 硬约束：user-invoked 可以调用 model-invoked，永远不调用另一个 user-invoked。
+
+## 语言
+
+skill 的全部内容——`SKILL.md`、`templates/`、`references/`——一律用英文写，不出现中文（含全角标点）。中文只出现在 `README.zh-CN.md` 和本文件。
 
 ## Frontmatter
 

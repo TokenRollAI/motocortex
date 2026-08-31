@@ -1,25 +1,25 @@
-# 推理与决策
+# Reasoning and Decisions
 
-适用于数学、逻辑、诊断、规划、方案比较和推荐。目标是让问题、约束和校验可见,不是规定模型应该生成多长的思维链。
+Applies to math, logic, diagnosis, planning, option comparison, and recommendation. The goal is to make the problem, constraints, and checks visible — not to dictate how long a chain of thought the model should produce.
 
-## 优化方法
+## How to optimize
 
-先写清问题定义、已知量、未知量、硬约束和优化目标。推荐或比较任务还要给出评价维度、权重由谁决定、哪些取舍不能替用户拍板。
+Write down the problem definition, knowns, unknowns, hard constraints, and the optimization objective first. Recommendation and comparison tasks also need the evaluation dimensions, who decides the weights, and which trade-offs must not be settled on the user's behalf.
 
-区分“需要正确答案”和“需要可审计过程”。前者用目标模型的 reasoning/thinking 配置控制推理预算;后者要求可检查的假设、公式、证据、关键中间结果和验证,而不是要求复述完整隐藏思维链。
+Distinguish "needs the right answer" from "needs an auditable process". For the former, control the reasoning budget through the target model's reasoning/thinking configuration; for the latter, require checkable assumptions, formulas, evidence, key intermediate results, and verification — not a recital of the full hidden chain of thought.
 
-确定性计算、约束求解、代码执行或搜索工具可用时,要求模型使用并报告结果。不要让自然语言自信替代计算器、solver、测试或独立来源。
+When deterministic computation, constraint solvers, code execution, or search tools are available, require the model to use them and report the results. Do not let natural-language confidence stand in for a calculator, a solver, tests, or an independent source.
 
-步骤本身是合规流程、证明格式或可复现实验时才固定。其余情况给模型选择分解方式,并明确最终答案必须核对哪些不变量。
+Fix the steps only when the procedure itself is a compliance process, a proof format, or a reproducible experiment. Otherwise let the model choose its own decomposition, and state which invariants the final answer must be checked against.
 
-对决策输出,区分事实、假设、推断与偏好。要求给出推荐及其适用条件,不要为了显得全面而穷举所有选项。
+For decision outputs, separate facts, assumptions, inferences, and preferences. Require a recommendation with its conditions of applicability — do not enumerate every option just to look thorough.
 
-## 最小评测
+## Minimal evals
 
-- 直接题、组合约束题和一个诱导性干扰题;
-- 改变无关措辞或输入顺序后结论是否稳定;
-- 关键约束是否全部满足;
-- 工具计算与最终答案是否一致;
-- 信息不足时是否暴露真正缺口,而非编造确定性。
+- a direct problem, a combined-constraints problem, and one misleading distractor;
+- whether the conclusion is stable when irrelevant wording or input order changes;
+- whether every key constraint is satisfied;
+- whether tool computations agree with the final answer;
+- whether insufficient information surfaces the real gap instead of fabricated certainty.
 
-Done when:问题可计算或可判断,约束可核对,结论与关键依据可审计,推理预算不靠提示词咒语控制。
+Done when: the problem is computable or decidable, the constraints are checkable, the conclusion and its key grounds are auditable, and the reasoning budget is not controlled by prompt incantations.

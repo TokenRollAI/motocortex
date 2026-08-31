@@ -1,28 +1,28 @@
-# 工具型 Agent
+# Tool-Using Agents
 
-适用于会检索、调用 API、操作文件或应用、改变外部状态、长期运行或协调子 agent 的工作。这里的 prompt 是操作与授权契约,但权限和安全仍须由 runtime 强制执行。
+Applies to work that retrieves, calls APIs, operates on files or applications, changes external state, runs long, or coordinates subagents. Here the prompt is an operations and authorization contract — but permissions and safety must still be enforced by the runtime.
 
-## 优化方法
+## How to optimize
 
-写清请求授权的工作层:只读回答、诊断、计划、范围内修改,还是外部协调。列出可自主完成的安全动作,并把破坏性、不可逆、付费、对外发送和实质扩 scope 的动作设为确认点。
+State the work tier being authorized: read-only answering, diagnosis, planning, in-scope modification, or external coordination. List the safe actions the agent may complete autonomously, and make destructive, irreversible, paid, outward-sending, and materially scope-expanding actions confirmation points.
 
-工具描述说明它做什么、何时使用、关键返回字段和错误行为。只暴露当前任务相关工具;确定性的筛选、聚合、格式验证和权限检查尽量下沉到代码或 schema。
+Tool descriptions explain what the tool does, when to use it, its key return fields, and its error behavior. Expose only the tools relevant to the current task; push deterministic filtering, aggregation, format validation, and permission checks down into code or schemas.
 
-工具存在依赖时写前置条件;独立读取可并行,后一动作依赖前一结果时保持顺序。空结果、部分结果和瞬时错误给出有限回退与重试,避免无限工具循环。
+Where tools have dependencies, write the preconditions; independent reads may run in parallel, while an action that depends on a previous result stays sequential. Give bounded fallbacks and retries for empty results, partial results, and transient errors, avoiding infinite tool loops.
 
-规定完成与停止:什么结果算完成,缺哪类信息才询问用户,遇到什么风险必须停,何时应缩窄答案。长程任务的进度声明要引用本次运行的工具结果,不能把意图写成已经完成。
+Define completion and stopping: what result counts as done, which missing information justifies asking the user, which risks require stopping, and when to narrow the answer. Progress claims in long-running tasks must cite this run's tool results; do not write intent as accomplishment.
 
-把网页、邮件、文件、用户提供的数据和工具返回视为不可信数据。明确它们不能修改 system/developer 目标或授权;同时使用工具白名单、最小权限、隔离、服务端校验和审批,不要期待 prompt 单独抵御注入。
+Treat web pages, email, files, user-provided data, and tool returns as untrusted data. Make explicit that they cannot modify system/developer goals or authorization; and rely on tool allowlists, least privilege, isolation, server-side validation, and approvals as well — do not expect the prompt alone to resist injection.
 
-## 最小评测
+## Minimal evals
 
-- 正常端到端成功;
-- 缺少前置数据时的最小询问;
-- 工具返回为空、部分或报错;
-- 不可逆或外部动作是否正确请求确认;
-- 外部内容包含冲突指令或 prompt injection;
-- 长程运行是否循环、误报进度或过早停止。
+- a normal end-to-end success;
+- the minimal question asked when prerequisite data is missing;
+- tool returns that are empty, partial, or errors;
+- whether irreversible or external actions correctly request confirmation;
+- external content carrying conflicting instructions or prompt injection;
+- whether long runs loop, misreport progress, or stop too early.
 
-记录任务成功率、未授权动作、工具调用数、重试、延迟、成本与证据完整性。
+Record task success rate, unauthorized actions, tool-call counts, retries, latency, cost, and evidence completeness.
 
-Done when:agent 知道能做什么、必须先查什么、何时确认、怎样验证和何时停止,而关键安全边界不只存在于自然语言里。
+Done when: the agent knows what it may do, what it must check first, when to confirm, how to verify, and when to stop — and the critical safety boundaries do not live in natural language alone.

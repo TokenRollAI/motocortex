@@ -1,25 +1,25 @@
-# 编码与制品
+# Coding and Artifacts
 
-适用于代码、网站、文档、表格、演示、图像或其它需要生成并验证的制品。Prompt 应像一份高质量任务说明:说清行为目标与验收,保留 agent 探索现状和选择实现路径的空间。
+Applies to code, websites, documents, spreadsheets, presentations, images, and other artifacts that must be generated and verified. The prompt should read like a high-quality task brief: clear behavioral goals and acceptance, with room left for the agent to explore the current state and choose the implementation path.
 
-## 优化方法
+## How to optimize
 
-先给目标、现状线索、范围、不变量和非目标。现有仓库或制品已经有设计系统、格式、技术栈和约定时,要求先检查并复用;不要在 prompt 里凭空重写它们。
+Lead with the goal, pointers to the current state, scope, invariants, and non-goals. When an existing repository or artifact already has a design system, format, stack, and conventions, require checking and reusing them first — do not rewrite them from thin air inside the prompt.
 
-把 Definition of Done 写成可运行测试、构建、类型检查、渲染检查、用户场景或人工验收点。只写“自查”“高质量”不能作为完成标准。
+Write the Definition of Done as runnable tests, builds, type checks, render checks, user scenarios, or human acceptance points. "Self-review" or "high quality" alone cannot serve as completion criteria.
 
-实现路径属于硬约束时才指定库、架构或文件级步骤。否则描述行为、接口、兼容性、性能与安全边界,让模型根据现有上下文选择最小改动。明确哪些重构、额外功能和未来抽象不在范围内。
+Specify libraries, architecture, or file-level steps only when the implementation path is itself a hard constraint. Otherwise describe behavior, interfaces, compatibility, performance, and security boundaries, and let the model choose the minimal change given the existing context. State explicitly which refactors, extra features, and future abstractions are out of scope.
 
-区分规划、编辑、验证、提交、部署和外部发布。用户要求实现通常授权范围内本地编辑与非破坏性验证,不自动授权部署、发 PR、发送消息或其它外部写入。
+Separate planning, editing, verification, committing, deployment, and external publication. A request to implement normally authorizes in-scope local edits and non-destructive verification; it does not automatically authorize deployment, opening PRs, sending messages, or other external writes.
 
-视觉或排版制品要求渲染后检查。代码要求运行最相关的测试;无法验证时报告原因与次优检查。不要让长解释替代真实制品和验证结果。
+Require visual or typographic artifacts to be checked after rendering. Require code to run the most relevant tests; when verification is impossible, report why and the next-best check. Do not let a long explanation substitute for the real artifact and its verification results.
 
-## 最小评测
+## Minimal evals
 
-- 典型变更是否满足用户场景;
-- diff 是否局限在授权范围并保留现有约定;
-- 测试、构建或渲染是否实际运行;
-- 输入异常、兼容性和回归风险是否覆盖;
-- 模型是否擅自增加功能、重构或执行外部动作。
+- does a typical change satisfy the user scenario;
+- is the diff confined to the authorized scope and preserving existing conventions;
+- were the tests, build, or render actually run;
+- are input anomalies, compatibility, and regression risk covered;
+- did the model add features, refactor, or take external actions on its own.
 
-Done when:交付物路径清楚,成功可以通过工具或用户场景验证,实现自由与不可突破的不变量都明确。
+Done when: the deliverable's path is clear, success is verifiable through tools or user scenarios, and both the implementation freedom and the unbreakable invariants are explicit.

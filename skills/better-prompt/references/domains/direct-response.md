@@ -1,32 +1,32 @@
-# 直接回答与文本变换
+# Direct Response and Text Transformation
 
-适用于问答、解释、摘要、提取、分类、改写与翻译。这里的主要风险不是模型不会写,而是答案范围、事实边界、保留项和输出契约没有说清。
+Applies to Q&A, explanation, summarization, extraction, classification, rewriting, and translation. The dominant risk here is not that the model cannot write — it is that the answer's scope, factual boundaries, preservation rules, and output contract were never stated.
 
-## 先判定任务
+## Determine the task first
 
-- 问答/解释:用户想解决什么问题,面向谁,需要多深?
-- 摘要:哪些信息必须覆盖,允许舍弃什么,是否只能依据原文?
-- 提取/分类:字段或标签怎样定义,缺失与歧义怎样表示?
-- 改写/翻译:哪些事实、结构、术语、语气与长度必须保留?
+- Q&A / explanation: what problem is the user solving, for whom, at what depth?
+- Summarization: what must be covered, what may be dropped, is the source text the only ground?
+- Extraction / classification: how are fields or labels defined, how are missing and ambiguous values represented?
+- Rewriting / translation: which facts, structure, terminology, tone, and length must be preserved?
 
-同一个 prompt 混合这些动作时,明确主任务及其优先级。例如“先提取再摘要”和“摘要时顺便提取”不是同一个契约。
+When one prompt mixes these actions, make the main task and its priority explicit. "Extract first, then summarize" and "summarize, extracting along the way" are not the same contract.
 
-## 优化方法
+## How to optimize
 
-把输入与指令分开,写清来源边界。需要 grounded 输出时,说明只能基于哪些材料、何时允许常识或外部检索、证据不足时怎样缩窄答案。
+Separate input from instructions and state the source boundary. For grounded output, say which materials alone may be used, when common knowledge or external retrieval is allowed, and how to narrow the answer when evidence falls short.
 
-用具体保留规则替代笼统风格词。例如“保留所有数字、专名与因果关系”比“准确改写”更可核验。短答案要说明必须保留的内容,而不仅是“简洁”。
+Replace vague style words with concrete preservation rules. "Preserve all numbers, proper nouns, and causal relations" is more checkable than "rewrite accurately". For short answers, state what must survive, not merely "be concise".
 
-分类和提取优先使用 API schema 或枚举。Prompt 解释字段语义、歧义和缺失值;schema 负责句法。只在标签边界反复出错时增加最少示例。
+For classification and extraction, prefer API schemas or enums. The prompt explains field semantics, ambiguity, and missing values; the schema owns the syntax. Add minimal examples only when label boundaries fail repeatedly.
 
-摘要不要默认要求逐节复述。按用户用途选择覆盖式、决策式、行动式或压缩式摘要,并给出长度与遗漏优先级。
+Do not default summaries to section-by-section recitation. Choose a coverage, decision, action, or compression summary by the user's purpose, and give length and omission priorities.
 
-## 最小评测
+## Minimal evals
 
-- 典型输入是否直接完成核心任务;
-- 缺字段或原文无答案时是否避免猜测;
-- 数字、专名、限定词与否定是否被保留;
-- 标签边界、格式和长度是否稳定;
-- 同义改写或输入顺序变化是否造成意图漂移。
+- does a typical input complete the core task directly;
+- does the model avoid guessing when a field is missing or the source has no answer;
+- are numbers, proper nouns, qualifiers, and negations preserved;
+- are label boundaries, format, and length stable;
+- does paraphrasing or input reordering cause intent drift.
 
-Done when:模型知道该回答什么、只能依据什么、必须保留什么,以及信息不足时怎样表现。
+Done when: the model knows what to answer, what it may rely on, what it must preserve, and how to behave when information falls short.

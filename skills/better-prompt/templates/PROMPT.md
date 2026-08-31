@@ -1,71 +1,71 @@
-# Better Prompt 交付模板
+# Better Prompt Delivery Template
 
 <better-prompt-template>
-# 优化后的 Prompt
+# Optimized Prompt
 
-删除所有不改变行为的章节,并按目标 runtime 分别放入 system / developer / user 层。
+Delete every section that does not change behavior, and place the content into the system / developer / user layers per the target runtime.
 
 ## Goal
 
-[用户可见的目标结果]
+[the outcome the user should see]
 
 ## Context
 
-[完成任务所需的最少背景、输入定义与边界]
+[the minimum background, input definitions, and boundaries needed to complete the task]
 
 ## Success criteria
 
-- [可观察或可验证的完成条件]
+- [observable or verifiable completion conditions]
 
 ## Constraints
 
-- [真正的安全、业务、事实或范围不变量]
+- [true safety, business, factual, or scope invariants]
 
 ## Output
 
-[内容、结构、长度、受众与语言要求]
+[content, structure, length, audience, and language requirements]
 
-## Role and collaboration（可选）
+## Role and collaboration (optional)
 
-[仅保留会改变专业视角、语气或协作行为的简短说明]
+[only a short note that changes the professional lens, tone, or collaboration behavior]
 
-## Evidence and tools（可选）
+## Evidence and tools (optional)
 
-[来源标准、工具选择条件、输入/工具返回的数据边界]
+[source standards, tool-selection conditions, data boundaries for inputs and tool returns]
 
-## Authority and approval（可选）
+## Authority and approval (optional)
 
-[允许自主完成的动作、必须确认的副作用与 scope 边界]
+[actions allowed autonomously, side effects requiring confirmation, scope boundaries]
 
-## Verification and stop rules（可选）
+## Verification and stop rules (optional)
 
-[验证方法、重试/回退条件、何时询问或停止]
+[verification method, retry/fallback conditions, when to ask or stop]
 
-## Examples（可选）
+## Examples (optional)
 
-[只放用于修复已知边界、格式或风格失败的最少示例]
+[only the minimal examples that fix known boundary, format, or style failures]
 
-# Prompt 外的运行时建议
+# Runtime Notes (outside the prompt)
 
-- Model: [目标模型或“保持可移植”]
-- Reasoning / thinking: [建议值与待比较基线]
-- Verbosity / output control: [运行时设置]
-- Structured output / tool schema: [应由 API 或 validator 承担的约束]
-- Context / caching: [静态前缀、动态输入与压缩建议]
+- Model: [target model, or "keep portable"]
+- Reasoning / thinking: [suggested value and the baseline to compare against]
+- Verbosity / output control: [runtime settings]
+- Structured output / tool schema: [constraints the API or a validator should own]
+- Context / caching: [static prefix, dynamic input, and compression advice]
 
-# 最小评测
+# Minimal Evals
 
-| Case | 输入特征 | 期望行为 | 失败信号 |
+| Case | Input characteristics | Expected behavior | Failure signal |
 |---|---|---|---|
-| 正常路径 | [典型输入] | [核心成功标准] | [可观察失败] |
-| 边界路径 | [难例或极端值] | [边界行为] | [可观察失败] |
-| 信息不足 | [缺关键字段] | [询问、缩窄或拒答] | [猜测或越权] |
-| 领域风险 | [该领域的关键风险] | [安全/质量行为] | [风险事件] |
+| Normal path | [typical input] | [core success criterion] | [observable failure] |
+| Boundary path | [hard case or extreme value] | [boundary behavior] | [observable failure] |
+| Insufficient information | [missing key field] | [ask, narrow, or decline] | [guessing or overreach] |
+| Domain risk | [the domain's key risk] | [safety/quality behavior] | [risk event] |
 
-# 改动说明
+# Change Notes
 
-- 保留: [原 prompt 中有效且必要的部分]
-- 删除: [重复、冲突、过时或无效脚手架]
-- 新增: [为明确失败模式增加的最小约束]
-- 待验证: [没有证据支持、需在目标模型上评测的假设]
+- Kept: [the parts of the original prompt that were effective and necessary]
+- Removed: [duplicated, conflicting, outdated, or ineffective scaffolding]
+- Added: [minimal constraints added for identified failure modes]
+- Pending validation: [assumptions without evidence, to be evaluated on the target model]
 </better-prompt-template>

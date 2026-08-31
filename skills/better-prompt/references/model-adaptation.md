@@ -1,28 +1,28 @@
-# 模型与 Runtime 适配
+# Model and Runtime Adaptation
 
-只有用户指定模型、要求迁移,或 prompt 行为明显依赖当前模型能力时才读取。模型变化快,这里保存判断纪律,不保存会过期的参数表。
+Read this only when the user names a model, asks for migration, or the prompt's behavior clearly depends on current model capabilities. Models change fast; this file keeps the judgment discipline, not parameter tables that expire.
 
-## 先核对当前事实
+## Verify current facts first
 
-查目标模型的最新官方 prompting、reasoning、tools、structured outputs 和迁移文档。保持用户指定的精确模型,不要擅自换成“更新”型号。官方资料没有覆盖的行为标为待验证。
+Check the target model's latest official prompting, reasoning, tools, structured outputs, and migration docs. Keep the exact model the user specified — do not swap in a "newer" one on your own. Mark behavior the official material does not cover as pending validation.
 
-若目标未指定,先给可移植核心。只有模型差异会改变结果或成本时才建议候选,并把选择依据写在 prompt 外。
+If no target is specified, deliver a portable core first. Suggest candidates only when model differences would change results or cost, and put the selection rationale outside the prompt.
 
-## 把控制放回正确层
+## Put each control back in its layer
 
-- reasoning / thinking effort 控制内部计算预算;
-- verbosity 或输出 token 控制默认篇幅;
-- structured outputs / tool schema 控制机器可解析结构;
-- temperature 与采样参数按目标模型当前建议设置;
-- 权限、工具白名单、审批和业务校验由 runtime 执行;
-- prompt caching 需要稳定静态前缀与靠后的动态输入。
+- reasoning / thinking effort controls the internal computation budget;
+- verbosity or output-token settings control default length;
+- structured outputs / tool schemas control machine-parseable structure;
+- temperature and sampling parameters follow the target model's current recommendations;
+- permissions, tool allowlists, approvals, and business validation are enforced by the runtime;
+- prompt caching needs a stable static prefix with dynamic input placed late.
 
-Prompt 只描述任务特有的目标、内容优先级、证据、约束和完成标准。不要同时用运行时参数与多条自然语言命令重复控制同一件事。
+The prompt describes only the task-specific goal, content priorities, evidence, constraints, and completion criteria. Do not control the same thing twice through runtime parameters and multiple natural-language commands.
 
-## 迁移纪律
+## Migration discipline
 
-先只切换模型并固定原有运行时基线,在代表性任务上测试。再一次调整一个变量:reasoning、prompt 模块、工具或 schema。若同时重写整套 prompt,无法判断回归来自哪里。
+First switch only the model, pin the original runtime baseline, and test on representative tasks. Then adjust one variable at a time: reasoning, prompt modules, tools, or schema. Rewriting the whole prompt at once makes it impossible to tell where a regression came from.
 
-删除旧模型留下的防偷懒、强制逐步思考、重复工具触发和冗长格式脚手架,但只在评测证明默认能力已经覆盖它们时删除。厂商特有建议放进 adapter notes,不要污染可移植核心。
+Delete the anti-laziness nudges, forced step-by-step thinking, repeated tool triggers, and verbose format scaffolding left over from older models — but only after evals prove the default capability already covers them. Put vendor-specific advice in adapter notes; do not pollute the portable core.
 
-Done when:当前模型事实来自官方资料,自然语言 prompt 与 runtime 配置各司其职,迁移可以通过单变量评测定位行为变化。
+Done when: current-model facts come from official sources, the natural-language prompt and runtime configuration each do their own job, and migration can localize behavior changes through single-variable evals.

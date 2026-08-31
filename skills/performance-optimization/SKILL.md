@@ -9,42 +9,42 @@ description: >-
   bottleneck signal, or credible scale risk.
 ---
 
-性能是系统在**特定负载下交付有用结果的行为**,不是代码看起来多底层、用了多少并发,或手写了多少优化。先明确用户感受到的结果与工作负载,再改变限制它的那一部分;没有目标和证据的优化只会把简单系统换成更难维护的系统。
+Performance is a system's behavior **delivering useful results under a specific workload** — not how low-level the code looks, how much concurrency it uses, or how many hand-written optimizations it carries. Establish the user-visible outcome and the workload first, then change the part that limits them; optimization without a target and evidence only trades a simple system for a harder-to-maintain one.
 
-## 先定义性能契约
+## Define the performance contract first
 
-说清谁在等待、处理什么工作、负载如何到达,以及什么结果才算足够好。按任务选择用户真正关心的指标:端到端延迟及其分布、吞吐、并发容量、启动或完成时间、内存、网络、成本或单位工作资源消耗。平均值会隐藏尾部与突发,局部指标会隐藏端到端等待;不要用容易测但无关的数字代替目标。
+Say who is waiting, what work is being processed, how load arrives, and what outcome counts as good enough. Pick the metrics the user actually cares about for this task: end-to-end latency and its distribution, throughput, concurrent capacity, startup or completion time, memory, network, cost, or resources per unit of work. Averages hide tails and bursts, and local metrics hide end-to-end waiting; do not substitute an easy-to-measure but irrelevant number for the goal.
 
-已有系统先在代表性数据、硬件、配置和负载下复现问题并建立基线。新系统没有可测基线时,先定义目标与负载模型;只对会决定架构成败的高风险假设做 prototype、benchmark 或 spike,不要伪装成已有生产证据。明显的无界资源增长、串行瀑布或关键路径阻塞可以在设计期处理,但要说明因果与假设。
+For an existing system, reproduce the problem and establish a baseline on representative data, hardware, configuration, and load. For a new system with no measurable baseline, define the target and the workload model first; prototype, benchmark, or spike only the high-risk assumptions that decide the architecture's success — do not dress them up as production evidence. Obvious unbounded resource growth, serial waterfalls, or critical-path blocking may be handled at design time, but state the causality and the assumptions.
 
-性能优化不能用正确性换数字。把结果语义、数据新鲜度、一致性、失败处理和资源上限纳入同一份契约;少做了必要工作而得到的加速是功能退化。
+Performance work must not trade correctness for numbers. Fold result semantics, data freshness, consistency, failure handling, and resource ceilings into the same contract; a speedup obtained by skipping necessary work is a functional regression.
 
-## 找到真正限制系统的地方
+## Find what actually limits the system
 
-沿代表性请求或数据流观察时间和资源花在哪里,区分有用计算、I/O 等待、锁或调度竞争、排队、网络与序列化、数据移动、内存压力和下游依赖。结合 profile、trace、查询计划、负载测试、运行指标或最小可重复 benchmark 定位限制;不要只凭代码形状猜瓶颈。
+Follow a representative request or data flow and observe where time and resources go, separating useful computation, I/O waiting, lock or scheduler contention, queueing, network and serialization, data movement, memory pressure, and downstream dependencies. Locate the limit with profiles, traces, query plans, load tests, runtime metrics, or a minimal reproducible benchmark; do not guess the bottleneck from the shape of the code.
 
-先看端到端关键路径和饱和点,再看局部热点。一个函数更快不代表用户更快,提高并发也可能只是把队列移到数据库或下游。高负载下延迟、错误和资源使用如何变化,往往比空载时的单次速度更能说明容量边界。
+Look at the end-to-end critical path and saturation points before local hotspots. A faster function does not mean a faster user, and more concurrency may only move the queue into the database or a downstream service. How latency, errors, and resource usage change under high load usually says more about capacity limits than single-shot speed on an idle system.
 
-## 按负载改变工作的形状
+## Reshape the work to fit the load
 
-优先寻找能否消除重复工作、减少数据量与往返、避免协调,或把非必要工作移出关键路径。算法、数据结构、数据布局和访问模式的改变通常比局部语法优化更有杠杆;具体采用哪种变换仍由已定位的限制决定。
+Look first for ways to eliminate repeated work, reduce data volume and round trips, avoid coordination, or move non-essential work off the critical path. Changes to algorithms, data structures, data layout, and access patterns usually have more leverage than local syntactic tweaks; which transformation to apply is still decided by the limit you located.
 
-把同步转成异步,是在即时完成不必要且生产者与消费者可以解耦时,用状态与运维复杂度换响应性和独立调度。设计结果查询或通知、幂等、重试、取消、超时、积压上限与失败归属;若调用者马上需要结果,异步包装不会消除等待。
+Turning synchronous work asynchronous trades state and operational complexity for responsiveness and independent scheduling — appropriate when immediate completion is unnecessary and producer and consumer can decouple. Design result polling or notification, idempotency, retries, cancellation, timeouts, backlog ceilings, and failure ownership; if the caller needs the result immediately, an async wrapper does not remove the wait.
 
-批处理通过一次承担固定开销来提高吞吐,同时增加单项等待、工作集和失败影响范围。根据延迟预算与资源上限约束批大小和最长等待,而不是无限等待"更大的批"。
+Batching raises throughput by paying a fixed overhead once, while increasing per-item waiting, working-set size, and failure blast radius. Bound batch size and maximum wait by the latency budget and resource ceilings — do not wait indefinitely for "a bigger batch".
 
-流处理适合无界输入、渐进结果或无法整体装入内存的数据。让消费者的能力反馈给生产者,并设计背压、有界缓冲与状态、取消、顺序和失败恢复;没有这些边界,流只是把内存泄漏改名为管道。
+Streaming fits unbounded input, progressive results, or data that cannot fit in memory whole. Feed consumer capacity back to producers, and design backpressure, bounded buffers and state, cancellation, ordering, and failure recovery; without these boundaries, a stream just renames a memory leak to a pipeline.
 
-并发与并行只加在相互独立、资源确实可用的工作上。限制并发,传播取消与 deadline,观察下游容量;更多 worker 在饱和后会增加竞争、排队和尾延迟。缓存只用于被证明确实昂贵且重复的工作,并把 key、失效、新鲜度、击穿和权限语义视为正确性设计,不是免费加速。
+Add concurrency and parallelism only to work that is genuinely independent and has resources available. Bound concurrency, propagate cancellation and deadlines, and watch downstream capacity; past saturation, more workers add contention, queueing, and tail latency. Use caching only for work proven expensive and repeated, and treat keys, invalidation, freshness, stampedes, and permission semantics as correctness design, not a free speedup.
 
-这些是判断视角,不是固定顺序或默认答案。简单的同步流程满足契约时就保留它;不要为了显得高性能而引入队列、流平台、分布式缓存或额外服务。
+These are lenses for judgment, not a fixed order or default answers. When a simple synchronous flow meets the contract, keep it; do not introduce queues, streaming platforms, distributed caches, or extra services to look high-performance.
 
-## 把每次改动当作实验
+## Treat every change as an experiment
 
-一次验证一个有意义的假设,在与基线相同且可重复的条件下比较前后结果。观察分布与运行波动,不要把噪声当收益;同时运行功能与压力下的正确性验证。收益必须足以支付新增代码、状态、依赖和操作负担,落在噪声内且增加复杂度的改动应撤回。
+Validate one meaningful hypothesis at a time, comparing before and after under the same reproducible conditions as the baseline. Observe distributions and run-to-run variance — do not book noise as a win — and run functional plus under-stress correctness checks alongside. The gain must pay for the added code, state, dependencies, and operational burden; revert changes that fall inside the noise while adding complexity.
 
-把有效目标变成与风险相称的性能预算、benchmark、负载测试或生产监控,防止以后无声退化。高成本测试和可能影响共享或生产环境的负载必须先确认范围与授权,优先在隔离且有代表性的环境验证。
+Turn the effective target into performance budgets, benchmarks, load tests, or production monitoring proportionate to the risk, so it cannot silently regress later. Expensive tests and load that could affect shared or production environments require confirmed scope and authorization first; prefer validating in an isolated, representative environment.
 
 ## Done when
 
-性能目标、负载模型与正确性边界明确;已有系统有可重复基线,新系统的关键假设有相称证据;瓶颈结论来自端到端测量而非猜测;所选变换与负载形态及代价相符;结果在可比条件下超过噪声并保持正确性;新增复杂度值得这份收益;关键指标已有与风险相称的回归守护。没有运行目标环境的验证时,明确标为待验证,不声称优化已经成立。
+The performance target, workload model, and correctness boundaries are explicit; an existing system has a reproducible baseline, or a new system's key assumptions have proportionate evidence; the bottleneck conclusion comes from end-to-end measurement, not guessing; the chosen transformations match the load shape and their costs; results beat the noise under comparable conditions while preserving correctness; the added complexity is worth the gain; and the key metrics have regression guards proportionate to the risk. Without validation in the target environment, mark the work as pending validation — do not claim the optimization holds.

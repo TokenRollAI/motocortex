@@ -1,35 +1,35 @@
-# Prompt 评测与迭代
+# Prompt Evaluation and Iteration
 
-Prompt 优化只有相对于目标模型、任务分布和指标才有意义。没有评测时可以提出更合理的候选,不能宣称已经提升。
+Prompt optimization is only meaningful relative to a target model, a task distribution, and metrics. Without evals you may propose better-reasoned candidates, but you cannot claim an improvement.
 
-## 建立基线
+## Establish a baseline
 
-保留原 prompt、模型快照、运行时参数、工具集合和代表性输入。先跑基线,记录失败类型,再决定改哪一处。若从零生成,用最小 prompt 作为 baseline。
+Keep the original prompt, model snapshot, runtime parameters, tool set, and representative inputs. Run the baseline first, record the failure types, then decide what to change. When generating from scratch, use a minimal prompt as the baseline.
 
-评测集至少覆盖:
+The eval set covers at least:
 
-- 典型成功路径;
-- 真实边界或难例;
-- 缺少必要信息;
-- 冲突、噪声或输入顺序变化;
-- 领域特有的安全或质量风险。
+- the typical success path;
+- real boundaries or hard cases;
+- missing necessary information;
+- conflicts, noise, or input-order variation;
+- domain-specific safety or quality risks.
 
-从真实轨迹选择样例,并保留未参与优化的 held-out 集。不要只用促成当前改法的失败案例评分。
+Pick samples from real trajectories and keep a held-out set that never touches the optimization. Do not score only against the failure cases that motivated the current change.
 
-## 选择指标
+## Choose metrics
 
-优先使用可执行或可复核指标:正确答案、schema validator、测试、构建、引用对应、权限事件、人工偏好。再补充任务完成度、事实覆盖、格式、成本、延迟、reasoning token、工具调用与重试。
+Prefer executable or checkable metrics: correct answers, schema validators, tests, builds, citation correspondence, permission events, human preference. Then supplement with task completion, factual coverage, format, cost, latency, reasoning tokens, tool calls, and retries.
 
-LLM judge 需要明确 rubric、校准样例和人工抽查。模型自我评价可以生成候选诊断,不能单独证明改进。
+An LLM judge needs an explicit rubric, calibration samples, and human spot checks. Model self-assessment can generate candidate diagnoses; it cannot prove improvement on its own.
 
-## 小步消融
+## Small-step ablation
 
-每次只增加、删除或改写一个有意义的模块,复跑相同样例。比较 bare/core prompt、领域模块、few-shot、reasoning 配置和工具变化,找出真正贡献质量的部分。
+Add, remove, or rewrite one meaningful module at a time and re-run the same samples. Compare the bare/core prompt, domain modules, few-shot examples, reasoning configuration, and tool changes to find what actually contributes quality.
 
-同时观察平均表现与最坏失败。一个 prompt 在开发集得分更高但增加越权、幻觉或跨版本波动,不能视为更好。迁移模型或工具后重跑回归;不要假设旧最优格式可移植。
+Watch both average performance and worst-case failures. A prompt that scores higher on the dev set while adding overreach, hallucination, or cross-version volatility is not better. Re-run the regression after migrating models or tools; do not assume the old optimal format is portable.
 
-## 交付评测建议
+## Deliver eval suggestions
 
-没有条件现场运行时,给出小而具体的测试表:输入特征、期望行为、失败信号和需要记录的指标。把未经验证的改动列为假设,并指出最低成本的下一次实验。
+When running evals in place is not possible, provide a small, concrete test table: input characteristics, expected behavior, failure signals, and the metrics to record. List unvalidated changes as hypotheses and point out the lowest-cost next experiment.
 
-Done when:改动对应已观察的失败模式,有可复现 baseline 与比较方法,结论区分测得结果和待验证假设。
+Done when: every change maps to an observed failure mode, there is a reproducible baseline and comparison method, and the conclusion separates measured results from pending hypotheses.
