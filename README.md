@@ -35,8 +35,9 @@ npx skills add TokenRollAI/motocortex --global
 | `architecture-design` | model | design or review architecture, technology choices, boundaries, and evolution without speculative complexity | task-adapted decision, design, or review |
 | `performance-optimization` | model | design, diagnose, optimize, or review performance from workload goals and evidence | task-adapted strategy, diagnosis, or verified change |
 | `better-prompt` | model | draft, diagnose, or optimize prompts with focused domain guidance | optimized prompt, runtime notes, minimal evals |
+| `study-codebase` | model | explain a project's purpose, architecture, dependencies, core implementation, and transferable lessons from source evidence | study note, proposed implementation exercise, GitHub Gist when requested |
 
-`start-a-goal` is the single user-invoked entry point. The other four are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, and `better-prompt` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
+`start-a-goal` is the single user-invoked entry point. The other five are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, `better-prompt`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
 
 ## How start-a-goal works
 
@@ -73,7 +74,15 @@ Review this service boundary and recommend the simplest architecture that meets 
 Diagnose this latency regression, establish a representative baseline, and keep only improvements the evidence supports.
 
 Rewrite this prompt around intent, reasons, and judgment; give me concrete checks for whether behavior improves.
+
+Use study-codebase to study <repository URL or local path>, explain its core design, and publish the learning note as a GitHub Gist.
 ```
+
+## How study-codebase works
+
+The study follows a representative user action through the source at an identified revision, explaining the project's purpose, architecture and important dependencies, core implementation, and worthwhile design lessons. The main text teaches through natural language and concrete examples and can be understood without opening source links. Most evidence is grouped in a source-reading appendix, with occasional inline references where immediate verification helps; inferred rationale and unverified behavior remain explicit. A short reading route and a proposed small implementation exercise help the reader turn understanding into practice. Building the exercise is a separate task.
+
+The output is a standalone Markdown note in the user's language. When Gist delivery is requested, the skill publishes the completed note and verifies the uploaded content and visibility. It honors requested visibility and otherwise uses a secret Gist, which is unlisted but readable by anyone with the URL. Publishing requires an authenticated GitHub tool or CLI; if unavailable, the completed local note is preserved and publication is reported as blocked. A study request alone keeps delivery local.
 
 ## Design principles
 
@@ -84,6 +93,7 @@ Rewrite this prompt around intent, reasons, and judgment; give me concrete check
 - **Architecture starts with forces, not patterns.** Business outcomes, quality scenarios, constraints, and credible change determine structure and technology; every layer and extension point must pay for itself.
 - **Performance is behavior under load.** Define the workload and target, find the real constraint, then choose the transformation whose trade-offs fit the evidence.
 - **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
+- **Learning follows mechanisms.** Trace concrete behavior through source, explain design costs as well as benefits, and extract a small exercise that tests understanding.
 - **Files carry state.** Decisions, readiness risks, completion criteria, execution rules, and progress survive across agents and context windows.
 
 ## Repository structure
@@ -97,9 +107,12 @@ skills/
 │   └── templates/    # durable decision record
 ├── architecture-design/
 ├── performance-optimization/
-└── better-prompt/
-    ├── references/   # domain guides, model adaptation, evaluation
-    └── templates/    # prompt delivery skeleton
+├── better-prompt/
+│   ├── references/   # domain guides, model adaptation, evaluation
+│   └── templates/    # prompt delivery skeleton
+└── study-codebase/
+    ├── references/   # Gist publication and verification
+    └── templates/    # source-backed study note and learning exercise
 ```
 
 `skills/` is the only distribution source of truth. Each skill keeps its decision-making discipline in `SKILL.md`, puts copyable artifact skeletons under `templates/`, and puts load-on-demand deep guidance under `references/`. All skill content is written in English.
