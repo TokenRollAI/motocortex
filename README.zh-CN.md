@@ -35,8 +35,9 @@ npx skills add TokenRollAI/motocortex --global
 | `architecture-design` | 模型触发 | 设计或审查架构、技术选型、边界与演进，排除推测性复杂度 | 按任务交付决策、设计或审查 |
 | `performance-optimization` | 模型触发 | 从负载目标与证据出发设计、诊断、优化或审查性能 | 按任务交付策略、诊断或已验证改动 |
 | `better-prompt` | 模型触发 | 用聚焦的领域指南生成、诊断或优化 prompt | 优化后的 prompt、runtime 建议、最小评测 |
+| `study-codebase` | 模型触发 | 根据源码证据解释项目用途、架构、依赖、核心实现与可迁移的设计经验 | 学习笔记、小型实现练习提案、按需发布的 GitHub Gist |
 
-`start-a-goal` 是唯一的用户触发入口。其余四个是模型触发的纪律：`grill` 在关键决策需要澄清时由 `start-a-goal` 拉入，也可以在不确定性妨碍有效推进时单独使用；`architecture-design`、`performance-optimization` 与 `better-prompt` 彼此独立——任务确实需要时，模型根据 description 选择它们，它们之间没有调用或依赖。
+`start-a-goal` 是唯一的用户触发入口。其余五个是模型触发的纪律：`grill` 在关键决策需要澄清时由 `start-a-goal` 拉入，也可以在不确定性妨碍有效推进时单独使用；`architecture-design`、`performance-optimization`、`better-prompt` 与 `study-codebase` 彼此独立——任务确实需要时，模型根据 description 选择它们，它们之间没有调用或依赖。
 
 ## start-a-goal 如何工作
 
@@ -73,7 +74,15 @@ npx skills add TokenRollAI/motocortex --global
 诊断这次延迟回归，建立有代表性的基线，只保留证据支持的优化。
 
 围绕意图、原因和判断依据重写这份 prompt，并给出检验行为是否改善的具体用例。
+
+使用 study-codebase 调研 <仓库 URL 或本地路径>，解释核心设计，并把学习笔记发布为 GitHub Gist。
 ```
+
+## study-codebase 如何工作
+
+调研从一个具体用户行为出发，沿确定版本的源码追踪，解释项目用途、架构与关键依赖、核心实现，以及值得学习的设计。正文用自然语言和具体例子讲解，不打开源码链接也能理解；大部分证据集中在文末的源码阅读附录，仅在需要即时核验的关键处保留少量行内引用。设计动机的推断与未经验证的行为明确标注。最后给出一条精简的源码阅读路线和一个小型实现练习提案，帮助读者把理解转化为实践；真正实现练习属于后续任务。
+
+产物是一份使用用户语言的独立 Markdown 笔记。用户要求 Gist 时，skill 发布完整笔记并核对上传内容与可见性。优先沿用指定的可见性，否则使用 secret Gist：不公开列出，但持有链接的人都能读取。发布需要已认证的 GitHub 工具或 CLI；不可用时保留完整本地笔记，并明确说明发布阻塞。仅要求调研时，交付保留在本地。
 
 ## 设计原则
 
@@ -84,6 +93,7 @@ npx skills add TokenRollAI/motocortex --global
 - **架构从作用力出发，不从模式出发。** 让业务结果、质量场景、约束与可信变化决定结构和技术；每一层与每个扩展点都要证明自己的代价值得。
 - **性能是负载下的行为。** 先定义负载与目标、找到真实限制，再选择取舍与证据相符的变换。
 - **Prompt 是契约，不是咒语。** 可移植核心保持精简，只加入会改变行为的指南，并用代表性样例验证。
+- **学习沿着机制展开。** 用源码追踪具体行为，同时解释设计收益与代价，再提炼一个能检验理解的小型练习。
 - **用文件承载状态。** 决策、就绪风险、完成标准、执行规则和进度可以跨 agent、跨 context window 延续。
 
 ## 仓库结构
@@ -97,9 +107,12 @@ skills/
 │   └── templates/    # 持久化决策记录
 ├── architecture-design/
 ├── performance-optimization/
-└── better-prompt/
-    ├── references/   # 领域指南、模型适配、评测
-    └── templates/    # prompt 交付骨架
+├── better-prompt/
+│   ├── references/   # 领域指南、模型适配、评测
+│   └── templates/    # prompt 交付骨架
+└── study-codebase/
+    ├── references/   # Gist 发布与核验
+    └── templates/    # 有源码证据的学习笔记与实现练习
 ```
 
 `skills/` 是唯一的分发真源。每个 skill 在 `SKILL.md` 中保留判断纪律，把需要照抄的产物骨架放在 `templates/`，把按需加载的深度指南放在 `references/`。所有 skill 内容用英文书写。
