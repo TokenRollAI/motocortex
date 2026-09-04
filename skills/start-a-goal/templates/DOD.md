@@ -1,39 +1,27 @@
 # DOD template
 
-When producing `DOD.md`, copy this skeleton. The number and content of phases depend on the project; the final phase is always E2E and maps to every user case in VISION.
+Use this skeleton for verifiable acceptance. Organize items into milestones when useful, with ordering based on actual dependencies. Each item states an expected result and the evidence that can establish it.
 
 <dod-template>
 # DOD (Definition of Done)
 
-> Check-off discipline: an item may be checked if and only if there is a
-> re-runnable command whose output proves it. "I think it's done" does not
-> count. The source of truth for the spec is VISION.md.
+## Acceptance basis
 
-## Global definition of done
+VISION.md describes the agreed outcomes. A checked item requires evidence for the current state: a command and result, a repeatable user procedure and observed result, or explicit human review with reviewer and outcome. Link the evidence from PROGRESS.md. Reopen items when later changes invalidate their evidence.
 
-The project is done when all of the following hold:
-1. Every phase's DoD list is fully checked, each item backed by a re-runnable command.
-2. Every E2E item in the final phase passes (one per VISION user case).
-3. <Project-specific global conditions, e.g. "one-command build is green".>
+## Global acceptance
 
-## Phase 0 — <name>
+<Conditions applying to the complete result, including required regression checks, expected results, and any human acceptance. Every condition must be satisfied before completion.>
 
-**Goal**: <what exists when this phase ends>
-**DoD**:
-- [ ] <verifiable item, with the command that verifies it>
-- [ ] ...
+## Acceptance items
 
-## Phase 1 — <name>
+- [ ] <Item ID>: <observable outcome; VISION criterion or case covered; verification method and expected result; actual prerequisites, if any>
 
-**Goal**: ...
-**DoD**:
-- [ ] ...
+## End-to-end acceptance
 
-## Phase N — E2E acceptance
+- [ ] <Acceptance ID>: <complete user scenario or related scenarios; VISION case identifiers; command, repeatable procedure, or human review; expected outcome>
 
-> Each E2E item maps to one VISION user case — scripted and re-runnable.
-> Checkboxes carry the state; the check-off discipline at the top applies.
+## Coverage
 
-- [ ] **E2E-1** <Case 1>: <re-runnable command + expected output>
-- [ ] **E2E-2** <Case 2>: ...
+<Map every VISION success criterion and user case to acceptance items. One check may cover several outcomes when its evidence actually demonstrates each of them.>
 </dod-template>

@@ -4,13 +4,13 @@ Applies to code, websites, documents, spreadsheets, presentations, images, and o
 
 ## How to optimize
 
-Lead with the goal, pointers to the current state, scope, invariants, and non-goals. When an existing repository or artifact already has a design system, format, stack, and conventions, require checking and reusing them first — do not rewrite them from thin air inside the prompt.
+Provide the goal, pointers to the current state, scope, invariants, and relevant non-goals. Existing design systems, formats, stacks, and conventions encode decisions the prompt should preserve unless the task calls for changing them. Point the agent to their source rather than duplicating or inventing those details in the prompt.
 
 Write the Definition of Done as runnable tests, builds, type checks, render checks, user scenarios, or human acceptance points. "Self-review" or "high quality" alone cannot serve as completion criteria.
 
 Specify libraries, architecture, or file-level steps only when the implementation path is itself a hard constraint. Otherwise describe behavior, interfaces, compatibility, performance, and security boundaries, and let the model choose the minimal change given the existing context. State explicitly which refactors, extra features, and future abstractions are out of scope.
 
-Separate planning, editing, verification, committing, deployment, and external publication. A request to implement normally authorizes in-scope local edits and non-destructive verification; it does not automatically authorize deployment, opening PRs, sending messages, or other external writes.
+Distinguish the authority needed for editing, verification, committing, deployment, and publication without imposing separate workflow stages. Infer scope from the user's request, existing authorization, and host rules. Proceed with authorized work; clarify only missing authority for consequential actions, since repeated approvals do not make an already authorized task clearer.
 
 Require visual or typographic artifacts to be checked after rendering. Require code to run the most relevant tests; when verification is impossible, report why and the next-best check. Do not let a long explanation substitute for the real artifact and its verification results.
 

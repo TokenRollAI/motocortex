@@ -8,7 +8,7 @@ State the work's purpose, audience, medium, usage context, and the facts it must
 
 Unpack "premium", "compelling", or "like brand X" into observable writing or design choices — rhythm, sentence length, information density, point of view, color relationships, emotional arc. Avoid direct style imitation of living artists; describe composable visual or verbal characteristics instead.
 
-Examples anchor results strongly. For consistency, give a few representative examples; for divergence, first ask for several clearly different directions, pick with selection criteria, then expand — do not front-load a pile of finished references.
+Examples anchor results strongly. Use representative examples when consistency matters; when exploration matters, describe the dimensions open to variation and how to choose a direction. Multiple concepts can help a user choose, but a request for a finished piece need not become a mandatory concept-selection workshop.
 
 Keep factual material and creative space separate. Mark the names, plots, and numbers that may be invented; product capabilities, customer results, dates, quotes, and research conclusions must not be fabricated for copy effect.
 

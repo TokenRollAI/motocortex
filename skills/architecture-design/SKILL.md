@@ -13,19 +13,21 @@ description: >-
 
 Architecture is the arrangement, under uncertainty, of **which decisions must be made now and which changes must stay affordable later**. Its value is not more layers or fashionable patterns — it is a system simple enough to meet what actually matters, with expensive change confined behind clear boundaries.
 
+Match the depth and output to the request: a focused review may need a few findings, while a new system may need a design and supporting experiments. Use the following lenses where they can change the conclusion. A review request does not itself authorize restructuring the system.
+
 ## Start from the driving forces
 
 First understand the business outcomes the system must produce, the critical user paths, the business invariants, and the existing constraints. Turn structure-shaping quality requirements into concrete scenarios: under what load, failure, or change must the system make what observable response. "High performance", "scalable", "highly available" cannot guide design by themselves; only requirements with an environment, a scale, and an outcome can enter a trade-off.
 
-Read the existing code, configuration, docs, dependencies, and runtime environment first. Look up whatever the environment can answer yourself, and prefer continuing technologies and conventions already proven to meet the need. Widen the candidate set only when the current approach shows a clear gap — do not pay migration, learning, and operations costs for theoretical advantages.
+Inspect the existing code, configuration, docs, dependencies, and runtime context relevant to the decision. Look up discoverable facts yourself, and prefer continuing technologies and conventions already proven to meet the need. Widen the candidate set when the current approach shows a gap; theoretical advantages alone rarely repay migration, learning, and operations costs.
 
-Separate ordinary implementation choices from architecturally significant decisions. If the core stack, data ownership, module or service boundaries, consistency model, key integration style, or a hard-to-exit dependency is still open, investigate first and hand the trade-off to the user to settle before advancing the work that depends on it. Decide local, reversible, structure-neutral choices yourself — do not turn everyday development into an architecture meeting.
+Separate ordinary implementation choices from architecturally significant decisions. For open choices about the core stack, ownership, boundaries, consistency, integration, or hard-to-exit dependencies, explain the trade-off and identify whether the user's existing instructions settle it or delegate it. Bring unresolved user-owned choices back before committing dependent implementation. Decide local, reversible, structure-neutral choices yourself so architectural attention stays on costly commitments.
 
 ## Make every structure answer for its cost
 
 Draw boundaries around business invariants, data ownership, independent change, and failure isolation. A boundary's purpose should be stateable as one causal sentence: what rule it protects, what change it isolates, or what failure propagation it stops.
 
-Only a layer that encapsulates policy, transforms a model, shields change, or isolates a dependency has absorbed real complexity. A layer that merely forwards calls, duplicates names, or spreads one modification across more files is hauling complexity around — merge it. Conversely, when business rules, infrastructure, and interface changes keep entangling each other, introduce the boundary that separates them.
+Assess a layer by the policy, model transformation, change, or dependency it isolates. Forwarding calls alone does not justify its cost, but an apparently thin interface may still protect a real ownership or compatibility boundary. Recommend consolidation when the indirection adds cost without protecting a relevant constraint; introduce separation when business rules, infrastructure, and interface changes repeatedly interfere. Apply structural changes within the task's scope.
 
 Treat patterns as tools that resolve known forces, never as starting points. Microservices, event-driven designs, DDD, Clean Architecture, plugin systems, or any framework must buy a capability needed now, with the coordination, consistency, debugging, deployment, and cognitive costs accounted for. Choose the simplest complete design that satisfies the forces; adopt nothing because it is popular or familiar.
 
@@ -41,8 +43,8 @@ Compare only candidates that genuinely stand a chance. Examine them against the 
 
 Versions, limits, support windows, prices, and ecosystem health change; verify them against current official sources. For assumptions the sources cannot settle but the design's success depends on, validate with a minimal prototype, benchmark, or spike; treat that code as learning material, not production by default. Write the conclusion with the reason for the choice, the costs accepted, and the condition changes that should trigger a re-examination.
 
-Walk the design once along a representative user path, data flow, failure path, and future change. This surfaces synchronous chains, shared state, implicit ownership, and cross-boundary coordination without imposing a mechanical architecture checklist on every project. When a written record is warranted, follow the repository's existing ADR or architecture-doc conventions; if the user has not asked and the repository has none, do not invent a documentation system.
+Use representative user paths, data flows, failures, or credible changes to test the boundaries most likely to fail. Such examples expose shared state, implicit ownership, and coordination that a structural diagram can hide; select the ones relevant to the decision. When a written record is warranted, follow existing ADR or architecture-doc conventions; otherwise deliver the reasoning in the form the task needs.
 
 ## Done when
 
-Every architecturally significant choice traces to a functional goal, a quality scenario, or a real constraint; technical facts are verified and success-critical unknowns are validated or explicitly exposed; every boundary and layer states the complexity it absorbs; extension points correspond to credible, expensive change, with speculative abstraction excluded; the major costs, exit paths, and re-examination triggers are clear; and every open decision that would change the architecture irreversibly has been handed to the user before the implementation that depends on it begins.
+The design, recommendation, or review answers the requested architectural question. Significant choices and boundaries trace to relevant goals or constraints; technical claims have evidence, and success-critical unknowns are validated or exposed with their implications. The main costs, credible change needs, and conditions for reconsideration are clear. Any user-owned decision needed before implementation is identified without turning completion of the review into an implementation requirement.

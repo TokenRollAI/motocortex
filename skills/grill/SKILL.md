@@ -1,35 +1,35 @@
 ---
 name: grill
 description: >-
-  Gather the project's context, then interview the user one question at a time
-  about the decisions they may not realize are open, until every branch is
-  settled and nothing is silently assumed. Writes the conclusions to
-  DECISIONS.md. Use when a goal is still rough and needs pinning down before
-  any work, or when another skill needs the context clarified.
+  Clarify consequential open decisions from project context and a focused user
+  interview, recording the results in DECISIONS.md. Use when a rough goal,
+  conflicting requirements, or unresolved scope, acceptance, or costly choices
+  prevent confident progress. Do not use for routine implementation choices
+  that can be resolved from existing context.
 ---
 
-Take the context in first, then question everything still unsettled until it is clean. This work stocks the shelves for DOR — the more thoroughly you ask now, the less an autonomous agent drifts later.
+Help the user settle the uncertainty that could change the outcome or cause expensive rework. Good clarification makes useful work possible and exposes important assumptions; it does not require predicting every future branch of the project.
 
-## Collect before you ask
+## Investigate what matters to the decision
 
-Before asking anything, read in every piece of context you can reach: repository structure, existing docs, the technology stack (package.json / configs / CI), established conventions, recent hotspots in the git log. **Look up yourself any fact the environment can answer — never ask the user for it.** Sort the findings into two piles: **settled** and **open**. (If `start-a-goal` already collected this, use its conclusions — do not read everything twice.)
+Inspect the context that can answer the current questions: relevant code, docs, configuration, established conventions, or prior decisions. Reuse findings supplied by the caller. Widen the search when a conflict or missing fact could change the recommendation; collecting unrelated context consumes attention without reducing decision risk.
 
-For a settled stack or existing convention, record it and confirm with the user in one sentence — do not re-interview. Spend the questioning budget only on decisions left hanging.
+Separate facts, user decisions, and working assumptions. Preserve settled choices unless new evidence or the user's request reopens them. Verify facts through available sources; when evidence is unavailable, expose the gap rather than treating a guess as a settled fact.
 
-## Interrogate the open decisions
+## Ask where the answer changes the work
 
-Work through the open pile one decision at a time. The aim is to surface questions **the user may not realize are open**: edge cases, failure paths, implicit premises, requirements that contradict each other.
+Bring consequential choices to the user: intended behavior, scope, acceptance, conflicting priorities, or commitments costly to reverse. Explain why the choice matters now, recommend an option with its trade-off, and make the alternatives understandable. Handle ordinary reversible implementation details within the existing goal and authorization yourself.
 
-Carry the questions with **AskUserQuestion**: one decision per question, the recommended answer as the first option marked "(Recommended)", the remaining options as genuine alternative branches. Before each question, give one sentence on why this decision is open and why it must be settled now, so the user chooses with context. Fall back to prose only for questions that cannot be enumerated into options.
+Prefer one decision at a time when its answer shapes later questions. Group independent questions when that reduces interruption without hiding trade-offs. Use an available host question tool when suitable, or ask in prose when the tool is absent, unavailable in the current mode, or unsuitable for the question.
 
-Decisions belong to the user; factual gaps you fill yourself from the environment.
+When the user is unavailable, continue work that does not depend on their decision. A low-cost, reversible assumption can support progress if it fits the existing intent and is recorded as an assumption. Silence cannot authorize scope changes, irreversible commitments, or acceptance changes; keep dependent work pending until the required answer arrives.
 
-When the user is temporarily unreachable, do not deadlock: take the default that best fits the existing context, record the assumption explicitly, keep moving, and have the user ratify the batch later.
+## Preserve decisions as they emerge
 
-## Write it down — do not leave it in the conversation
+Record decisions and their reasons incrementally in `DECISIONS.md` using [templates/DECISIONS.md](templates/DECISIONS.md). Use the caller's goal directory or the repository's existing convention, and update the matching record without overwriting an unrelated goal. Persisting during clarification keeps resolved questions from being asked again after context loss.
 
-Consensus that lives only in session context gets wiped by automatic compaction, and the framing step then has nothing to build on. Write the conclusions into `DECISIONS.md` — three sections suffice: **Settled** (existing stack / conventions), **Decided** (one line each: decision + one-sentence reason), **Assumptions on record** (defaults taken while the user was away, pending ratification). The framing step reads this file to write VISION and DOR; it never replays the conversation.
+Distinguish what is settled from what still needs a decision, and identify which work each open question blocks. Ask for confirmation when a consequential interpretation remains uncertain; an answer already given does not need a second approval ceremony.
 
 ## Done when
 
-The frontier is empty: every branch of the decision tree has been walked, nothing is silently assumed, and `DECISIONS.md` is on disk. Do not write further documents until the user confirms the consensus. Hand off to the framing step.
+The next useful work has a clear goal and acceptance basis, consequential choices needed for that work are settled, and DECISIONS records the supporting facts, decisions, reversible assumptions, and deferred questions. If a necessary choice remains unanswered, hand off that specific blocker rather than claiming consensus. Stop asking when further answers would not change the work now authorized.
