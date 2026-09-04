@@ -1,33 +1,27 @@
 # DOR template
 
-When producing `DOR.md`, copy this skeleton. Turn every line into a concrete item for this project — leave no placeholder text. Check off what is satisfied; mark what is missing as a blocker.
+Use this skeleton for project-specific readiness facts and gaps. Omit categories that do not apply; name the affected work for every unresolved prerequisite.
 
 <dor-template>
 # DOR (Definition of Ready)
 
-> Readiness-risk list before work starts. Satisfied items are checked off.
-> Unsatisfied items do not block the start — they are inherited into PROGRESS
-> as blockers, narrowing what the agent can advance this run (DoD items that
-> depend on them get skipped) instead of stalling the whole effort. The point
-> is to start running with a clear picture of what is not ready, not to wait
-> at the gate.
+## Requirements and decisions
 
-## Requirements readiness
-- [ ] Every VISION success criterion is verifiable (checkable by a command or a user case)
-- [ ] No silent assumptions (every assumption grill recorded has been ratified by the user)
+<Settled scope and acceptance basis; unresolved choices and the work requiring an answer. Distinguish reversible assumptions from decisions reserved for the user.>
 
 ## Technical readiness
-- [ ] Technology stack settled (existing choices recorded; new choices justified)
-- [ ] Build / test / run commands known and runnable
+
+<Relevant existing stack and conventions, reasons for new choices, and available build, run, or verification capabilities.>
 
 ## External prerequisites
-- [ ] Required credentials / accounts / external services in place (list each; mark missing ones as blockers)
-- [ ] Upstream dependencies / environments reachable
+
+<Required services, accounts, environments, or inputs; their availability and the work depending on them. Reference secret locations without copying secret values.>
 
 ## Acceptance readiness
-- [ ] Every user case has a re-runnable acceptance command that can be written for it
+
+<Available commands, repeatable user procedures, or human reviewers; missing verification capabilities and the acceptance they affect.>
 
 ## Blockers
-<List every unsatisfied prerequisite here; the engine step copies them into
- PROGRESS's initial state. Write "none" if there are none.>
+
+<For each gap: affected DOD items or outcomes, missing input, and what would resolve it. Mirror unresolved gaps in PROGRESS; write none if ready.>
 </dor-template>

@@ -17,12 +17,12 @@ If no target is specified, deliver a portable core first. Suggest candidates onl
 - permissions, tool allowlists, approvals, and business validation are enforced by the runtime;
 - prompt caching needs a stable static prefix with dynamic input placed late.
 
-The prompt describes only the task-specific goal, content priorities, evidence, constraints, and completion criteria. Do not control the same thing twice through runtime parameters and multiple natural-language commands.
+Use runtime settings for mechanical controls and the prompt for their task-specific meaning. For example, an output budget limits size while the prompt explains what must survive compression. Avoid duplicating the same control in several places when those versions could conflict.
 
 ## Migration discipline
 
-First switch only the model, pin the original runtime baseline, and test on representative tasks. Then adjust one variable at a time: reasoning, prompt modules, tools, or schema. Rewriting the whole prompt at once makes it impossible to tell where a regression came from.
+Preserve a baseline that makes the migration's effects interpretable. When identifying the cause of a regression, hold other factors stable while changing the model, prompt, or runtime setting under investigation. If the user requests a combined redesign, evaluate it as a candidate against the baseline and use narrower experiments where attribution matters.
 
-Delete the anti-laziness nudges, forced step-by-step thinking, repeated tool triggers, and verbose format scaffolding left over from older models — but only after evals prove the default capability already covers them. Put vendor-specific advice in adapter notes; do not pollute the portable core.
+Replace legacy nudges, forced reasoning scripts, repeated tool triggers, and unnecessary format scaffolding with the goal or invariant they were meant to protect. Preserve requirements whose purpose still applies. Treat behavioral gains from simplification as hypotheses until tested, and put vendor-specific advice in adapter notes rather than the portable core.
 
-Done when: current-model facts come from official sources, the natural-language prompt and runtime configuration each do their own job, and migration can localize behavior changes through single-variable evals.
+Done when: current-model facts come from official sources, the prompt and runtime configuration have complementary roles, and the migration has a comparison method that can reveal regressions and investigate their causes.

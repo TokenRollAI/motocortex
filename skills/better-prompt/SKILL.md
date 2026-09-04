@@ -8,67 +8,49 @@ description: >-
   underperforming, or needs migration, simplification, or evaluation.
 ---
 
-Treat a prompt as a **task contract**, not an incantation that unlocks model capability. The goal of optimization is not longer text or a more spec-like look — it is the target model delivering what the user actually wants, reliably, with less ambiguity, fewer conflicts, and fewer dead constraints.
+Give the model the intent, context, and judgment needed to produce the right result. A useful prompt explains why a constraint matters and what distinguishes success from failure, while leaving ordinary reasoning and execution choices to the model. More instructions are valuable only when they resolve a real ambiguity or protect a necessary boundary.
 
-## Preserve the original intent first
+## Preserve what the user is trying to achieve
 
-The input may be an existing prompt or just a rough goal. Recover its real intent first: audience, inputs, deliverable, success criteria, and where it runs. Distinguish stable system/developer rules, the current user task, external data, and tool returns; do not mash content of different priorities into one blob.
+Recover the audience, inputs, deliverable, acceptance basis, and operating context from the request and available artifacts. Distinguish stable system/developer instructions, the current task, external data, and tool results; flattening their roles creates conflicts that stronger wording cannot repair.
 
-Look up yourself whatever the existing prompt, calling code, tool schemas, evals, or context can answer. Ask only about decisions that would materially change the contract; for the rest, proceed on the most conservative reasonable assumption and list the assumptions outside the prompt for the user to confirm.
+Inspect the existing prompt, calling code, tool schemas, evals, or relevant context where they can answer an open question. Ask about choices that materially change intent or authorization. Use reasonable, visible assumptions for low-cost details instead of making the user specify the model's entire workflow.
 
-Given an existing prompt, preserve its effective behavior and authorization boundaries first, then make the smallest change with the most explanatory power. Given only a rough goal, produce a minimal usable version — do not preempt every failure that has not yet been observed.
+Preserve effective behavior and existing authorization when revising a prompt. Match the size of the rewrite to the problem: a local ambiguity may need one sentence, while a prompt built around obsolete or conflicting procedures may need a new structure. For a rough goal, supply a minimal usable prompt without inventing requirements for hypothetical failures.
 
-## Route by task shape
+## Explain causes and decision criteria
 
-Determine the dominant task shape first, and read only the relevant domain guide. When one prompt mixes several shapes, read the necessary few and make the priority explicit — do not pile every domain's rules in.
+When an instruction prescribes a step, ask what the step protects. Preserve the underlying requirement and explain the condition that makes the step useful. For example, an approval boundary protects a user-owned commitment; evidence protects an acceptance claim; a dependency constrains order because later work needs the earlier result. These reasons help the model adapt when circumstances differ from the example.
 
-| Task shape | When to read |
+Keep fixed procedures when their sequence is itself required for authorization, correctness, reproducibility, or the user's chosen process. Otherwise describe the outcome, relevant trade-offs, and evidence needed to decide. An exact retry count, tool sequence, output outline, or interview script needs a task-specific reason to be mandatory.
+
+Look for behavior-changing defects: conflicting priorities, vague acceptance, hidden assumptions, duplicated rules, examples that anchor unwanted behavior, and tool or permission gaps. If the cause belongs to retrieval, schemas, runtime configuration, access control, or missing capabilities, identify that layer rather than trying to compensate with more prose.
+
+Keep each rule in one appropriate place. Use clear boundaries and positive, observable expectations; reserve prohibitions for constraints whose violation would change intent, correctness, or authority. Request key assumptions, evidence, and concise rationale when useful, not a recital of hidden chain of thought. Explain a rule's causal value without padding obvious advice into a tutorial.
+
+## Load guidance where it changes the answer
+
+Choose the relevant task shapes; mixed prompts may need several guides, but unrelated guidance adds competing priorities.
+
+| Task shape | Relevant guidance |
 |---|---|
-| Direct response and text transformation | Q&A, explanation, summarization, extraction, classification, rewriting, translation: read [direct-response.md](references/domains/direct-response.md) |
-| Reasoning and decisions | Math, analysis, planning, comparison, recommendation, diagnosis: read [reasoning-and-decisions.md](references/domains/reasoning-and-decisions.md) |
-| Research and synthesis | Search, fact-checking, citations, literature or competitive synthesis: read [research-and-synthesis.md](references/domains/research-and-synthesis.md) |
-| Coding and artifacts | Code, websites, documents, spreadsheets, presentations, or other verifiable artifacts: read [coding-and-artifacts.md](references/domains/coding-and-artifacts.md) |
-| Tool-using agents | Calls tools, changes state, runs long, or handles untrusted external content: read [tool-using-agents.md](references/domains/tool-using-agents.md) |
-| Creative work | Ideation, copywriting, stories, visual direction, open-ended design: read [creative-work.md](references/domains/creative-work.md) |
+| Q&A, explanation, summarization, extraction, classification, rewriting, translation | [Direct response](references/domains/direct-response.md) |
+| Math, analysis, planning, comparison, recommendation, diagnosis | [Reasoning and decisions](references/domains/reasoning-and-decisions.md) |
+| Search, fact-checking, citations, literature or competitive synthesis | [Research and synthesis](references/domains/research-and-synthesis.md) |
+| Code, websites, documents, spreadsheets, presentations, verifiable artifacts | [Coding and artifacts](references/domains/coding-and-artifacts.md) |
+| Tool calls, state changes, long-running work, untrusted external content | [Tool-using agents](references/domains/tool-using-agents.md) |
+| Ideation, copywriting, stories, visual direction, open-ended design | [Creative work](references/domains/creative-work.md) |
 
-When the user names a model, asks for migration, or the optimization depends on current model capabilities, also read [model-adaptation.md](references/model-adaptation.md) and check that model's current official guidance. When you need to prove an optimization works or design a regression set, read [evaluation.md](references/evaluation.md).
+For a named model, migration, or claims about current model capabilities, use [model-adaptation.md](references/model-adaptation.md) and verify relevant official guidance. For empirical comparisons or regression design, use [evaluation.md](references/evaluation.md). Keep vendor settings outside the portable prompt; model capability claims need evidence, not assumptions based on model branding.
 
-## Diagnose before rewriting
+## Deliver and validate proportionately
 
-Look for problems that actually change behavior:
+Return a directly usable prompt in the form requested. Use [templates/PROMPT.md](templates/PROMPT.md) when a structured delivery helps; omit sections that add no value. Write or replace files when the user requests that work. A diagnosis-only request can end with findings and proposed changes rather than an unsolicited rewrite.
 
-- vague goal, inputs, completion criteria, or audience;
-- duplicated or conflicting instructions, or every requirement written at top priority;
-- steps prescribed that are irrelevant to the goal, narrowing paths the model could validly take;
-- only unverifiable demands like "be careful", "be professional", "don't hallucinate";
-- context piled up with unclear provenance, or blurred boundaries between data and instructions;
-- few-shot examples that fix no known failure and instead anchor wrong patterns;
-- runtime controls — reasoning depth, verbosity, temperature, schema — disguised as universal natural-language tricks;
-- underspecified tools, permissions, side effects, evidence, verification, retries, and stop conditions;
-- expecting the prompt alone to solve permission isolation, structural constraints, or prompt injection.
+Distinguish a reasoned revision from demonstrated improvement. When evals are available and running them is in scope, compare the original and revised prompts on representative inputs under comparable runtime conditions. Isolate variables when needed to explain a result; a coherent rewrite can be evaluated as a whole when that is the change the user asked for.
 
-Sort out the root cause. If a problem belongs to tool design, permissions, retrieval, model choice, runtime parameters, schema, server-side validation, or missing evals, say so explicitly and move it to the right layer — do not paper over a system problem with more prompt text.
-
-## Rewrite into a minimal task contract
-
-Keep the goal, necessary context, success criteria, hard constraints, and delivery format first. Add role, personality, fixed procedures, tool routing, authorization, stop rules, or examples only when they change behavior.
-
-- Describe the destination and let a high-performance model choose its own ordinary reasoning and execution path. Fix steps only when the path itself involves compliance, reproducibility, authorization, or business process.
-- State every rule once. Reserve absolutes for true invariants; write judgment calls as conditions and decision criteria.
-- Describe expected outcomes as positive, observable behavior. When a prohibition is necessary, state the alternative behavior.
-- XML, Markdown headings, or delimiters exist only for boundary clarity; pick one consistent structure and do not treat formatting as a performance secret.
-- Use examples only for label boundaries, style, format, or recurring failures that are hard to define in words; keep them minimal, realistic, and mutually consistent.
-- Do not ask the model to recite its full hidden chain of thought. Ask for key assumptions, evidence, calculations, verification results, or a concise rationale instead.
-- Default to a portable core; put vendor-specific parameters, API schemas, and caching advice outside the prompt.
-
-When a full deliverable is needed, organize it per [templates/PROMPT.md](templates/PROMPT.md). Delete every empty optional module; the template is not a mandate to turn every prompt into a long document. Default to returning a copy-ready result in the conversation; write to a file or replace an existing prompt only when the user asks.
-
-## Validate against failure modes
-
-Do not declare an optimization successful because it "reads more professional". With existing evals, establish a before/after baseline on the same model, runtime parameters, and samples; without evals, at least provide a minimal test set covering a normal input, a boundary input, an insufficient-information case, and one domain-specific risk.
-
-Change one meaningful module at a time and compare task success, factual and constraint correctness, format, cost, latency, tool-call counts, and failure types. Model self-assessment can surface problems, but it cannot replace tests, validators, source verification, or human preference judgment.
+Without executable evals, provide concrete validation cases proportional to the change: an ordinary success, a relevant boundary, missing information, and a task-specific failure risk are useful starting points. Judge outcomes such as task completion, preserved intent, factual correctness, or authorization behavior. Add cost, latency, format, or tool-use metrics where they matter. A cleaner-looking prompt is not evidence of better model behavior.
 
 ## Done when
 
-The deliverable preserves the user's original intent and authorization boundaries; the core prompt is directly usable, free of duplication and conflict, and contains only behavior-changing modules; domain-specific risks are handled; runtime configuration is separated from the prompt; and a minimal eval suggestion sufficient to validate the change is provided. If no eval has run on the target model, mark the result "pending validation" — do not claim it is already better.
+The requested draft, revision, or diagnosis preserves the user's intent and authority. Instructions explain the necessary judgment and constraints without imposing an unrelated workflow; the prompt is directly usable where requested, with runtime concerns kept in their appropriate layer. Validation results or concrete next checks support the conclusions, and any untested behavioral improvement is marked pending validation.

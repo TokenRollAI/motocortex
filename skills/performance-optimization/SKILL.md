@@ -11,17 +11,21 @@ description: >-
 
 Performance is a system's behavior **delivering useful results under a specific workload** — not how low-level the code looks, how much concurrency it uses, or how many hand-written optimizations it carries. Establish the user-visible outcome and the workload first, then change the part that limits them; optimization without a target and evidence only trades a simple system for a harder-to-maintain one.
 
-## Define the performance contract first
+## Match the evidence to the task
+
+Keep design, review, diagnosis, and implementation within the user's requested scope. A review may identify a credible risk and the measurement needed to resolve it without changing code or generating load. A diagnosis seeks a supported explanation; implementation must also demonstrate the change's effect. Use the sections below where they help answer that task, rather than treating them as a sequence every request must complete.
+
+## Define the performance contract
 
 Say who is waiting, what work is being processed, how load arrives, and what outcome counts as good enough. Pick the metrics the user actually cares about for this task: end-to-end latency and its distribution, throughput, concurrent capacity, startup or completion time, memory, network, cost, or resources per unit of work. Averages hide tails and bursts, and local metrics hide end-to-end waiting; do not substitute an easy-to-measure but irrelevant number for the goal.
 
-For an existing system, reproduce the problem and establish a baseline on representative data, hardware, configuration, and load. For a new system with no measurable baseline, define the target and the workload model first; prototype, benchmark, or spike only the high-risk assumptions that decide the architecture's success — do not dress them up as production evidence. Obvious unbounded resource growth, serial waterfalls, or critical-path blocking may be handled at design time, but state the causality and the assumptions.
+For a measured diagnosis or optimization, establish a baseline on representative data, hardware, configuration, and load. For design or review without runtime access, state the workload assumptions and causal risks, and identify the smallest measurement that would confirm or refute them. Prototype or benchmark success-critical unknowns when the task authorizes it and the evidence would change the decision. Existing traces or benchmarks may already answer the question; do not recreate them merely to follow a process.
 
 Performance work must not trade correctness for numbers. Fold result semantics, data freshness, consistency, failure handling, and resource ceilings into the same contract; a speedup obtained by skipping necessary work is a functional regression.
 
 ## Find what actually limits the system
 
-Follow a representative request or data flow and observe where time and resources go, separating useful computation, I/O waiting, lock or scheduler contention, queueing, network and serialization, data movement, memory pressure, and downstream dependencies. Locate the limit with profiles, traces, query plans, load tests, runtime metrics, or a minimal reproducible benchmark; do not guess the bottleneck from the shape of the code.
+Follow the request or data flow relevant to the suspected constraint. Profiles, traces, query plans, load tests, runtime metrics, or a minimal benchmark can distinguish computation, waiting, contention, data movement, and downstream limits. Choose evidence that can discriminate between plausible causes. Code structure can support a risk hypothesis, but a claim about the actual bottleneck needs representative measurement.
 
 Look at the end-to-end critical path and saturation points before local hotspots. A faster function does not mean a faster user, and more concurrency may only move the queue into the database or a downstream service. How latency, errors, and resource usage change under high load usually says more about capacity limits than single-shot speed on an idle system.
 
@@ -41,10 +45,14 @@ These are lenses for judgment, not a fixed order or default answers. When a simp
 
 ## Treat every change as an experiment
 
-Validate one meaningful hypothesis at a time, comparing before and after under the same reproducible conditions as the baseline. Observe distributions and run-to-run variance — do not book noise as a win — and run functional plus under-stress correctness checks alongside. The gain must pay for the added code, state, dependencies, and operational burden; revert changes that fall inside the noise while adding complexity.
+Keep comparisons attributable: preserve comparable workload and environment conditions, and isolate changes when interacting hypotheses would make the result ambiguous. Observe distributions and run-to-run variance, with correctness checks appropriate to the failure risk. Noise is not a demonstrated gain. Keep added complexity only when its measured benefit or another agreed requirement justifies it; remove unsupported additions made during the optimization without disturbing unrelated work.
 
 Turn the effective target into performance budgets, benchmarks, load tests, or production monitoring proportionate to the risk, so it cannot silently regress later. Expensive tests and load that could affect shared or production environments require confirmed scope and authorization first; prefer validating in an isolated, representative environment.
 
 ## Done when
 
-The performance target, workload model, and correctness boundaries are explicit; an existing system has a reproducible baseline, or a new system's key assumptions have proportionate evidence; the bottleneck conclusion comes from end-to-end measurement, not guessing; the chosen transformations match the load shape and their costs; results beat the noise under comparable conditions while preserving correctness; the added complexity is worth the gain; and the key metrics have regression guards proportionate to the risk. Without validation in the target environment, mark the work as pending validation — do not claim the optimization holds.
+For design or review, the relevant workload, target or target gap, correctness boundaries, and causal trade-offs are clear; findings distinguish evidence from assumptions and identify proportionate validation for unresolved risks. A useful review can be complete while a performance hypothesis remains unverified.
+
+For diagnosis, the evidence supports the cause or narrows the remaining hypotheses to a concrete measurement gap; distinguish a confirmed diagnosis from an investigation blocked on that gap.
+
+For implementation, comparable measurements show whether the agreed target is met beyond noise, correctness is preserved, added complexity earns its cost, and regression protection matches the risk. If the target is unmet or target-environment validation is unavailable, report that limitation rather than claiming a successful optimization.

@@ -1,42 +1,27 @@
 # VISION template
 
-When producing `VISION.md`, copy this skeleton and fill every section. This is structure to copy, not prose.
+Use this skeleton to describe the agreed outcome. Adapt sections to the task while preserving scope and a checkable acceptance basis.
 
 <vision-template>
 # Vision
 
-> One sentence: what this project is and what it solves for whom.
+## Goal
 
-## Problem
+<What this goal solves, for whom, and why it matters.>
 
-<The user's current pain, taken from the clarified decisions.>
+## Outcome and scope
 
-## What we are building
-
-<What the system is; the core proposition; a boundary sketch if it helps.>
+<What will exist or behave differently; include implementation constraints only when they are part of the user's requirements.>
 
 ## Non-goals
 
-<What we explicitly will not do — guards against scope creep.>
+<The adjacent work deliberately outside this goal.>
 
 ## Success criteria
 
-<Verifiable criteria. Each one must be concrete enough to be checked by a
- single command or a single user case. An unverifiable criterion is as good
- as unwritten.>
+<Observable outcomes with identifiers for tracing acceptance. State what evidence can demonstrate each outcome; clarify ambiguous criteria instead of silently dropping them.>
 
-## User cases (acceptance baseline)
+## User cases
 
-<Break the success criteria into N concrete scenarios, each "user does X →
- gets Y". These cases map one-to-one to the E2E items in DOD.>
-
-### Case 1: <name>
-
-1. <step>
-2. <step>
-3. <outcome>
-
-### Case 2: <name>
-
-...
+<Concrete scenarios: starting conditions, the user's action, and the expected result. Include relevant failure or boundary behavior. Map these cases to DOD acceptance without requiring a separate test for each case when one procedure proves several.>
 </vision-template>

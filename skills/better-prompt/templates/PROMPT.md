@@ -1,9 +1,9 @@
 # Better Prompt Delivery Template
 
+Use only sections that help the requested delivery. Replace placeholders with task content; the guidance in this paragraph is for the author, not part of the resulting prompt. Place instructions in the appropriate system, developer, or user layer for the target runtime, and keep runtime notes and evals outside the copy-ready prompt.
+
 <better-prompt-template>
 # Optimized Prompt
-
-Delete every section that does not change behavior, and place the content into the system / developer / user layers per the target runtime.
 
 ## Goal
 
@@ -19,7 +19,11 @@ Delete every section that does not change behavior, and place the content into t
 
 ## Constraints
 
-- [true safety, business, factual, or scope invariants]
+- [necessary business, factual, scope, or authorization constraints and why they matter]
+
+## Judgment (optional)
+
+[trade-offs, relevant conditions, and evidence that should guide choices; prescribe a sequence only where the sequence itself is required]
 
 ## Output
 

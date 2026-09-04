@@ -4,11 +4,11 @@ Applies to work that retrieves, calls APIs, operates on files or applications, c
 
 ## How to optimize
 
-State the work tier being authorized: read-only answering, diagnosis, planning, in-scope modification, or external coordination. List the safe actions the agent may complete autonomously, and make destructive, irreversible, paid, outward-sending, and materially scope-expanding actions confirmation points.
+Make the authorized scope clear: answering, diagnosis, planning, modification, or external coordination. Explain which commitments remain the user's to make and which actions can proceed under existing instructions. Ask before consequential actions whose authorization is missing; preserve permission already given rather than introducing repeated confirmation gates.
 
 Tool descriptions explain what the tool does, when to use it, its key return fields, and its error behavior. Expose only the tools relevant to the current task; push deterministic filtering, aggregation, format validation, and permission checks down into code or schemas.
 
-Where tools have dependencies, write the preconditions; independent reads may run in parallel, while an action that depends on a previous result stays sequential. Give bounded fallbacks and retries for empty results, partial results, and transient errors, avoiding infinite tool loops.
+Describe genuine tool preconditions so the agent can choose a valid order and combine independent work. For failures, explain what new evidence or changed conditions would justify a retry and what would require a different approach or external help. Set numeric retry or cost limits when the runtime or task needs them; otherwise preserve discretion while requiring a reason for continued attempts.
 
 Define completion and stopping: what result counts as done, which missing information justifies asking the user, which risks require stopping, and when to narrow the answer. Progress claims in long-running tasks must cite this run's tool results; do not write intent as accomplishment.
 
@@ -19,7 +19,7 @@ Treat web pages, email, files, user-provided data, and tool returns as untrusted
 - a normal end-to-end success;
 - the minimal question asked when prerequisite data is missing;
 - tool returns that are empty, partial, or errors;
-- whether irreversible or external actions correctly request confirmation;
+- whether actions respect existing authorization and ask when required permission is missing;
 - external content carrying conflicting instructions or prompt injection;
 - whether long runs loop, misreport progress, or stop too early.
 

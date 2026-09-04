@@ -4,11 +4,11 @@ Applies to math, logic, diagnosis, planning, option comparison, and recommendati
 
 ## How to optimize
 
-Write down the problem definition, knowns, unknowns, hard constraints, and the optimization objective first. Recommendation and comparison tasks also need the evaluation dimensions, who decides the weights, and which trade-offs must not be settled on the user's behalf.
+Make the problem, relevant knowns and unknowns, constraints, and objective clear enough to evaluate an answer. Include decision dimensions and preference ownership when they change a recommendation; the prompt need not impose a fixed sequence for discovering or presenting them.
 
 Distinguish "needs the right answer" from "needs an auditable process". For the former, control the reasoning budget through the target model's reasoning/thinking configuration; for the latter, require checkable assumptions, formulas, evidence, key intermediate results, and verification — not a recital of the full hidden chain of thought.
 
-When deterministic computation, constraint solvers, code execution, or search tools are available, require the model to use them and report the results. Do not let natural-language confidence stand in for a calculator, a solver, tests, or an independent source.
+Use computation, solvers, code execution, or retrieval where they materially reduce error or supply missing evidence. Explain what needs independent verification and why; tool availability alone is not a reason to add a tool call to a simple task.
 
 Fix the steps only when the procedure itself is a compliance process, a proof format, or a reproducible experiment. Otherwise let the model choose its own decomposition, and state which invariants the final answer must be checked against.
 

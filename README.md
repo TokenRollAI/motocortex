@@ -1,6 +1,6 @@
 # motocortex
 
-> TokenRollAI's in-house agent skills: interrogate a rough goal until nothing is silently assumed, drive it to verified done, and make sound architecture, performance, and prompt decisions along the way.
+> TokenRollAI's in-house agent skills: clarify consequential choices, carry goals to verified completion, and explain the judgment behind architecture, performance, and prompt decisions.
 
 **motocortex is the skills collection TokenRollAI builds for its own agent-driven development.** It is public and anyone is welcome to install it, but it encodes how we work rather than trying to serve every workflow: opinionated defaults, evidence-gated progress, and files — not conversation memory — carrying all state. Expect it to evolve with our practice, including breaking changes.
 
@@ -30,26 +30,28 @@ npx skills add TokenRollAI/motocortex --global
 
 | skill | invocation | responsibility | artifacts |
 |---|---|---|---|
-| `start-a-goal` | user | take a goal end to end: clarify it, generate the execution documents, then drive the loop until done or blocked | `VISION.md`, `DOR.md`, `DOD.md`, `LOOP.md`, `PROGRESS.md` |
-| `grill` | model | inspect the context, then interview the user one decision at a time until nothing is silently assumed | `DECISIONS.md` |
+| `start-a-goal` | user | carry a goal to verified completion with resumable execution documents and evidence | `VISION.md`, `DOR.md`, `DOD.md`, `LOOP.md`, `PROGRESS.md` |
+| `grill` | model | resolve consequential open decisions and record assumptions and deferred questions | `DECISIONS.md` |
 | `architecture-design` | model | design or review architecture, technology choices, boundaries, and evolution without speculative complexity | task-adapted decision, design, or review |
 | `performance-optimization` | model | design, diagnose, optimize, or review performance from workload goals and evidence | task-adapted strategy, diagnosis, or verified change |
 | `better-prompt` | model | draft, diagnose, or optimize prompts with focused domain guidance | optimized prompt, runtime notes, minimal evals |
 
-`start-a-goal` is the single user-invoked entry point. The other four are model-invoked disciplines: `grill` is pulled in by `start-a-goal` during clarification and also stands alone whenever a task is too vague to execute; `architecture-design`, `performance-optimization`, and `better-prompt` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
+`start-a-goal` is the single user-invoked entry point. The other four are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, and `better-prompt` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
 
 ## How start-a-goal works
 
 ```text
-rough goal
+current goal
 └── start-a-goal
-    ├── clarify → grill → DECISIONS.md
-    ├── frame   → VISION.md + DOR.md
-    ├── engine  → DOD.md + LOOP.md + PROGRESS.md
-    └── drive   → run the LOOP state machine until done or only blockers remain
+    ├── reconcile intent and existing execution state
+    ├── clarify consequential choices as needed → grill → DECISIONS.md
+    ├── maintain the package → VISION + DOR + DOD + LOOP + PROGRESS
+    └── advance authorized work → verify outcomes or expose blockers
 ```
 
-On a repository that already has the execution documents, `start-a-goal` skips generation and goes straight to driving. The five execution documents form a package any agent can pick up and run: `VISION.md` (what to build, success criteria), `DOR.md` (readiness risks), `DOD.md` (what counts as done), `LOOP.md` (how each round runs), and `PROGRESS.md` (the ledger).
+Existing documents are checked against the current goal and project state before reuse. Matching packages resume; missing or stale documents are repaired from supported decisions, and unrelated goals stay in separate directories. The five execution documents preserve `VISION.md` (outcomes and scope), `DOR.md` (readiness gaps and dependencies), `DOD.md` (acceptance and evidence), `LOOP.md` (execution judgment and completion conditions), and `PROGRESS.md` (current state and evidence history).
+
+These are responsibilities, not mandatory stages. The agent chooses work by actual dependencies and feedback, records decisions as they emerge, and verifies outcomes with commands, repeatable user procedures, or explicit human acceptance. Required regression must pass for the final state before completion; a blocked handoff remains unfinished work.
 
 ## How to use it
 
@@ -59,25 +61,26 @@ After installation, hand your agent a rough goal:
 Use start-a-goal to take this to done: <your goal>
 ```
 
-Some hosts expose user-invoked skills as slash commands, so the same action may appear as `/start-a-goal`. Answer the clarification questions, review the generated documents, and let the agent drive. Hosts that run one round per invocation need re-entry (a manual "continue", a script, or an outer loop) to reach the termination conditions.
+Some hosts expose user-invoked skills as slash commands, so the same action may appear as `/start-a-goal`. Answer consequential clarification questions when needed and let the agent carry the goal forward. Existing decisions and authorization are reused. If the host ends execution before completion, resume through its supported continuation mechanism; the package preserves the current state.
 
 The model-invoked disciplines trigger on their own when a task matches their descriptions, or on request:
 
 ```text
-Use grill to pin down what's still open about this idea before we build anything.
+Use grill to settle the decisions that matter before we commit to this idea.
 
 Review this service boundary and recommend the simplest architecture that meets these quality requirements.
 
 Diagnose this latency regression, establish a representative baseline, and keep only improvements the evidence supports.
 
-Rewrite this prompt into a minimal task contract and give me the evals to prove it improved.
+Rewrite this prompt around intent, reasons, and judgment; give me concrete checks for whether behavior improves.
 ```
 
 ## Design principles
 
-- **Look up facts; leave decisions to the user.** Discoverable context is inspected. Material judgment calls are surfaced one at a time with a recommendation.
+- **Explain why; leave room for judgment.** State intent, causal trade-offs, and observable completion. Fix a procedure only when its order is required for correctness, authorization, reproducibility, or the user's chosen process.
+- **Look up facts; surface consequential choices.** Inspect relevant context and ask where the answer changes the work. Handle ordinary reversible choices within existing intent and authorization.
 - **Do not re-litigate settled choices.** Existing stacks and conventions are recorded and reused.
-- **Checking off means evidence.** Every definition-of-done item requires a reproducible command or user case, not a confidence statement.
+- **Checking off means evidence.** Acceptance requires observed results from a command, repeatable user procedure, or explicit human review. Failed required regression prevents completion; weakening the goal cannot make an implementation correct.
 - **Architecture starts with forces, not patterns.** Business outcomes, quality scenarios, constraints, and credible change determine structure and technology; every layer and extension point must pay for itself.
 - **Performance is behavior under load.** Define the workload and target, find the real constraint, then choose the transformation whose trade-offs fit the evidence.
 - **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
@@ -88,9 +91,10 @@ Rewrite this prompt into a minimal task contract and give me the evals to prove 
 ```text
 skills/
 ├── start-a-goal/
-│   ├── SKILL.md      # orchestration and driving discipline
+│   ├── SKILL.md      # goal ownership and execution judgment
 │   └── templates/    # VISION, DOR, DOD, LOOP, PROGRESS skeletons
 ├── grill/
+│   └── templates/    # durable decision record
 ├── architecture-design/
 ├── performance-optimization/
 └── better-prompt/
