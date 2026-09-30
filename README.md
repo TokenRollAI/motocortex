@@ -35,9 +35,10 @@ npx skills add TokenRollAI/motocortex --global
 | `architecture-design` | model | design or review architecture, technology choices, boundaries, and evolution without speculative complexity | task-adapted decision, design, or review |
 | `performance-optimization` | model | design, diagnose, optimize, or review performance from workload goals and evidence | task-adapted strategy, diagnosis, or verified change |
 | `better-prompt` | model | draft, diagnose, or optimize prompts with focused domain guidance | optimized prompt, runtime notes, minimal evals |
+| `interaction-design` | model | design, review, or implement interaction from user goals, mental models, and the full lifecycle of each action | task-adapted flow design, evidence-labeled review, verified UI change, or interaction spec |
 | `study-codebase` | model | explain a project's purpose, architecture, dependencies, core implementation, and transferable lessons from source evidence | study note, proposed implementation exercise, GitHub Gist when requested |
 
-`start-a-goal` is the single user-invoked entry point. The other five are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, `better-prompt`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
+`start-a-goal` is the single user-invoked entry point. The other six are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, `better-prompt`, `interaction-design`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
 
 ## How start-a-goal works
 
@@ -75,6 +76,8 @@ Diagnose this latency regression, establish a representative baseline, and keep 
 
 Rewrite this prompt around intent, reasons, and judgment; give me concrete checks for whether behavior improves.
 
+Review this checkout flow's interaction: missing states, error recovery, undo, keyboard access, and expert shortcuts.
+
 Use study-codebase to study <repository URL or local path>, explain its core design, and publish the learning note as a GitHub Gist.
 ```
 
@@ -93,6 +96,7 @@ The output is a standalone Markdown note in the user's language. When Gist deliv
 - **Architecture starts with forces, not patterns.** Business outcomes, quality scenarios, constraints, and credible change determine structure and technology; every layer and extension point must pay for itself.
 - **Performance is behavior under load.** Define the workload and target, find the real constraint, then choose the transformation whose trade-offs fit the evidence.
 - **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
+- **Interaction lowers cognitive cost.** Start from users, tasks, and evidence; weigh conflicting principles by frequency, risk, reversibility, and expertise; design each action as a full state lifecycle with cheap recovery; judge the interface by walking its flows, not by its screenshot.
 - **Learning follows mechanisms.** Trace concrete behavior through source, explain design costs as well as benefits, and extract a small exercise that tests understanding.
 - **Files carry state.** Decisions, readiness risks, completion criteria, execution rules, and progress survive across agents and context windows.
 
@@ -110,6 +114,9 @@ skills/
 ├── better-prompt/
 │   ├── references/   # domain guides, model adaptation, evaluation
 │   └── templates/    # prompt delivery skeleton
+├── interaction-design/
+│   ├── references/   # patterns, evaluation, CLI, content and localization, AI and agents
+│   └── templates/    # interaction spec and review skeletons
 └── study-codebase/
     ├── references/   # Gist publication and verification
     └── templates/    # source-backed study note and learning exercise
