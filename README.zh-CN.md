@@ -36,9 +36,10 @@ npx skills add TokenRollAI/motocortex --global
 | `performance-optimization` | 模型触发 | 从负载目标与证据出发设计、诊断、优化或审查性能 | 按任务交付策略、诊断或已验证改动 |
 | `better-prompt` | 模型触发 | 用聚焦的领域指南生成、诊断或优化 prompt | 优化后的 prompt、runtime 建议、最小评测 |
 | `interaction-design` | 模型触发 | 从用户目标、心智模型与每个动作的完整生命周期出发设计、审查或实现交互 | 按任务交付流程设计、标注证据类型的审查、已验证的 UI 改动或交互规格 |
+| `product-dogfood` | 模型触发 | 像真实用户一样端到端深度使用运行中的产品，从功能设计、交互、UI 质感、信息密度与 AI Slop 给出直接反馈 | 带运行态证据的优先级产品评审与改进建议 |
 | `study-codebase` | 模型触发 | 根据源码证据解释项目用途、架构、依赖、核心实现与可迁移的设计经验 | 学习笔记、小型实现练习提案、按需发布的 GitHub Gist |
 
-`start-a-goal` 是唯一的用户触发入口。其余六个是模型触发的纪律：`grill` 在关键决策需要澄清时由 `start-a-goal` 拉入，也可以在不确定性妨碍有效推进时单独使用；`architecture-design`、`performance-optimization`、`better-prompt`、`interaction-design` 与 `study-codebase` 彼此独立——任务确实需要时，模型根据 description 选择它们，它们之间没有调用或依赖。
+`start-a-goal` 是唯一的用户触发入口。其余七个是模型触发的纪律：`grill` 在关键决策需要澄清时由 `start-a-goal` 拉入，也可以在不确定性妨碍有效推进时单独使用；`architecture-design`、`performance-optimization`、`better-prompt`、`interaction-design`、`product-dogfood` 与 `study-codebase` 彼此独立——任务确实需要时，模型根据 description 选择它们，它们之间没有调用或依赖。
 
 ## start-a-goal 如何工作
 
@@ -78,6 +79,8 @@ npx skills add TokenRollAI/motocortex --global
 
 审查这个结账流程的交互：缺失的状态、错误恢复、撤销、键盘可达性与专家快捷方式。
 
+端到端深度试用 http://localhost:3000，从功能闭环、交互摩擦、UI 质感、信息密度和 AI Slop 直接给出反馈与改进建议。
+
 使用 study-codebase 调研 <仓库 URL 或本地路径>，解释核心设计，并把学习笔记发布为 GitHub Gist。
 ```
 
@@ -97,6 +100,7 @@ npx skills add TokenRollAI/motocortex --global
 - **性能是负载下的行为。** 先定义负载与目标、找到真实限制，再选择取舍与证据相符的变换。
 - **Prompt 是契约，不是咒语。** 可移植核心保持精简，只加入会改变行为的指南，并用代表性样例验证。
 - **交互是为了降低认知成本。** 从用户、任务与证据出发；按频率、风险、可逆性与熟练度权衡互相冲突的原则；把每个动作设计成恢复成本低的完整状态生命周期；通过实际走流程评判界面，而不是看截图。
+- **产品要在真实使用中检验。** 先以无源码视角的真实用户走完端到端流程，再结合功能闭环、操作税、视觉层级、匹配场景的信息密度与未经打磨的 AI Slop 默认痕迹给出直接判断。
 - **学习沿着机制展开。** 用源码追踪具体行为，同时解释设计收益与代价，再提炼一个能检验理解的小型练习。
 - **用文件承载状态。** 决策、就绪风险、完成标准、执行规则和进度可以跨 agent、跨 context window 延续。
 
@@ -117,6 +121,9 @@ skills/
 ├── interaction-design/
 │   ├── references/   # 交互模式、可用性评估、CLI、文案与本地化、AI 与 agent
 │   └── templates/    # 交互规格与审查骨架
+├── product-dogfood/
+│   ├── references/   # 五大评审透镜与 ego-lite 浏览器探索规范
+│   └── templates/    # 优先级产品试用反馈骨架
 └── study-codebase/
     ├── references/   # Gist 发布与核验
     └── templates/    # 有源码证据的学习笔记与实现练习
