@@ -1,28 +1,21 @@
 # Model and Runtime Adaptation
 
-Read this only when the user names a model, asks for migration, or the prompt's behavior clearly depends on current model capabilities. Models change fast; this file keeps the judgment discipline, not parameter tables that expire.
+Load this when targeting a named model, migrating between model families or snapshots, or untangling prompt prose from API configuration. Vendor capabilities and parameters shift quickly; verify specifics against current official docs rather than relying on memorized folklore.
 
-## Verify current facts first
+## Verify target-model behavior from primary docs
 
-Check the target model's latest official prompting, reasoning, tools, structured outputs, and migration docs. Keep the exact model the user specified — do not swap in a "newer" one on your own. Mark behavior the official material does not cover as pending validation.
+Look up the exact target model's official prompting, reasoning/thinking, tool-calling, and structured-output documentation. Keep the user's chosen model identifier intact rather than silently substituting another tier or vendor; offer model alternatives outside the prompt only when cost, latency, or capability trade-offs materially warrant it. Flag undocumented behaviors as hypotheses requiring empirical check.
 
-If no target is specified, deliver a portable core first. Suggest candidates only when model differences would change results or cost, and put the selection rationale outside the prompt.
+## Assign each control to its native layer
 
-## Put each control back in its layer
+Stop forcing prompt prose to do work the API or host runtime enforces deterministically:
 
-- reasoning / thinking effort controls the internal computation budget;
-- verbosity or output-token settings control default length;
-- structured outputs / tool schemas control machine-parseable structure;
-- temperature and sampling parameters follow the target model's current recommendations;
-- permissions, tool allowlists, approvals, and business validation are enforced by the runtime;
-- prompt caching needs a stable static prefix with dynamic input placed late.
+- **Reasoning / thinking effort**: governs internal search and deliberation depth — tune via API config rather than prompt incantations.
+- **Output / verbosity limits**: bound length via runtime budgets while using the prompt to specify *information priority* under compression.
+- **Structured outputs and tool schemas**: enforce syntax, types, and enums in JSON Schema; reserve prompt space for semantic edge cases, nullability meaning, and precondition logic.
+- **Authorization, sandboxing, and business invariants**: enforce in host code and server validators; prompts guide agent judgment, never replace access control.
+- **Prompt caching**: keep static instructions, schemas, and reference context in a byte-stable prefix; append volatile session state, timestamps, and user turns last.
 
-Use runtime settings for mechanical controls and the prompt for their task-specific meaning. For example, an output budget limits size while the prompt explains what must survive compression. Avoid duplicating the same control in several places when those versions could conflict.
+## Migrate with attributable baselines
 
-## Migration discipline
-
-Preserve a baseline that makes the migration's effects interpretable. When identifying the cause of a regression, hold other factors stable while changing the model, prompt, or runtime setting under investigation. If the user requests a combined redesign, evaluate it as a candidate against the baseline and use narrower experiments where attribution matters.
-
-Replace legacy nudges, forced reasoning scripts, repeated tool triggers, and unnecessary format scaffolding with the goal or invariant they were meant to protect. Preserve requirements whose purpose still applies. Treat behavioral gains from simplification as hypotheses until tested, and put vendor-specific advice in adapter notes rather than the portable core.
-
-Done when: current-model facts come from official sources, the prompt and runtime configuration have complementary roles, and the migration has a comparison method that can reveal regressions and investigate their causes.
+Hold inputs, tools, and eval criteria constant when isolating whether a behavioral shift came from the model upgrade, runtime settings, or prompt edits. Strip compensations written for older, weaker models — repetitive tool-call reminders, rigid scratchpad templates, defensive formatting threats — and replace them only where the new model demonstrates an actual failure on the baseline set. Keep vendor-specific quirks in thin adapter notes outside the portable core.

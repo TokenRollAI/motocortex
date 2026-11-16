@@ -1,25 +1,13 @@
 # Coding and Artifacts
 
-Applies to code, websites, documents, spreadsheets, presentations, images, and other artifacts that must be generated and verified. The prompt should read like a high-quality task brief: clear behavioral goals and acceptance, with room left for the agent to explore the current state and choose the implementation path.
+Covers software changes, web interfaces, documents, spreadsheets, slides, and other buildable deliverables. Write the prompt like a senior engineering brief: crisp behavioral invariants and executable acceptance, leaving codebase exploration and local implementation mechanics to the agent.
 
-## How to optimize
+## Specify contracts, reuse boundaries, and runnable proof
 
-Provide the goal, pointers to the current state, scope, invariants, and relevant non-goals. Existing design systems, formats, stacks, and conventions encode decisions the prompt should preserve unless the task calls for changing them. Point the agent to their source rather than duplicating or inventing those details in the prompt.
+Point the agent to authoritative repo context (existing architecture, design tokens, schemas, conventions) rather than pasting stale copies into the prompt, and require reusing established patterns unless the task explicitly replaces them. Constrain libraries or file paths only when external compatibility demands it; otherwise specify observable behavior, edge/error semantics, performance/security bounds, and explicit non-goals (no drive-by refactors, speculative abstractions, or unrequested features).
 
-Write the Definition of Done as runnable tests, builds, type checks, render checks, user scenarios, or human acceptance points. "Self-review" or "high quality" alone cannot serve as completion criteria.
+Define completion through real execution — unit/integration suites, typechecks, builds, CLI runs, or live render/browser walkthroughs — never "self-review" prose. State authority boundaries clearly (local edits and tests vs commits, pushes, deployments, or external mutations) so authorized work flows uninterrupted without redundant permission prompts. When an environment blocks a check, require naming the exact skipped verification rather than implying pass.
 
-Specify libraries, architecture, or file-level steps only when the implementation path is itself a hard constraint. Otherwise describe behavior, interfaces, compatibility, performance, and security boundaries, and let the model choose the minimal change given the existing context. State explicitly which refactors, extra features, and future abstractions are out of scope.
+## Discriminating checks
 
-Distinguish the authority needed for editing, verification, committing, deployment, and publication without imposing separate workflow stages. Infer scope from the user's request, existing authorization, and host rules. Proceed with authorized work; clarify only missing authority for consequential actions, since repeated approvals do not make an already authorized task clearer.
-
-Require visual or typographic artifacts to be checked after rendering. Require code to run the most relevant tests; when verification is impossible, report why and the next-best check. Do not let a long explanation substitute for the real artifact and its verification results.
-
-## Minimal evals
-
-- does a typical change satisfy the user scenario;
-- is the diff confined to the authorized scope and preserving existing conventions;
-- were the tests, build, or render actually run;
-- are input anomalies, compatibility, and regression risk covered;
-- did the model add features, refactor, or take external actions on its own.
-
-Done when: the deliverable's path is clear, success is verifiable through tools or user scenarios, and both the implementation freedom and the unbreakable invariants are explicit.
+Verify end-to-end scenario completion, diff containment within scope and repo conventions, actual execution of build/test/render verification, edge and regression handling, and absence of unrequested features or abstractions.

@@ -1,25 +1,15 @@
 # Reasoning and Decisions
 
-Applies to math, logic, diagnosis, planning, option comparison, and recommendation. The goal is to make the problem, constraints, and checks visible — not to dictate how long a chain of thought the model should produce.
+Covers math, formal logic, root-cause diagnosis, planning, trade-off analysis, and recommendations. Help the model frame the decision space and falsify weak conclusions — never script how its internal chain of thought should sound.
 
-## How to optimize
+## Separate deliberation depth from visible auditability
 
-Make the problem, relevant knowns and unknowns, constraints, and objective clear enough to evaluate an answer. Include decision dimensions and preference ownership when they change a recommendation; the prompt need not impose a fixed sequence for discovering or presenting them.
+Control internal search depth through the model's reasoning/thinking configuration rather than prompt slogans. In the prompt, specify what must be **externally auditable** in the response: governing constraints, explicit assumptions, key intermediate quantities or causal links, and independent sanity checks.
 
-Distinguish "needs the right answer" from "needs an auditable process". For the former, control the reasoning budget through the target model's reasoning/thinking configuration; for the latter, require checkable assumptions, formulas, evidence, key intermediate results, and verification — not a recital of the full hidden chain of thought.
+Route arithmetic, constraint solving, data aggregation, or factual lookups to code execution or retrieval tools whenever exactness matters, while avoiding pointless tool round-trips on self-contained logic. Prescribe step order only when compliance or proof validity demands a fixed protocol; otherwise state the invariants the final answer must satisfy and let the model decompose freely.
 
-Use computation, solvers, code execution, or retrieval where they materially reduce error or supply missing evidence. Explain what needs independent verification and why; tool availability alone is not a reason to add a tool call to a simple task.
+For decisions under uncertainty, separate verified facts, testable assumptions, and value preferences. Require a committed recommendation with explicit conditions under which an alternative wins, rather than symmetric pro/con lists that punt judgment back to the reader.
 
-Fix the steps only when the procedure itself is a compliance process, a proof format, or a reproducible experiment. Otherwise let the model choose its own decomposition, and state which invariants the final answer must be checked against.
+## Discriminating checks
 
-For decision outputs, separate facts, assumptions, inferences, and preferences. Require a recommendation with its conditions of applicability — do not enumerate every option just to look thorough.
-
-## Minimal evals
-
-- a direct problem, a combined-constraints problem, and one misleading distractor;
-- whether the conclusion is stable when irrelevant wording or input order changes;
-- whether every key constraint is satisfied;
-- whether tool computations agree with the final answer;
-- whether insufficient information surfaces the real gap instead of fabricated certainty.
-
-Done when: the problem is computable or decidable, the constraints are checkable, the conclusion and its key grounds are auditable, and the reasoning budget is not controlled by prompt incantations.
+Test multi-constraint interaction with plausible distractors, stability under wording/order perturbation, agreement between tool outputs and final prose, and honest exposure of underdetermined inputs instead of invented precision.

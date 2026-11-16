@@ -1,35 +1,23 @@
 # Prompt Evaluation and Iteration
 
-Prompt optimization is only meaningful relative to a target model, a task distribution, and metrics. Without evals you may propose better-reasoned candidates, but you cannot claim an improvement.
+A prompt change is an empirical claim over an input distribution and target runtime. Without representative checks, a rewrite is a reasoned hypothesis, never a verified improvement.
 
-## Establish a baseline
+## Build a discriminating eval set
 
-Preserve the original prompt, model snapshot, runtime parameters, tool set, and representative inputs so a comparison can distinguish the revision's effect from changes in its environment. Use observed baseline failures to guide changes when available; a requested rewrite can also begin from explicit hypotheses and be compared afterwards. For a new prompt, a minimal task statement can serve as the baseline.
+Freeze baseline artifacts — original prompt, model snapshot, reasoning/sampling config, tool definitions, and test inputs — so diffs stay attributable. Pull cases from real production or session trajectories whenever available, covering five fault lines:
 
-Choose cases that can reveal the change's likely benefits and regressions, drawing from:
+- **Core happy path** (non-regression on everyday work);
+- **Hard boundaries** (ambiguous labels, dense multi-constraint inputs, edge scales);
+- **Missing or unverified inputs** (tests whether the model asks, narrows, or hallucinates);
+- **Noisy, reordered, or adversarial inputs** (conflicting context, distractor details, untrusted injection payloads);
+- **High-cost domain failures** (unauthorized side effects, dropped negations/numbers, fabricated citations).
 
-- the typical success path;
-- real boundaries or hard cases;
-- missing necessary information;
-- conflicts, noise, or input-order variation;
-- domain-specific safety or quality risks.
+Keep a held-out slice when iterating repeatedly so tuning does not overfit the phrasing of three dev examples.
 
-Prefer samples from real trajectories. When repeatedly tuning against a set, reserve held-out cases to detect overfitting; a small one-off revision may only need a representative comparison. Include unaffected behavior as well as the failures that motivated the change, because a local improvement can hide a broader regression.
+## Prefer deterministic checks over vibe grading
 
-## Choose metrics
+Grade with code first: exact answers, schema/AST/build checks, test suites, citation-to-source verification, and tool-call/permission traces. Use rubric-anchored LLM judges only for semantic or stylistic qualities deterministic code cannot check, calibrated against human spot-reviews. Never accept the evaluated model's ungrounded self-grade as proof.
 
-Prefer executable or checkable metrics: correct answers, schema validators, tests, builds, citation correspondence, permission events, human preference. Then supplement with task completion, factual coverage, format, cost, latency, reasoning tokens, tool calls, and retries.
+## Measure tails alongside averages
 
-An LLM judge needs an explicit rubric, calibration samples, and human spot checks. Model self-assessment can generate candidate diagnoses; it cannot prove improvement on its own.
-
-## Small-step ablation
-
-Compare the requested revision against its baseline on the same samples. When the cause of a gain or regression is unclear, isolate modules, examples, reasoning configuration, or tool changes to learn what contributes. Single-variable experiments support attribution; they are a diagnostic technique, not a requirement to deliver a coherent rewrite as many separate edits.
-
-Watch both average performance and worst-case failures. A prompt that scores higher on the dev set while adding overreach, hallucination, or cross-version volatility is not better. Re-run the regression after migrating models or tools; do not assume the old optimal format is portable.
-
-## Deliver eval suggestions
-
-When running evals in place is not possible, provide a small, concrete test table: input characteristics, expected behavior, failure signals, and the metrics to record. List unvalidated changes as hypotheses and point out the lowest-cost next experiment.
-
-Done when: changes map to observed failures or explicit behavioral hypotheses, the comparison method is reproducible, and conclusions distinguish measured results from proposed tests. If execution is unavailable, the validation plan identifies concrete inputs, expected behavior, and remaining uncertainty without claiming an empirical improvement.
+Compare candidate against baseline on both pass rate and worst-case failure severity, tracking latency, token/reasoning cost, and tool-call churn where operational budgets matter. When a bundled rewrite regresses a case, bisect changed blocks or examples to isolate the culprit. If live execution is out of scope, deliver a compact test matrix with concrete inputs, pass criteria, and exact failure signals, labeling improvements as unverified until run.

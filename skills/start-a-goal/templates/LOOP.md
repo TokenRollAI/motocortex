@@ -1,39 +1,31 @@
 # LOOP template
 
-Adapt this contract to the goal's dependencies, verification needs, and existing authorization. Fill the package path relative to the repository root; use that path in the launch text. Paths to sibling documents resolve from this file's directory.
+Tailor this execution contract to the goal's dependencies, verification surfaces, and host authorization. Keep `<goal-directory>` relative to the repository root so any resumed agent resolves the right package immediately.
 
 <loop-template>
 # LOOP (execution contract)
 
-## How to launch
+## Resume protocol
 
-Read `<goal-directory>/LOOP.md` and its sibling PROGRESS.md. Confirm that their goal matches the current request, then continue authorized work using VISION.md for intent and DOD.md for acceptance. Preserve useful state for the next session if execution is interrupted.
+Read `<goal-directory>/LOOP.md` and `PROGRESS.md`, verify they match the active request and git/workspace state, then advance authorized work against `VISION.md` and `DOD.md`. This file records execution discipline; it grants no permissions beyond the host and user instructions.
 
-## Preserve the goal
+## Scope and authority
 
-User intent and authorization govern this package. Keep VISION, DOD, and the decision record consistent with the user's current instructions. Repair an implementation that violates the agreed outcome; revise a stale document when existing instructions or verified facts justify it. Obtain the user's decision before changing user-owned scope, outcomes, or acceptance unless that change is already authorized. Record the reason so the next agent can distinguish a correction from a new requirement.
+Keep code and package docs aligned with current user intent. Fix code when it violates agreed outcomes; update stale package docs when verified repo facts or user instructions supersede them. Pause for user decision before altering user-owned scope, acceptance criteria, or irreversible commitments, while continuing orthogonal unblocked work.
 
-## Choose useful work
+## Stage cadence and execution strategy
 
-Let actual dependencies, risk, and feedback determine the next work. Milestones organize the goal; they do not prohibit advancing independent work elsewhere. Related items may be handled together when that makes implementation or verification clearer.
+Not every turn warrants a deep review. Drive work through a clear progression: **working demo / thin vertical slice -> implementation -> functional verification -> consolidating and merging major stage work -> deep architectural review** once real behavior and coupling pressures are proven in running code. Check one-way safety/contract boundaries before crossing them, keep turn-by-turn iteration fast and functional, and run deep structural review after major stage consolidation rather than policing every intermediate edit.
 
-Use the tools, delegation, and commits supported by the host and authorized for this task. This document supplies no additional permission. Choose execution mechanics for the work at hand rather than treating them as required ceremony.
+Combine tightly coupled items and parallelize independent discovery or verification where supported. Fix root causes at the owning boundary rather than silencing checks or patching symptoms. When retries stop producing new information, stop thrashing: isolate the missing fact, capability, or decision, record what blocks that path in `PROGRESS.md`, and pivot to independent unblocked work. Re-evaluate blockers whenever inputs change.
 
-A failed attempt is useful when it provides new evidence. Retry or change approach when there is a plausible path to progress; when attempts stop yielding information, identify the missing decision, resource, or capability and work on something independent. Record what would unblock the item so a resumed session does not repeat the same dead end. Recheck blockers when their inputs change.
+## Verification integrity
 
-## Make acceptance mean something
+Check off `DOD` items only from observed results on the current state — command exit and output, repeatable live procedure (`ego-lite` preferred on web UIs when available), or recorded human acceptance. Later edits inside an item's blast radius invalidate prior check-offs until re-run. Link concise artifacts or logs from `PROGRESS.md` instead of pasting walls of output.
 
-Check off a DOD item only when its expected outcome is demonstrated. Record the command and result, repeatable user procedure and observed result, or explicit human acceptance with reviewer and outcome. Reference large logs or artifacts rather than burying the current state in raw output. A file's existence or an unperformed check does not prove its behavior.
+## Termination states
 
-Match verification to the change's impact and the agreed acceptance basis. Run relevant checks while working and required regression before milestone acceptance or completion. Passing earlier checks is insufficient when later changes invalidate their evidence: reopen affected items and obtain fresh evidence. Failed, skipped, or unavailable required checks leave acceptance pending; record the reason and affected work.
-
-## Preserve enough state to resume
-
-Maintain PROGRESS with the active goal, package path, current work, evidence, and blockers. Keep its summary consistent with DOD check-offs. Record meaningful decisions and results as they emerge; a handoff should expose what is true now and what can usefully happen next without requiring a replay of the conversation.
-
-## Completion and blocked handoff
-
-Declare **ALL DONE** only when every DOD item and global acceptance condition is satisfied for the final state, every VISION success criterion and user case is covered, required regression has passed, and required human acceptance is recorded. Include the final evidence references in PROGRESS.
-
-If unresolved external prerequisites or user decisions block all remaining useful work, report **BLOCKED** with the affected items and exact input or action needed. A pause, failed verification, or blocked handoff is not completion. If the host ends the session earlier, record the actual state and next work without claiming either termination condition has been met.
+- **ALL DONE**: Every `DOD` item, end-to-end check, stage-end architectural review, and global regression/human gate passes on the final state, covering all `VISION` criteria and user cases, with final evidence recorded in `PROGRESS.md`.
+- **BLOCKED**: All remaining useful work depends on missing external prerequisites or user decisions; report exact blockers and required inputs without claiming completion.
+- **INTERRUPTED**: If the session ends mid-flight, leave `PROGRESS.md` accurate on current state, invalidated checks, and the next concrete move.
 </loop-template>

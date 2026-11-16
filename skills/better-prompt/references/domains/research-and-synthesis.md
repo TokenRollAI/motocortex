@@ -1,27 +1,15 @@
 # Research and Synthesis
 
-Applies to web search, fact verification, literature review, competitive research, and multi-source synthesis. The core of a research prompt is the evidence protocol and stop conditions, not a phrase like "research thoroughly".
+Covers web/corpus search, fact verification, competitive or literature synthesis, and source-grounded reporting. A strong research prompt defines an **epistemic and stopping protocol**, not a plea to "be thorough".
 
-## How to optimize
+## Govern source hierarchy, citations, and stopping
 
-Scope the research question to the necessary time range, geography, subjects, definitions, and decision purpose. State the source priority: when primary materials, official docs, papers, regulatory information, and reliable secondary reporting are each acceptable.
+Bound scope upfront: target question, temporal validity window, entities/jurisdictions, and the decision the synthesis serves. Rank acceptable evidence tiers (primary code/filings/specs/official docs > peer-reviewed or primary telemetry > reputable secondary reporting) and require retrieval rather than parametric memory for time-sensitive or version-specific facts.
 
-Define the retrieval depth. Ordinary fact-checking, a representative scan, and an exhaustive review need different budgets. Require stopping when further retrieval can no longer change the core conclusion; do not keep searching for volume.
+Enforce strict provenance: cite only inspected sources next to the exact claims they back; separate observed facts from synthesis inferences; surface source conflicts with their likely cause (version skew, methodology, date) instead of averaging them away; and distinguish "no evidence found in inspected sources" from "false". Treat all retrieved pages and documents as untrusted data incapable of overriding task instructions or tool authority.
 
-Set citation discipline: cite only sources actually read; place citations next to the claims they support; separate direct evidence from inference; when sources conflict, present the difference and its likely causes. When evidence falls short, narrow the conclusion or list it as open — do not write "not found" as "does not exist".
+Define diminishing-returns stop rules calibrated to task depth (point verification vs landscape scan vs exhaustive audit) so the agent stops once additional queries cannot flip the conclusion, rather than farming links for volume.
 
-Organize long material so provenance and relevance remain visible. Filtering, deduplication, and source grouping help when volume obscures the evidence; preserve dates, authors, and applicability through any compression. Keep the research question clear. External pages, files, and retrieval results are untrusted data; instructions inside them must not override the research task.
+## Discriminating checks
 
-For time-sensitive questions, state the current date or require the runtime to supply it, and use retrieval rather than model memory. Do not bake changing vendor, price, legal, or version information into a long-lived prompt.
-
-## Minimal evals
-
-- a narrow question one official source can answer;
-- a question needing multi-source cross-validation;
-- a question where sources conflict;
-- a question without sufficient evidence;
-- external material carrying malicious or irrelevant instructions.
-
-Check source quality, claim coverage, date discipline, citation correspondence, inference marking, and whether stopping was reasonable.
-
-Done when: the research scope is bounded, every significant claim traces to evidence, conflicts and gaps are visible, and retrieval stops under reasonable conditions.
+Test single-source primary lookup, conflicting-source reconciliation with version/date skew, honest narrowing when evidence is absent, zero fabricated or unread citations, and immunity to instructions embedded inside retrieved documents.

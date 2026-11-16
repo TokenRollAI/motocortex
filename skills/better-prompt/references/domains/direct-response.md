@@ -1,32 +1,15 @@
 # Direct Response and Text Transformation
 
-Applies to Q&A, explanation, summarization, extraction, classification, rewriting, and translation. The dominant risk here is not that the model cannot write — it is that the answer's scope, factual boundaries, preservation rules, and output contract were never stated.
+Covers Q&A, explanation, summarization, extraction, classification, rewriting, and translation. Frontier models rarely struggle with fluency here — failures come from underspecified source boundaries, unranked omission rules, and fuzzy label edges.
 
-## Determine the task first
+## Lock semantics and preservation invariants
 
-- Q&A / explanation: what problem is the user solving, for whom, at what depth?
-- Summarization: what must be covered, what may be dropped, is the source text the only ground?
-- Extraction / classification: how are fields or labels defined, how are missing and ambiguous values represented?
-- Rewriting / translation: which facts, structure, terminology, tone, and length must be preserved?
+Make the dominant operation explicit when tasks combine ("extract structured fields first, then synthesize a decision brief from extracted facts alone" behaves differently from freeform summary).
 
-When one prompt mixes these actions, make the main task and its priority explicit. "Extract first, then summarize" and "summarize, extracting along the way" are not the same contract.
+Fence source material cleanly from instructions and define epistemic authority: strictly source-bound, supplemented by verified retrieval, or open to general domain knowledge — plus exact behavior when the input omits an answer (`null`, explicit gap marker, or narrowed scope rather than silent interpolation).
 
-## How to optimize
+Replace subjective adjectives ("accurate", "concise") with checkable invariants: preserve exact numerics, units, negations, conditionals, attribution, and temporal scope; state what drops first when output length is capped. For extraction and classification, enforce structure via runtime JSON Schema/enums and spend prompt tokens only on label boundary disambiguation and missing/multi-label semantics. Match summaries to the reader's decision or action rather than defaulting to chronological section-by-section paraphrase.
 
-Separate input from instructions and state the source boundary. For grounded output, say which materials alone may be used, when common knowledge or external retrieval is allowed, and how to narrow the answer when evidence falls short.
+## Discriminating checks
 
-Replace vague style words with concrete preservation rules. "Preserve all numbers, proper nouns, and causal relations" is more checkable than "rewrite accurately". For short answers, state what must survive, not merely "be concise".
-
-For classification and extraction, prefer API schemas or enums. The prompt explains field semantics, ambiguity, and missing values; the schema owns the syntax. Add minimal examples only when label boundaries fail repeatedly.
-
-Do not default summaries to section-by-section recitation. Choose a coverage, decision, action, or compression summary by the user's purpose, and give length and omission priorities.
-
-## Minimal evals
-
-- does a typical input complete the core task directly;
-- does the model avoid guessing when a field is missing or the source has no answer;
-- are numbers, proper nouns, qualifiers, and negations preserved;
-- are label boundaries, format, and length stable;
-- does paraphrasing or input reordering cause intent drift.
-
-Done when: the model knows what to answer, what it may rely on, what it must preserve, and how to behave when information falls short.
+Verify preservation of negations, qualifiers, and numbers under aggressive compression; abstention when source text lacks the answer; label stability near decision boundaries; and invariance under input-order shuffling.

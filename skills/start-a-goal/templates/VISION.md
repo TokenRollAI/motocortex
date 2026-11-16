@@ -1,27 +1,27 @@
 # VISION template
 
-Use this skeleton to describe the agreed outcome. Adapt sections to the task while preserving scope and a checkable acceptance basis.
+Capture the target outcome concisely. Keep entries checkable and omit implementation detail unless the user made it a constraint.
 
 <vision-template>
 # Vision
 
 ## Goal
 
-<What this goal solves, for whom, and why it matters.>
+<Problem solved, target user/caller, and why it matters.>
 
 ## Outcome and scope
 
-<What will exist or behave differently; include implementation constraints only when they are part of the user's requirements.>
+<Observable capabilities or behavior changes in scope, plus user-mandated constraints.>
 
 ## Non-goals
 
-<The adjacent work deliberately outside this goal.>
+<Adjacent work explicitly excluded so execution does not drift.>
 
 ## Success criteria
 
-<Observable outcomes with identifiers for tracing acceptance. State what evidence can demonstrate each outcome; clarify ambiguous criteria instead of silently dropping them.>
+- `SC-1`: <observable outcome and the class of evidence that proves it>
 
 ## User cases
 
-<Concrete scenarios: starting conditions, the user's action, and the expected result. Include relevant failure or boundary behavior. Map these cases to DOD acceptance without requiring a separate test for each case when one procedure proves several.>
+- `UC-1`: <precondition -> action -> expected outcome, covering core paths and critical failure/boundary cases>
 </vision-template>

@@ -1,70 +1,52 @@
 # Interaction Specification Template
 
-Use this when the task calls for a written interaction specification. Write it in the user's language, replace placeholders with decisions, cover only the flows and states the change touches, remove sections that do not apply, and keep open questions explicit rather than filling them with guesses. For a CLI, replace the accessibility and responsive sections with output streams, exit codes, machine-readable output, and interactive versus non-interactive behavior. Reference existing design-system components by name instead of redefining them.
+Write in the user's language, scoping strictly to touched flows and omitting inapplicable sections. Reference existing design-system components by name; for CLIs, swap visual/responsive sections for stream routing, exit codes, `--json` contracts, and TTY vs non-TTY behavior. Keep unresolved decisions explicit rather than papering over them with guesses.
 
 <interaction-spec-template>
-# [Feature or product]: Interaction Specification
+# [Feature or Surface]: Interaction Specification
 
-[Scope, platform(s), related existing flows, and the design system or conventions this follows]
+[Scope, target platforms, reused design-system conventions, and related existing flows]
 
-## Users and tasks
+## Users, jobs, and accelerators
 
-- Primary users: [who, how often, expertise]
-- Primary task: [what they must get done, and what failure costs]
-- Secondary tasks: [supporting tasks]
-- Expert path: [shortcuts, command palette, bulk actions, automation or API]
+- Personas & frequency: [who operates this, how often, expertise range]
+- Primary job & failure cost: [outcome required and blast radius of mistakes]
+- Expert path: [shortcuts, command palette, bulk ops, URL/CLI/API automation]
 
-## Object model and information architecture
+## Domain objects and navigation
 
-[The user-facing objects, their vocabulary, and how they relate. The navigation path to each object, and what each screen shows about where the user is, what is here, and what they can do next.]
+[User-facing objects, canonical terms, URL/state persistence, and how each view answers where-am-I / what-is-here / what-next.]
 
-## Primary flows
+## Flows and state preservation
 
-[For each flow: entry points, steps, the result, and where the user lands afterwards. Note what is preserved across navigation, such as drafts, filters, selection, and scroll position.]
+[Entry -> steps -> landing state for each touched flow, specifying what survives errors, reloads, and Back navigation (drafts, filters, selection, scroll).]
 
-## Action lifecycles
+## Action state machines
 
-| Action | Immediate feedback | Pending | Success | Failure and recovery | Unknown outcome | Reversibility |
+| Action | Immediate signifier | Pending | Success | Definite failure | Unknown / timeout | Reversibility & backend support |
 |---|---|---|---|---|---|---|
-| [action] | [acknowledgement] | [indicator, scope, duplicate protection] | [confirmation, next step] | [message, data safety, retry or cancel] | [how the outcome is checked, when retry is safe] | [undo, confirm, or preview, and what the backend can reverse] |
+| [verb + object] | [ack] | [local lock & indicator] | [in-place feedback] | [inline error & preserved input] | [reconcile rule / idempotency] | [undo, preview/diff, or named confirm] |
 
 ## View states
 
-[For each affected view, the reachable states among first use, empty, loading, partial, full, slow, offline, permission-denied, and partial failure, and their behavior.]
+[Behavior across reachable states: first-use, empty, loading, partial, full, slow, offline, permission-denied, partial-failure.]
 
-## Destructive and side-effecting actions
+## Safeguards, density, craft, and accessibility
 
-[Each such action, its impact, and its policy: undo, preview or diff, or explicit confirmation naming the consequence. For agent actions, the approval point and how users pause or stop.]
+- Subtraction & anti-bloat: [controls/options kept out of the primary viewport, command/drawer indexing, opinionated defaults chosen]
+- Density & anti-slop craft: [Operate vs Onboard density target, calm chrome vs semantic status color, specific outcome verbs]
+- Destructive / external side effects: [blast radius, undo vs named confirmation, agent approval/takeover gates]
+- Microcopy & i18n: [canonical labels, inline error phrasing, text-expansion/locale rules]
+- Accessibility & input modes: [semantic elements, focus order, full keyboard path, live announcements, single-pointer non-drag path, target sizing, reduced motion]
+- Responsive / AI behavior (if applicable): [viewport adaptation; provenance, object-landed output, and local AI repair]
 
-## Trade-offs
+## Principle trade-offs and open forks
 
-[Principles that conflicted, such as consistency and innovation, density and simplicity, undo and confirmation, or optimistic and pessimistic updates; the choice made and the evidence or assumption behind it.]
+[Explicit choices made where heuristics collided, plus unresolved user/stakeholder decisions and what each blocks.]
 
-## Content
+## Live verification checklist
 
-[Key action labels, terminology, error and confirmation wording, and localization constraints.]
-
-## Accessibility
-
-[Semantic structure, accessible names, focus order and visible focus, keyboard operation of every flow, status announcements, field error association, target sizes, non-drag alternatives, reduced motion, and non-color signals.]
-
-## Responsive behavior
-
-[How layout, navigation, and interactions adapt across screen sizes and input methods.]
-
-## AI behavior
-
-[Only if applicable: expectations shown to users, where output lands as an editable object, uncertainty and provenance display, correction actions, and failure handling.]
-
-## Verification scenarios
-
-- [First-time user completes the primary task]
-- [Primary task completed by keyboard alone]
-- [Slow, offline, empty, permission-denied, and partial-failure behavior]
-- [Each error triggered and recovered without data loss]
-- [Destructive actions undone or confirmed with named consequence]
-
-## Open questions
-
-[Decisions that still need the user or stakeholders, and what each blocks]
+- [Cold primary path + keyboard-only completion]
+- [Empty, slow, definite-error, and unknown-timeout recovery with zero data loss]
+- [Destructive undo or named-consequence confirmation verified]
 </interaction-spec-template>

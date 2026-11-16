@@ -1,26 +1,26 @@
 # PROGRESS template
 
-Initialize from the actual state and unresolved DOR gaps. Keep the current summary concise; preserve meaningful evidence and decisions in the history or linked artifacts.
+Keep the live summary scannable in seconds; append concise, evidence-linked deltas below as meaningful state changes occur.
 
 <progress-template>
 # PROGRESS (execution ledger)
 
 ## Current state
 
-- Goal: <the current goal>
-- Package: <directory relative to the repository root>
-- Status: <ready, in progress, blocked, or complete; based on actual evidence>
-- Current work: <active items or milestone>
-- Acceptance: <DOD items satisfied and evidence references; pending verification>
-- Blockers: <each unresolved prerequisite and the work it affects; or none>
-- Next useful work: <unblocked work or the exact input needed to resume>
+- Goal: <active goal>
+- Package: <path relative to repository root>
+- Status: <ready | in_progress | blocked | complete>
+- Active focus: <current slice or milestone>
+- Verified DOD: <satisfied IDs with short evidence pointers; invalidated or pending IDs>
+- Blockers: <unresolved gap -> gated IDs -> required input, or `None`>
+- Next move: <highest-leverage unblocked action or exact unblock request>
 
-## Evidence and decision history
+## Log
 
-### <Date or work increment>
+### <Timestamp or increment>
 
-- Work: <what changed and why>
-- Verification: <item IDs, method, expected and observed results, evidence references, and the state or revision checked>
-- Decisions: <new decisions or corrections and their basis; link DECISIONS when relevant>
-- Remaining: <open work, invalidated acceptance, or blockers>
+- Changed: <what moved and why>
+- Verified: <DOD IDs, command/procedure run on current revision, observed outcome, artifact path>
+- Decisions: <new choices or assumption updates; link `DECISIONS.md`>
+- Open: <remaining items, reopened checks, or blockers>
 </progress-template>

@@ -1,75 +1,53 @@
 # Better Prompt Delivery Template
 
-Use only sections that help the requested delivery. Replace placeholders with task content; the guidance in this paragraph is for the author, not part of the resulting prompt. Place instructions in the appropriate system, developer, or user layer for the target runtime, and keep runtime notes and evals outside the copy-ready prompt.
+Include only sections that earn their place for the requested delivery. Place copy-ready instructions in the appropriate system/developer/user layer, and keep runtime configuration and evals outside the prompt text itself.
 
 <better-prompt-template>
 # Optimized Prompt
 
-## Goal
+## Objective
 
-[the outcome the user should see]
+[Outcome to achieve, target audience/caller, and what defines a complete result.]
 
-## Context
+## Context and trust boundaries
 
-[the minimum background, input definitions, and boundaries needed to complete the task]
+[Inputs provided, authoritative sources vs untrusted external data, and environmental facts.]
 
-## Success criteria
+## Invariants and constraints
 
-- [observable or verifiable completion conditions]
+- [Non-negotiable factual, scope, safety, or authorization rule — plus the causal reason it matters and fallback behavior when blocked.]
 
-## Constraints
+## Decision criteria (optional)
 
-- [necessary business, factual, scope, or authorization constraints and why they matter]
+[How to weigh competing priorities, when to act autonomously vs ask, and when to stop; prescribe step order only where order itself is mandatory.]
 
-## Judgment (optional)
+## Output contract
 
-[trade-offs, relevant conditions, and evidence that should guide choices; prescribe a sequence only where the sequence itself is required]
-
-## Output
-
-[content, structure, length, audience, and language requirements]
-
-## Role and collaboration (optional)
-
-[only a short note that changes the professional lens, tone, or collaboration behavior]
-
-## Evidence and tools (optional)
-
-[source standards, tool-selection conditions, data boundaries for inputs and tool returns]
-
-## Authority and approval (optional)
-
-[actions allowed autonomously, side effects requiring confirmation, scope boundaries]
-
-## Verification and stop rules (optional)
-
-[verification method, retry/fallback conditions, when to ask or stop]
+[Required structure, precision/density, tone, and language — deferring strict syntax to runtime schemas where applicable.]
 
 ## Examples (optional)
 
-[only the minimal examples that fix known boundary, format, or style failures]
+[Include only minimal boundary examples needed to disambiguate subtle format, label, or tone edges.]
 
-# Runtime Notes (outside the prompt)
+# Runtime Notes (outside prompt)
 
-- Model: [target model, or "keep portable"]
-- Reasoning / thinking: [suggested value and the baseline to compare against]
-- Verbosity / output control: [runtime settings]
-- Structured output / tool schema: [constraints the API or a validator should own]
-- Context / caching: [static prefix, dynamic input, and compression advice]
+- Target model & reasoning config: [model ID / portable target, thinking budget]
+- Schemas & tool contracts: [constraints owned by JSON Schema, validators, or tool definitions]
+- Caching & context layout: [static prefix vs dynamic tail]
 
-# Minimal Evals
+# Validation Cases
 
-| Case | Input characteristics | Expected behavior | Failure signal |
+| Slice | Input trigger | Pass invariant | Regression / failure signal |
 |---|---|---|---|
-| Normal path | [typical input] | [core success criterion] | [observable failure] |
-| Boundary path | [hard case or extreme value] | [boundary behavior] | [observable failure] |
-| Insufficient information | [missing key field] | [ask, narrow, or decline] | [guessing or overreach] |
-| Domain risk | [the domain's key risk] | [safety/quality behavior] | [risk event] |
+| Core path | [representative real task] | [expected behavior] | [observable failure] |
+| Hard boundary | [edge or conflicting constraint] | [expected trade-off resolution] | [observable failure] |
+| Missing ground truth | [omitted prerequisite fact] | [targeted question or explicit narrowing] | [silent fabrication or overreach] |
+| Domain hazard | [highest-risk failure mode] | [guardrail behavior] | [unauthorized action or corruption] |
 
-# Change Notes
+# Delta Summary
 
-- Kept: [the parts of the original prompt that were effective and necessary]
-- Removed: [duplicated, conflicting, outdated, or ineffective scaffolding]
-- Added: [minimal constraints added for identified failure modes]
-- Pending validation: [assumptions without evidence, to be evaluated on the target model]
+- Preserved: [load-bearing intent and effective rules kept]
+- Cut: [redundant, conflicting, or legacy scaffolding removed]
+- Tightened: [invariants or layer fixes introduced]
+- Unverified: [hypotheses pending live eval on target runtime]
 </better-prompt-template>

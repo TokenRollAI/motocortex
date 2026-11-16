@@ -1,45 +1,39 @@
 ---
 name: start-a-goal
-description: >-
-  Take a goal from clarification to verified completion, with durable decisions,
-  execution documents, and evidence that another agent can resume.
+description: Carry a goal from clarification to verified completion with resumable execution state and runtime evidence.
 disable-model-invocation: true
 ---
 
-Carry the user's goal through to a verified result. Use documents to preserve intent, decisions, and evidence across context loss and handoffs; let the work's dependencies and feedback determine how to get there. The documents support execution rather than prescribe a universal sequence.
+Own the user's goal through to verified completion. Execution documents exist to survive context resets and agent handoffs, not to create ceremony before real work begins: keep them terse, non-overlapping, and anchored to actual repository and runtime state.
 
-## Establish which goal the documents describe
+## Reconcile intent against project reality
 
-Recover the current goal and authorization from the user's request and relevant project context. Existing files are evidence of earlier work, not proof that the user wants that work resumed. Compare any existing VISION, DOR, DOD, LOOP, and PROGRESS with the current goal, their recorded state, and the actual project before relying on them.
+Inspect the request, relevant codebase state, and any existing goal package in parallel before trusting prior notes. Earlier documents prove only that prior work happened, not that it matches the current goal or current code. Resume a matching package after repairing stale facts; isolate unrelated goals in their own directory and record the active package path in `PROGRESS.md` so sibling links never resolve against the wrong goal. Fold new user instructions directly into the package without re-asking settled choices.
 
-Resume a matching, usable package. Repair missing or stale documents from supported decisions and current evidence before executing work that depends on them; file existence alone does not establish readiness. Incorporate changes the user has already requested without asking for the same decision again. When the intended goal or a material conflict cannot be resolved from context, ask the narrow question that resolves it and continue independent work.
+## Settle forks and wire a lean execution package
 
-Keep unrelated goals separate. Use the repository's established location, or a goal-specific directory when another package already occupies it. Preserve existing work and record the active package path in PROGRESS; resolve package links from that location so a handoff cannot accidentally load a different goal.
+Clarify only where ambiguity could redirect scope, acceptance, or costly commitments. Pull in `grill` (or apply its discipline directly) with the facts already gathered, recording settled choices, reversible working assumptions, and blocking questions in `DECISIONS.md`. Skip interviews when intent and acceptance are already clear.
 
-## Make the goal executable
+Keep each document in its own lane and cross-reference by ID instead of duplicating prose:
 
-Clarification is valuable where uncertainty could change the outcome or cause expensive rework. Use `grill` for those open decisions, passing along context already gathered. If it is unavailable, apply that same judgment directly: inspect discoverable facts, surface consequential choices, and record decisions and their reasons in DECISIONS. A clear request does not need an interview merely to fill a document.
+- **VISION** ([templates/VISION.md](templates/VISION.md)): desired outcome, non-goals, checkable success criteria, and representative user/failure cases — free of implementation prescription unless the user constrained it.
+- **DOR** ([templates/DOR.md](templates/DOR.md)): verified stack conventions, runnable verification surfaces, external prerequisites, and concrete readiness gaps mapped to the exact work they block.
+- **DOD** ([templates/DOD.md](templates/DOD.md)): traceable acceptance items and end-to-end checks, each paired with the command, live runtime procedure, or human review that proves it.
+- **LOOP** ([templates/LOOP.md](templates/LOOP.md)): the active execution contract — autonomy boundaries, stage cadence, verification rigor, pivot rules when an approach stalls, and exact completion vs blockage conditions.
+- **PROGRESS** ([templates/PROGRESS.md](templates/PROGRESS.md)): compact live ledger of current state, verified `DOD` evidence, active blockers, and the next highest-leverage move.
 
-Use DECISIONS as the durable record of settled choices, assumptions, and unresolved questions. New user instructions supersede older records; reconcile the documents with those instructions rather than treating an old file as stronger authority. Unresolved choices constrain the work that depends on them, not every useful action.
+Scale document weight to task complexity: a focused goal needs tight bullets, while multi-milestone work earns milestone grouping only where real dependencies or acceptance gates exist.
 
-Give the execution documents distinct jobs:
+## Pace execution from working demo to stage-end architectural review
 
-- **VISION** describes the desired outcome, scope, success criteria, and representative user cases. Keep implementation detail here only when it is a genuine user constraint.
-- **DOR** identifies readiness gaps and the work each gap blocks, including settled technical choices and their basis.
-- **DOD** makes every success criterion and user case traceable to acceptance evidence. Choose commands, repeatable user procedures, or explicit human review according to what can actually prove the result.
-- **LOOP** records how to preserve intent, evaluate progress, and recognize completion or blockage within the task's authorization.
-- **PROGRESS** carries the current state, evidence references, blockers, and useful next work. Keep it consistent with DOD and inherit DOR's unresolved dependencies.
+Creating the package is setup, not a stopping point: share the package path and continue directly into authorized execution unless the user asked only for planning or handoff.
 
-Use the artifact skeletons in [VISION](templates/VISION.md), [DOR](templates/DOR.md), [DOD](templates/DOD.md), [LOOP](templates/LOOP.md), and [PROGRESS](templates/PROGRESS.md), adapting their sections to the goal. Organize work into milestones where they help explain dependencies or acceptance; a phase number is not itself a dependency.
+Do not run heavyweight architectural or full-spectrum reviews on every micro-turn — premature critique before behavior works stalls momentum and breeds speculative abstraction. Advance substantial work in a deliberate cadence: **prove the core shape with a working demo/vertical slice -> build out the implementation -> verify end-to-end functionality -> consolidate and merge major stage work -> run deep architectural review once real boundaries, coupling, and workload forces are visible in running code** (refactoring structure where proven seams demand it). Guard irreversible one-way risks (data loss, external contracts, security boundaries) upfront, keep per-turn checks fast and functional, and reserve deep structural review for major stage milestones and pre-completion convergence.
 
-## Execute with evidence and judgment
+Batch or parallelize independent reads, checks, and orthogonal changes. Treat mismatches and failures as causal signals: fix root causes at the owning boundary rather than patching callers, mocking away broken integrations, or weakening `VISION` / `DOD` criteria to make red checks pass. Update stale docs when verified facts or current user instructions supersede them; bring genuine scope or acceptance trade-offs back to the user while continuing unblocked work.
 
-Use the package's LOOP contract to guide continued work. Choose useful work that is authorized and unblocked; combine related changes or revisit earlier work when feedback warrants it. Record decisions and meaningful results as they become available, especially before a handoff, so recovery does not depend on remembering an uninterrupted conversation.
-
-Treat an implementation mismatch as a reason to investigate. Correct the implementation when it violates the agreed goal. Correct stale documentation when the user's existing instructions or established facts support the correction. Changes to user-owned scope, outcomes, or acceptance require the user's decision; difficulty implementing a requirement is not evidence that it should disappear.
-
-Show the user the package paths once ready and continue the authorized work unless they requested a handoff. The generated documents do not grant additional permissions or override host instructions. If execution is interrupted, leave enough state for the next session to resume from the same goal and verify which evidence still applies.
+Verify outcomes in the real runtime — test suites, builds, CLI runs, or live browser walkthroughs (`ego-lite` preferred when available) — and re-run checks whenever subsequent edits touch their blast radius. Persist evidence and state transitions incrementally in `PROGRESS.md` so an abrupt session end leaves the next agent ready to act without replaying chat history.
 
 ## Done when
 
-The package is ready when it describes the current goal consistently, acceptance covers every success criterion and user case, and unresolved decisions and prerequisites are linked to the work they affect. The goal is complete when the LOOP completion conditions are satisfied by evidence for the final state, including required regression and human acceptance. When only external inputs or user decisions can unlock remaining work, report a blocked handoff with the exact missing input and affected work; blocked is not complete.
+The package is consistent with current user intent and repository reality, every `VISION` criterion and user case maps to `DOD` verification, major integrated work has passed stage-end architectural review without unaddressed structural debt, and every `LOOP` completion gate — including final-state regression and any required human acceptance — is backed by observed evidence. When external prerequisites or user-owned decisions block all remaining work, report a blocked handoff naming the exact missing input and gated items; blocked is unfinished, not complete.
