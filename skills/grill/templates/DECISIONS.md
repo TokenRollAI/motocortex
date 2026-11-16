@@ -1,27 +1,27 @@
 # Decisions template
 
-Use this skeleton for the goal's durable decision record. Keep entries concise and update them as evidence or user decisions change.
+Maintain a compact, durable record of choices for the active goal. Update entries in place as new facts or user answers supersede earlier assumptions.
 
 <decisions-template>
 # Decisions
 
-## Goal and scope
+## Goal and authorized scope
 
-<The goal this record belongs to and the work currently authorized.>
+<Target goal and the scope of execution currently authorized.>
 
-## Settled context
+## Verified context
 
-<Relevant facts and existing conventions, with sources or file references.>
+<Load-bearing repository facts, constraints, and existing conventions with file or source pointers.>
 
-## Decisions
+## Settled decisions
 
-<Decision, reason, and basis in the user's instructions or delegated discretion.>
+- <Choice made | rationale and accepted trade-off | authority (user instruction or delegated scope)>
 
 ## Working assumptions
 
-<Reversible assumptions, their impact, and what evidence would change them; or none.>
+- <Reversible assumption | affected work | signal or evidence that would trigger revisiting it; or `None`>
 
-## Open or deferred questions
+## Open or deferred forks
 
-<Question, why it matters, affected work, and when or from whom an answer is needed; or none.>
+- <Unresolved question | why it changes the build | gated work | who decides and when; or `None`>
 </decisions-template>

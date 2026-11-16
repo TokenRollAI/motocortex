@@ -1,26 +1,13 @@
 # Creative Work
 
-Applies to ideation, copywriting, stories, brand expression, visual direction, and open-ended design. The dominant risks here are constraints packed so densely they flatten the creativity, or missing factual boundaries letting the work pass off invented details as real information.
+Covers ideation, copywriting, narrative, brand voice, and visual/product direction. Guard against the two twin failure modes of frontier models: **over-constrained prompts that collapse output into stiff formula, and under-fenced prompts that invent false product facts or default to generic AI clichés**.
 
-## How to optimize
+## Partition hard invariants from open creative space
 
-State the work's purpose, audience, medium, usage context, and the facts it must convey. Split the requirements into three classes: must keep, explicit no-go, and free to explore. The clearer the free zone, the better the model explores in the right places.
+Separate constraints into three explicit zones: **non-negotiable facts and structural bounds**, **explicit anti-patterns / clichés to reject**, and **axes deliberately open for bold choices**. Naming where the model has license to take aesthetic or tonal risk prevents safe, median-of-the-internet output.
 
-Unpack "premium", "compelling", or "like brand X" into observable writing or design choices — rhythm, sentence length, information density, point of view, color relationships, emotional arc. Avoid direct style imitation of living artists; describe composable visual or verbal characteristics instead.
+Translate vague taste words ("modern", "premium", "punchy") into concrete compositional levers — sentence cadence, lexical register, information density, focal hierarchy, palette tension, or point of view — without imitating named living creators. Fence factual claims strictly: invented metaphors or fictional scenarios are fair game where marked, whereas product capabilities, metrics, quotes, dates, and customer proof must never be fabricated for rhetorical punch. When editing existing copy or designs, state which voice, structure, and length invariants must survive so "tighten this" never balloons into marketing fluff.
 
-Examples anchor results strongly. Use representative examples when consistency matters; when exploration matters, describe the dimensions open to variation and how to choose a direction. Multiple concepts can help a user choose, but a request for a finished piece need not become a mandatory concept-selection workshop.
+## Discriminating checks
 
-Keep factual material and creative space separate. Mark the names, plots, and numbers that may be invented; product capabilities, customer results, dates, quotes, and research conclusions must not be fabricated for copy effect.
-
-When revising existing work, list the facts, structure, length, genre, and brand voice that must be preserved, then state what may change. Do not let "polish" default to expansion, added headings, or a shifted marketing register.
-
-## Minimal evals
-
-- does it satisfy the purpose, audience, and medium;
-- are the must-keeps, no-gos, and factual boundaries respected;
-- are the multiple directions genuinely different;
-- is the style recognizable without being over-templated;
-- does a revision preserve the original's meaning and structure;
-- is human preference review separated from automated checks.
-
-Done when: the creative boundaries and the free space are both clear, facts stay uncontaminated by invention, and results can be chosen by purpose and preference rather than checked off by format alone.
+Verify adherence to audience/medium fit and factual fences, genuine divergence when multiple directions are requested, absence of templated AI tropes/buzzwords, and preservation of voice and structure on targeted revisions.

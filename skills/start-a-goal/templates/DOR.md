@@ -1,27 +1,27 @@
 # DOR template
 
-Use this skeleton for project-specific readiness facts and gaps. Omit categories that do not apply; name the affected work for every unresolved prerequisite.
+Record discovered technical facts and concrete readiness gaps. Omit inapplicable sections; link every gap to the exact `DOD` items it blocks.
 
 <dor-template>
 # DOR (Definition of Ready)
 
-## Requirements and decisions
+## Settled context and assumptions
 
-<Settled scope and acceptance basis; unresolved choices and the work requiring an answer. Distinguish reversible assumptions from decisions reserved for the user.>
+<Decisions locked in DECISIONS.md, reversible working assumptions in force, and open user decisions with gated work.>
 
-## Technical readiness
+## Technical baseline
 
-<Relevant existing stack and conventions, reasons for new choices, and available build, run, or verification capabilities.>
+<Verified stack, architectural boundaries, existing conventions to reuse, and working build/test/runtime commands.>
 
 ## External prerequisites
 
-<Required services, accounts, environments, or inputs; their availability and the work depending on them. Reference secret locations without copying secret values.>
+<Services, credentials (locations only, never secret values), fixtures, or environments required and their current availability.>
 
-## Acceptance readiness
+## Verification surfaces
 
-<Available commands, repeatable user procedures, or human reviewers; missing verification capabilities and the acceptance they affect.>
+<Runnable test suites, CLI/API harnesses, live browser tooling (ego-lite preferred when available), or human review channels — plus any missing verification capability.>
 
 ## Blockers
 
-<For each gap: affected DOD items or outcomes, missing input, and what would resolve it. Mirror unresolved gaps in PROGRESS; write none if ready.>
+<Each unresolved prerequisite, gated DOD IDs, and exact unblocking input; write `None` when ready.>
 </dor-template>

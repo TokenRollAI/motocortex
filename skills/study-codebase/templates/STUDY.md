@@ -1,54 +1,52 @@
 # Codebase Study Template
 
-Write the resulting note in the user's language as a readable explanation. Replace placeholders with findings, remove author guidance, and adapt the depth to the project. Keep the four learning questions and the proposed exercise explicit. Collect most source references in the final appendix, using descriptive link labels and occasional inline citations only where immediate verification helps. Add diagrams or pseudocode only where they explain a mechanism; label pseudocode as a simplification and preserve the important invariant.
+Write in the user's language as clear, connected technical prose that stands on its own without opening links. Strip author instructions, keep epistemic labels (`inspected`, `executed`, `documented`, `inferred`) honest, and collect commit-pinned source links in the final reading route. Use diagrams or simplified pseudocode only where they clarify a non-obvious state transition or invariant.
 
 <codebase-study-template>
 # [Project]: Codebase Study
 
-[Repository URL, inspected commit, study date, scope, and relevant local differences]
+[Repository URL, pinned commit SHA, local/dirty state if any, study date, and subsystem scope]
 
-## Central conclusions
+## Core thesis
 
-[The project's purpose, central mechanism, and most useful design insight in a few evidence-backed sentences.]
+[2-4 sentences stating what problem the system solves, the central mechanism/invariant that makes it work, and its most transferable engineering trade-off.]
 
-## What it does
+## Problem and scope
 
-[Who uses it, what problem it solves, and a concrete input-to-output example. Explain the scope that distinguishes this project from a generic description of its category.]
+[Target user/caller, concrete input-to-output example, and the deliberate scope boundary separating this system from adjacent tools in its category.]
 
-## Architecture and dependencies
+## Architecture and dependency seams
 
-[Explain how the main components cooperate, who owns state, and how control or data moves between them. Introduce each component by its job. Include a compact diagram if useful, and collect supporting source references in the appendix.]
+[How load-bearing components divide state ownership and control/data flow, introduced by job before symbol name. Include a compact topology diagram only if helpful. Distinguish policy implemented here from capabilities delegated to key runtime dependencies (with version/call-site grounding in the appendix), separating runtime deps from build/test tooling.]
 
-[Explain the important libraries, frameworks, or services through the work they perform in this design. Distinguish project-owned behavior from delegated capabilities and runtime dependencies from development tooling. Use a compact comparison table only if it improves clarity; put integration evidence in the appendix.]
+## End-to-end mechanism walkthrough
 
-## How the core works
+[Follow one concrete operation from public entry point to final effect in connected prose: data structures, state transitions, invariants upheld at each seam, and why each step exists.]
 
-[Walk a concrete input or user action through to its result in connected prose. Explain what the system remembers, transforms, or decides at each meaningful transition, why that transition is needed, and what must remain true. Name implementation symbols only when they help connect the explanation to later source reading. The walkthrough should make sense without opening any links.]
+[Trace one revealing boundary, contention, or failure case showing how the design preserves or degrades its invariant — distinguishing static source inspection from executed verification.]
 
-[Explain a revealing failure or boundary case and how the implementation handles it. Distinguish inspected behavior from execution results.]
+## Transferable design lessons
 
-## What is worth learning
+[For each high-signal lesson: forcing constraint -> concrete mechanism -> benefit bought -> cost accepted -> when to adopt vs avoid. Flag inferred author intent explicitly.]
 
-[For each selected lesson, explain the constraint, concrete design choice, benefit, cost, and transfer conditions. Connect the lesson to the example above, mark inferred rationale explicitly, and collect its supporting evidence in the appendix.]
+## Proposed mini-implementation
 
-## A small implementation exercise
+[A self-contained build proposal isolating the central mechanism and invariant — marked clearly as a proposal.]
 
-[Propose a small thing to build around one central mechanism. State the learning objective and how it relates to the source design.]
+- Input -> expected output: [concrete test case]
+- Minimal components: [smallest coherent structure]
+- Core invariant: [what must hold under stress and why]
+- Deliberate cuts: [production features/infra stripped away]
+- Falsifiable acceptance check: [happy path + one boundary probe that breaks a naive clone]
 
-- Input and expected output: [a concrete example]
-- Minimum components: [the smallest coherent design]
-- Invariant to preserve: [what must remain true and why]
-- Deliberate omissions: [product features or infrastructure unnecessary for this lesson]
-- Acceptance check: [observable success plus a boundary case that would expose a misunderstanding]
+## Blind spots and open questions
 
-## Evidence limits and open questions
+[Uninspected third-party internals, doc-vs-code discrepancies, or unexecuted runtime assumptions that bound confidence, and what check would settle each.]
 
-[Uninspected boundaries, documentation conflicts, inferred claims, and unexecuted checks that matter to the conclusions. State what could resolve each important gap; say when no material gap was found.]
+## Appendix: Source reading route
 
-## Appendix: Source reading and evidence
+[Dependency-ordered reading path supporting the claims above, using descriptive links pinned to the inspected commit SHA (with line ranges only where they sharpen lookup).]
 
-[Offer a short optional reading route, grouping evidence by the mechanisms or lessons explained above. Make clear which conclusion each entry supports. Use descriptive links pinned to the inspected revision; include precise line ranges only where they help.]
-
-1. [Descriptive source link] - [the mechanism or conclusion it supports and what to look for]
-2. [Descriptive source link] - [the next question it unlocks; extend only as useful]
+1. [Descriptive commit-pinned link] — [invariant or transition it establishes and what to inspect]
+2. [Descriptive commit-pinned link] — [next causal link in the trace]
 </codebase-study-template>

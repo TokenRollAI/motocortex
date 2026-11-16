@@ -1,55 +1,54 @@
 ---
 name: product-dogfood
 description: >-
-  Use a live product end-to-end as a real user and deliver candid,
-  evidence-backed feedback across functional design, interaction, UI craft,
+  Operate a live product end-to-end like a real user and deliver candid,
+  evidence-backed critique across functional design, interaction, UI craft,
   information density, and AI slop. Use when asked to dogfood, try out, walk
-  through, experience deeply, or critique a running web app, desktop surface,
-  CLI, or product workflow from a user and product perspective, or to expose
-  what feels broken, hollow, tedious, sparse, noisy, or templated. Do not use
-  for designing an interaction spec before a product runs, implementing UI
-  changes without live product usage, static code or architecture review, or
-  writing automated test suites.
+  through, experience deeply, or audit a running web app, desktop surface, CLI,
+  or workflow from a product and user perspective to expose what feels broken,
+  hollow, tedious, sparse, noisy, or templated. Do not use for pre-build
+  interaction specs, implementing UI edits without live product usage, static
+  code or architecture review, or automated test-suite authoring.
 ---
 
-Reading source code or glancing at static screenshots hides how a product actually feels to learn, operate, and trust. Deep dogfooding means using the running product with a real user's goals and ignorance, experiencing every dead end, missing capability, extra click, misweighted viewport, and unedited generator cliché firsthand, then turning that lived friction into direct, prioritized product recommendations.
+Code inspection and static screenshots hide what a product actually feels like to learn, operate at speed, and trust. Dogfooding means driving the running product cold with real user goals, feeling every broken loop, extra click, misweighted viewport, and unedited generator tell firsthand, then turning that evidence into blunt, prioritized product cuts and fixes.
 
-## Experience the product blind before reading source
+## Walk the live product blind before touching source
 
-Inspecting routes, components, schemas, or prompts beforehand gives you an insider's mental model and masks confusing onboarding, ambiguous labels, and missing signifiers. Enter the running product as an outsider first. Within the first seconds on the landing or workspace view, record your unfiltered impression: what the product appears to do, which three elements pull the eye first, and whether the path to first value is obvious without outside explanation.
+Reading routes, schemas, or components beforehand plants an insider's mental model and masks confusing onboarding, leaky internal naming, and missing signifiers. Enter the live product cold first. Within the first five seconds on the entry and main workspace views, capture your unfiltered read: what the product claims to do, the first three elements that pull the eye, and whether the path to first value is obvious without outside context.
 
-Read repository source, network payloads, or configuration only after completing the live walkthrough, and only when needed to separate a broken implementation from an unbuilt capability, verify a root cause, or inspect a state the live environment could not reach. Keep live observations clearly distinct from post-walkthrough source checks so insider knowledge never rewrites what a user actually saw.
+Inspect repository code, network payloads, or configuration only **after** finishing the live walkthrough, and only to distinguish an unbuilt capability from a broken implementation, confirm a root cause, or inspect a state blocked in the live environment. Keep live user observations strictly separated from post-walkthrough source checks.
 
-Leave the target repository and shared environment intact. A dogfooding request authorizes realistic usage with reversible or clearly scoped test data, whereas editing product code, mutating shared production data destructively, or wiping shared browser profile state requires explicit user direction.
+Leave product code, shared data, and shared browser profiles intact: use reversible or clearly scoped synthetic records during write flows, and never edit source code, mutate shared production state destructively, or clear shared browser cookies/storage without explicit user authorization.
 
-## Drive web surfaces with ego-lite, not synthetic test runners
+## Prefer ego-lite on web surfaces, falling back cleanly
 
-A real shared browser exposes actual font rendering, viewport rhythm, authenticated workflows, and human handoffs that headless test scripts flatten away. On web targets, drive the live product exclusively through `ego-lite` (`ego-browser`), running `ego-browser skill` first so scripts follow the installed runtime contract. Use semantic snapshots to orient and act, viewport and full-page screenshots to judge visual hierarchy and density, and in-page evaluation or CDP when console errors, network failures, or computed style metrics inform the critique. Read [references/ego-lite-exploration.md](references/ego-lite-exploration.md) when operating a web target.
+A shared real browser preserves true font rendering, viewport density, signed-in session state, and live human handoffs that isolated test runners miss. On web targets, **prefer `ego-lite` (`ego-browser`) first** whenever available — run `ego-browser skill` before the first browser call, reuse one `TaskSpace`, protect shared cookies and user tabs, and use `handOff()` when unprovided credentials, SSO, 2FA, CAPTCHA, payment, or browser permission prompts require the user.
 
-Keep Playwright, Puppeteer, and headless browser scripts out of web verification; if `ego-lite` or the target URL cannot run, report the specific blocker rather than substituting another browser harness or guessing runtime behavior from code. When login without supplied credentials, 2FA, CAPTCHA, payment, or a browser permission prompt requires a person, hand control to the user in the active space and resume there once they finish. Preserve existing cookies, storage, and user-owned tabs unless the user explicitly asks to clear state. For CLI or API products, execute the real commands across interactive, piped, and failure cases.
+When `ego-lite` is absent or unavailable in the current environment, fall back pragmatically to the strongest available live browser tool (such as `agent-browser`, a browser MCP server, or Playwright/Chromium automation) rather than stalling — recording which driver ran and any session or rendering caveats (such as a clean unauthenticated profile). Report a browser blocker only when *no* live browser runtime can reach the target, never fabricating visual or interactive claims from JSX/CSS alone. Read [references/web-exploration.md](references/web-exploration.md) when operating web targets. On CLI or API surfaces, execute the real binary or endpoints across interactive TTY, piped non-TTY, and error paths.
 
-## Walk real jobs from first contact to repeat speed
+## Stress full value loops from cold start to operator speed
 
-Clicking through top-level navigation only checks that routes render. Real product weaknesses appear when carrying realistic, messy domain data across steps, recovering from mistakes, and repeating a task ten times in a row.
+Clicking top-level nav tabs only proves routes mount. Exercise the product from two distinct postures: a **first-time user** trying to reach real payoff unassisted, and a **repeat operator** running the core loop ten times in a row where modal friction, focus resets, and missing shortcuts compound.
 
-Adopt at least two angles while using the product: a first-time user trying to reach meaningful value unassisted, and a daily operator repeating the core workflow where extra clicks, modal jumps, and lost context compound. Carry core objects through their whole lifecycle — create, view, edit, search or filter, share or export, and delete or undo. Deliberately exercise empty states, zero-result searches, long or awkward strings, invalid inputs, slow or failed requests, mid-flow reloads, keyboard-only operation, and relevant desktop and mobile viewports. Confirm interactive bugs by reproducing them once, and record findings with screenshot or output paths as you go so nothing blurs across a long session.
+Carry realistic, messy domain inputs (long titles, multi-line text, edge characters, zero/large counts — never `test` or `foo`) through the full object lifecycle: create -> inspect -> edit -> search/filter -> export/share -> delete/undo. Deliberately probe empty states, zero-result searches, invalid submissions, slow/failing requests, mid-flow browser reloads and Back navigation, keyboard-only operation, and desktop vs mobile viewports where applicable. Reproduce interactive bugs once from a clean prior state to confirm them, logging findings and artifact paths incrementally as you go.
 
-## Critique directly across the five product lenses
+## Judge directly across the five product lenses
 
-A product that throws zero runtime errors can still fail if its features stop short of the user's job, its flows tax routine work, its hierarchy lies, its screens starve or drown the eye, or its interface looks stamped out by a template generator. Judge every exercised workflow across all five lenses, using [references/critique-lenses.md](references/critique-lenses.md) to calibrate severity and context:
+Zero console errors does not mean a good product. Evaluate every exercised journey across five lenses, calibrating severity with [references/critique-lenses.md](references/critique-lenses.md):
 
-- **Functional design**: Test whether capabilities close the real job from intent to usable outcome. Call out missing table-stakes steps, dead-end outputs that cannot be edited or carried forward, hollow features that add surface area without earning their keep, and navigation organized around backend tables instead of user objects.
-- **Interaction and flow**: Measure the physical and cognitive tax of each task. Flag unnecessary steps, modal chains where inline action belongs, lost drafts or filters across navigation, silent waits, missing keyboard or bulk accelerators on repeat paths, and destructive actions that either omit undo or nag on routine edits.
-- **UI and visual craft**: Check whether visual prominence matches task importance. Evaluate alignment, spacing rhythm, typographic hierarchy, color contrast, interactive signifiers without hover, state consistency across views, and responsive layout integrity.
-- **Information density**: Judge density against the screen's job rather than equating whitespace with clarity. On operational workspaces, flag starvation density — oversized cards, decorative banners, or hidden row details that force constant scrolling and clicking to inspect a few items. On onboarding or infrequent decision views, flag overload density — unchunked walls of options, competing badges, and internal fields exposed before they matter.
-- **AI slop**: Ask whether a thoughtful human team would deliberately choose this layout, ornament, and copy for this specific product. Flag templated visual tells (unmotivated purple-indigo gradients, symmetrical three-column icon-circle grids, uniform rounded cards nested inside cards, decorative blobs or radial glows, emoji headings), structural filler (ALL-CAPS eyebrow chips above every heading, invented stat strips, decorative sparklines, equal bento boxes for unequal content), and copy slop ("Unlock the power of...", welcome happy-talk inside workspaces, vague "Get Started" or "Submit" buttons, apologetic or robotic phrasing in place of plain task verbs). Weigh context honestly: a brand-owned trait backed by real craft differs from stacked generator defaults.
+- **Functional design**: Does the feature set close the user's real job end-to-end, or stop at a demo happy path? Call out missing table-stakes links, dead-end outputs, backend-shaped navigation, and hollow features or panels that should be cut or demoted.
+- **Interaction and flow**: Count clicks, modal hops, scroll jumps, and memory bridges across screens. Audit async state lifecycles, draft/filter survival across reloads, undo vs named destructive confirmation, and keyboard/bulk speed on repeat workflows.
+- **UI and visual craft**: Test whether visual weight matches task priority, and check cross-screen token coherence (type scale, spacing rhythm, radii, contrast, non-hover signifiers, responsive integrity).
+- **Information density**: Judge density relative to surface mode — flag **starvation density** (puffy cards, hero banners, modal-hidden attributes, wasted above-the-fold space) on daily operator views, and **overload density** (unchunked option walls, premature advanced flags, chrome noise) on onboarding or infrequent decision views.
+- **AI slop**: Apply the studio test — would a deliberate product team choose this styling, structure, and copy for *this* domain? Call out unmotivated generator tells across visuals, layout templates, and vaporware/happy-talk microcopy, distinguishing brand-owned choices from stacked defaults.
 
-## Deliver candid, ranked recommendations
+## Deliver candid, ranked fixes backed by runtime proof
 
-Polite padding and vague aesthetic notes ("simplify this section", "add polish") hide what matters and leave builders guessing what to change. State plainly what earns its place, what hurts the product, and what should be cut, merged, redesigned, or rewritten.
+Skip diplomatic fluff and vague taste notes ("clean up layout", "improve UX"). State plainly what earns its keep, what hurts comprehension, speed, or trust, and what to **cut, merge, redesign, or rewrite**.
 
-Rank findings from core-value blockers and high-frequency workflow taxes down to craft and microcopy polish. Tie each finding to the user goal, the exact route or command, captured evidence (screenshots, snapshots, console or network signals), the mechanism of user harm, and a concrete fix — naming the specific flow change, layout shift, capability cut or addition, or replacement copy. Distinguish live-observed facts from post-walkthrough source verification and from unexercised paths. Use [templates/DOGFOOD-REPORT.md](templates/DOGFOOD-REPORT.md) when writing a full product critique, adapting its depth when the user scopes to a single flow.
+Order findings `P0` -> `P3` by user and product impact. Anchor each finding in the user job, exact route/command, captured runtime proof (screenshots, snapshots, DOM/network/console signals), causal harm, and a concrete replacement — down to the exact flow restructure, table/layout change, feature cut, or rewritten label. Use [templates/DOGFOOD-REPORT.md](templates/DOGFOOD-REPORT.md) for full critiques, scaling tightly when scoped to a single flow.
 
 ## Done when
 
-The running product has been used end-to-end across its core workflows and relevant edge states — through `ego-lite` on web surfaces without Playwright or unrequested profile-state clearing — while leaving product code and shared data intact. Feedback covers functional design, interaction, UI craft, information density, and AI slop with candid, impact-ranked recommendations; every claim points to captured runtime evidence and separates live observation from any subsequent source check; and any flow, role, or environment that blocked live verification is explicitly named with what is required to exercise it.
+The live product has been driven end-to-end across core jobs and edge states (preferring `ego-lite` on web targets when available, or a documented live browser fallback otherwise, while leaving product code and shared profile data intact); feedback covers functional design, interaction, UI craft, information density, and AI slop with blunt, `P0`–`P3` ranked, actionable replacements; every claim cites captured runtime evidence cleanly separated from any post-walkthrough source check; and any blocked surface or role is stated explicitly alongside what unlocks it.

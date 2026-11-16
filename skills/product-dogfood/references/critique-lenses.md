@@ -1,66 +1,57 @@
 # Product Critique Lenses
 
-Use these five lenses while operating the product so feedback covers whether the product is worth using, not merely whether its buttons throw exceptions. Weigh findings by how often real users hit them, how badly they stall or degrade the outcome, and whether users can recover.
+Apply these lenses during live operation so critique judges whether the product earns adoption and daily speed — not merely whether pages render without throwing.
 
-## First-impression and region scan
+## 5-second hierarchy and 2-second region scan
 
-Run a five-second read on the landing screen and the primary workspace before clicking anything. Record what the screen communicates at a glance, the first three elements the eye lands on in order, and whether those three match the user's real reason for arriving. When a secondary badge, decorative banner, or sidebar promo beats the primary action for attention, the visual hierarchy is lying.
+Before interacting on the landing screen or primary workspace, run two cold checks:
 
-Apply a two-second region scan to each major view: name the job of every distinct area on screen. Regions whose job takes longer than two seconds to name, or two regions doing the same job in slightly different shapes, signal muddled structure that should be merged or cut.
+- **Eye-order check (5s)**: Name what the screen claims to do and the first three elements that capture attention in order. When a promo banner, secondary badge, or decorative header beats the primary user action, visual hierarchy is lying.
+- **Region-job check (2s per block)**: Name the single job of every distinct region on screen. Any region whose purpose takes >2s to name — or two regions splitting the same job — is structural clutter to merge or cut.
 
-## Functional design
+## 1. Functional design
 
-Functional critique asks whether the product solves the whole problem it promises rather than staging a narrow demo.
+Judge whether capabilities close the real job-to-be-done rather than staging a demo:
 
-Trace the core domain object from creation to real-world payoff. An editor without export or sharing, a search bar without useful filters or sort on growing lists, an import without validation feedback, a background job without status or cancellation, or a generated artifact trapped in a read-only pane leaves the workflow half-built. Name the exact missing link that blocks real adoption.
+- **End-to-end loop closure**: Follow the primary domain artifact from creation to downstream payoff. Generation without editing/export, lists without working filter/sort at realistic volume, imports without row-level error feedback, or background jobs without progress/cancel leave the product half-built.
+- **Subtraction and earn-your-keep**: Challenge dashboards, tabs, decorative stats, and settings copied from category templates that do not serve the core loop. Recommending what to **delete or demote** is often higher-leverage than proposing new features.
+- **User-object alignment**: Flag navigation or workflows organized around internal services, database join tables, or pipeline stages that force users to hop across multiple top-level views to finish one domain task.
 
-Apply the earn-your-keep test to every tab, dashboard widget, and setting. Early products routinely accumulate speculative analytics panels, redundant views, social chrome, or configuration toggles copied from larger tools while the primary workflow stays rough. Recommend removing or demoting features that add navigation weight without serving the main user job; subtraction is often the sharpest product improvement.
+## 2. Interaction and flow
 
-Check whether objects and navigation match user concepts. People think in projects, invoices, deployments, or drafts, not join tables, internal microservices, or pipeline stages. When a single user goal forces jumping across three top-level sections to assemble context, call out the broken boundary and propose co-locating the workflow.
+Measure the physical and cognitive tax of cold setup and 10x/day operator repetition:
 
-## Interaction and flow
+- **Action and context-switch tax**: Count clicks, modal-on-modal chains, separate Edit/Save ceremony on trivial fields, and *memory bridges* where step 3 requires recalling data visible only back on step 1.
+- **State lifecycle and persistence**: Probe new-account empty state, zero-result search, pending/skeleton stability, definite failure, ambiguous timeout, mid-task reload, and Back button behavior. Check whether drafts, filters, selection, and scroll survive errors and navigation, and ensure actionable errors appear inline beside their cause rather than only in vanishing toasts.
+- **Proportional safeguards and speed**: Routine reversible mutations should fire immediately with undo; irreversible high-blast-radius actions should name the exact consequence on the confirmation button. Check keyboard-only operability, `Enter`/`Escape` ergonomics, sensible defaults, and bulk/shortcut accelerators on repeat views.
 
-Interaction critique measures the physical and mental tax of completing and repeating work.
+## 3. UI and visual craft
 
-Count steps, clicks, scroll jumps, and focus resets along both first-time setup and the ten-times-a-day operator loop. Flag modal overuse where inline editing, a side panel, or direct manipulation preserves context better. Flag memory bridges where step three asks for information visible only back on step one, and modes that force clicking "Edit" and "Save" around trivial single-field adjustments.
+Evaluate visual decisions by how fast and accurately they guide scanning and action:
 
-Exercise the full state lifecycle of asynchronous and stateful views: empty state on a new account, zero-result filter state, loading skeletons or pending indicators, partial or full request failure, ambiguous timeout, and browser reload or back-navigation mid-task. Verify that drafts, filter selections, and scroll positions survive navigation and recoverable errors, and that errors sit beside their cause with a concrete way forward rather than flashing in a disappearing toast.
+- **Contrast budget**: One unmistakable primary focal point, quiet chrome, grouped secondary controls. Equal borders, shadows, and saturated pills everywhere flatten everything into noise.
+- **Cross-screen token discipline**: Compare rendered font families, size/weight steps, spacing multiples, border radii, button heights, icon strokes, and status colors across 3+ screens to catch stitched-together drift.
+- **Affordance and viewport integrity**: Interactive elements must signal operability without hover or color alone, prose should stay within readable measure (~60–80ch), targets must be comfortably clickable/tappable, and layouts must adapt across desktop and mobile widths without horizontal overflow or silent truncation.
 
-Match safeguards to blast radius and reversibility. Routine reversible actions should happen immediately with undo or history; high-stakes, irreversible actions (deleting shared resources, billing, sending externally, revoking access) should state the concrete consequence and name the verb on the confirmation trigger rather than training users to click past generic "Are you sure?" dialogs. Check keyboard reachability, focus visibility, and expert shortcuts on high-frequency surfaces.
+## 4. Information density
 
-## UI and visual craft
+Density fails in opposite directions depending on the surface's job:
 
-Visual craft serves comprehension, trust, and scanning speed.
+- **Operate surfaces** (workspaces, queues, tables, logs, editors, consoles): Daily operators scan, compare, and triage. Watch for **starvation density** — oversized hero banners inside logged-in apps, airy card grids showing 4 items per viewport where a compact aligned table shows 25, truncated identifiers beside wide blank gutters, or hiding key attributes and actions inside per-row modals.
+- **Onboard and persuade surfaces** (first-run setup, landing, pricing, rare high-stakes choices): Newcomers lack a mental map. Watch for **overload density** — walls of 8+ ungrouped choices at one decision point (exceeding ~4 working-memory chunks), exposing advanced flags before basic setup succeeds, or tangling primary setup with secondary promos.
+- **Data density vs chrome density**: Separate useful information per viewport from box-inside-box borders, repeated labels on every card, redundant icons beside plain words, and uniform "Active" pills on 99% healthy rows. Cut chrome before hiding data.
 
-Establish whether each view has one unmistakable focal point, grouped secondary controls, and quiet supporting chrome. When every card border, shadow, pill badge, and heading carries the same contrast, the eye has nowhere to start.
+## 5. AI slop
 
-Compare the inferred design system across at least three screens — actual rendered typefaces, font sizes and weights, line heights, spacing increments, border radii, icon styles, button heights, and semantic status colors. Drift across screens makes a product feel stitched together by separate hands. Check that interactive controls carry consistent signifiers without relying on hover or color alone, prose stays readable (roughly 60 to 80 characters per line), interactive targets remain comfortably clickable or tappable, and layouts adapt across desktop and mobile widths without horizontal overflow or clipped labels.
+AI slop is the stacked residue of unchosen generator defaults across styling, page anatomy, and copy that makes a product look interchangeable and untrustworthy. Judge by intent and domain fit rather than keyword bans — one deliberate brand choice backed by craft differs from five unmotivated template defaults piled together:
 
-## Information density
+- **Visual tells**: Unmotivated purple/indigo/blue-violet gradients; neon-on-near-black dev tropes or warm-cream + serif + terracotta editorial defaults unrelated to the subject; gradient text and gradient primary CTAs; frosted glass and radial background halos used everywhere instead of to show depth; uniform bubbly radii and identical soft shadows (`card-in-card-in-card`) replacing layout; unstyled `system-ui` stacks with flat hierarchy; decorative blobs, geometric filler art, or emoji headings/bullets (`✨`, `🚀`, `⚡`).
+- **Structural tells**: Symmetrical 3-column icon-in-tinted-circle feature grids regardless of content shape; tracked-out ALL-CAPS eyebrow chips above every heading; `01 / 02 / 03` labels on non-sequential items; bento grids giving equal area to unequal concepts; unattributed social proof or invented stat strips (`10k+ users · 99.9%`); decorative sparklines/rings detached from real user data; routing every secondary action into a centered modal.
+- **Copy tells**: Vaporware slogans (`Unlock the power of…`, `Supercharge your workflow`, `All-in-one seamless platform`); workspace happy-talk welcome paragraphs repeating what the sidebar already says (measure what fraction of screen words can be deleted with zero information loss); spaced em-dash aphorisms (`Built for speed — designed for scale`) and middle-dot chains (`Fast · Secure · Modern`); vague CTAs (`Get Started`, `Learn More`, `Submit`, `Continue`) instead of concrete outcome verbs (`Create workspace`, `Send invite`); chatty/apologetic errors; and multi-sentence helper prose compensating for an unclear control.
 
-Information density is neither "less is better" nor "pack everything in"; judge it against the surface's job and user frequency.
+## Priority scale
 
-On **operate surfaces** — workspaces, tables, queues, logs, editors, and admin consoles — people return daily to scan, compare, triage, and act. The dominant failure here is **starvation density**: marketing-sized hero headers inside a working app, puffy card grids showing four records where a compact table shows twenty-five, wide empty margins beside truncated titles, or hiding status and primary actions behind per-item menus and modals. Recommend tighter row rhythm, tabular alignment, scannable columns, and inline actions so operators see working context in one viewport without constant scrolling.
-
-On **onboard and persuade surfaces** — first-run setup, landing pages, pricing, and rare high-consequence choices — people lack a mental map of the product. The dominant failure here is **overload density**: walls of ten ungrouped options at a single decision point (exceeding the roughly four chunks working memory holds comfortably), exposing advanced flags before basic setup works, or mixing primary setup steps with secondary upsells and documentation links. Recommend chunking, sensible defaults, and progressive disclosure limited to one clear next layer.
-
-Separate **data density** from **chrome density**. High data density with shared headers, clean alignment, and restrained typography speeds experts up; high chrome density — boxes inside boxes, repeated field labels on every tile, redundant icons next to plain words, and status pills on every row when 98% share the same healthy state — creates clutter even when very little information is shown.
-
-## AI slop
-
-AI slop is the recognizable cluster of unchosen generator defaults across styling, page structure, and copy that strips a product of identity and makes users suspect nobody cared enough to design it. Judge by intent and craft rather than mechanical keyword bans: a single trait owned deliberately by a brand can work, whereas multiple unmotivated defaults stacked together expose template output.
-
-Watch for **visual tells**: unmotivated purple, indigo, or blue-to-violet gradients; neon-accent-on-near-black developer clichés or warm-cream-plus-terracotta editorial defaults detached from the product's domain; gradient headline text and gradient primary buttons; frosted glass and radial background spotlights pasted across ordinary panels; uniform large border-radius and identical soft drop shadows wrapping cards inside cards in place of real layout; unstyled default system fonts with flat weight contrast; decorative blobs, wavy dividers, geometric filler illustrations, or emoji (`✨`, `🚀`, `⚡`) standing in for hierarchy and iconography.
-
-Watch for **structural tells**: the symmetrical three-column feature grid (icon in a tinted circle, bold title, two-line blurb) applied regardless of what the content actually needs; tracked-out ALL-CAPS eyebrow chips above every section heading; `01 / 02 / 03` numbering on unordered concepts; bento grids giving equal box area to unequal ideas; placeholder or unverifiable social proof ("10,000+ happy teams", five-star quote strips without real attribution); decorative sparklines, progress rings, or fake dashboard widgets that represent no real user data; and routing every secondary action into a centered modal.
-
-Watch for **copy and microcopy tells**: vaporware headlines ("Unlock the power of...", "Supercharge your workflow", "Your all-in-one intelligent platform"); happy-talk welcome paragraphs at the top of workspaces that repeat what the navigation already says (count how many words on a working screen can be cut without losing meaning); spaced em-dash slogans ("Built for speed — designed for scale") and middle-dot taglines ("Fast · Secure · Effortless"); vague button labels ("Get Started", "Learn More", "Submit", "Continue") instead of specific outcome verbs ("Create project", "Invite teammate"); apologetic or chatty error filler instead of plain cause-and-fix wording; and multi-sentence helper text compensating for a control whose label and structure should have been self-explanatory.
-
-## Priority calibration
-
-Rank findings so the team fixes product-defining problems before polishing corners:
-
-- **P0 (Blocking)**: A core user journey cannot complete, user data or drafts are silently lost or corrupted, navigation or auth traps the user, or crashes and unhandled failures break primary workflows.
-- **P1 (Major product or UX flaw)**: A table-stakes capability is missing from the core loop, a frequent operator workflow suffers heavy click or context-switch tax, severe starvation or overload density cripples scanning, or pervasive AI slop undermines trust on primary screens.
-- **P2 (Moderate friction or craft gap)**: Secondary flows confuse or stall, empty/loading/error states are missing or unhelpful, component styles or vocabulary drift across pages, responsive layouts clip or overflow, or localized slop and vague copy weaken clarity.
-- **P3 (Polish)**: Minor alignment, spacing rhythm, typographic hierarchy, edge-case truncation, or microcopy tightening.
+- **P0 (Blocking)**: Core user loop cannot finish, user data/drafts silently vanish or corrupt, auth/routing traps the user, or crashes/5xx break primary paths.
+- **P1 (Major product or UX flaw)**: Missing table-stakes capability on the core loop, heavy click/context-switch tax on frequent operator paths, severe density mismatch crippling scan/comprehension, or pervasive AI slop gutting credibility on primary views.
+- **P2 (Moderate friction or craft gap)**: Confusing secondary flow, missing empty/loading/error/timeout state, cross-screen token/term drift, responsive breakage, or localized slop/vague copy.
+- **P3 (Polish)**: Minor alignment, spacing, type scale, truncation, or microcopy tightening.

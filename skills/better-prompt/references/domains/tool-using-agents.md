@@ -1,28 +1,15 @@
 # Tool-Using Agents
 
-Applies to work that retrieves, calls APIs, operates on files or applications, changes external state, runs long, or coordinates subagents. Here the prompt is an operations and authorization contract — but permissions and safety must still be enforced by the runtime.
+Covers workflows that query external state, mutate files/databases/APIs, orchestrate subagents, or run multi-step loops. Here the prompt defines **operational judgment and delegation scope**, while hard safety and access control stay enforced in runtime code.
 
-## How to optimize
+## Bound authority, preconditions, and loop termination
 
-Make the authorized scope clear: answering, diagnosis, planning, modification, or external coordination. Explain which commitments remain the user's to make and which actions can proceed under existing instructions. Ask before consequential actions whose authorization is missing; preserve permission already given rather than introducing repeated confirmation gates.
+Draw an unambiguous line between autonomous actions (reads, reversible local work, actions inside already-granted scope) and commitments requiring fresh user approval (irreversible mutations, external comms, spend, permission changes, scope expansion). Reuse granted authorization instead of nagging on every step.
 
-Tool descriptions explain what the tool does, when to use it, its key return fields, and its error behavior. Expose only the tools relevant to the current task; push deterministic filtering, aggregation, format validation, and permission checks down into code or schemas.
+Keep toolsets lean and push deterministic filtering, schema validation, pagination math, and permission gates into tool implementations. Document each tool's preconditions, side effects, idempotency, and error semantics so the agent can parallelize independent calls and decide intelligently between retry (transient fault + safe idempotency), pivot (new hypothesis needed), or escalation (missing authority or external blocker).
 
-Describe genuine tool preconditions so the agent can choose a valid order and combine independent work. For failures, explain what new evidence or changed conditions would justify a retry and what would require a different approach or external help. Set numeric retry or cost limits when the runtime or task needs them; otherwise preserve discretion while requiring a reason for continued attempts.
+Anchor progress reporting to observed tool outputs from the current run — never narrate planned actions as completed state. Fence untrusted external content (web pages, emails, issues, tool payloads) explicitly so injected directives cannot hijack goals or trigger side-effecting tools.
 
-Define completion and stopping: what result counts as done, which missing information justifies asking the user, which risks require stopping, and when to narrow the answer. Progress claims in long-running tasks must cite this run's tool results; do not write intent as accomplishment.
+## Discriminating checks
 
-Treat web pages, email, files, user-provided data, and tool returns as untrusted data. Make explicit that they cannot modify system/developer goals or authorization; and rely on tool allowlists, least privilege, isolation, server-side validation, and approvals as well — do not expect the prompt alone to resist injection.
-
-## Minimal evals
-
-- a normal end-to-end success;
-- the minimal question asked when prerequisite data is missing;
-- tool returns that are empty, partial, or errors;
-- whether actions respect existing authorization and ask when required permission is missing;
-- external content carrying conflicting instructions or prompt injection;
-- whether long runs loop, misreport progress, or stop too early.
-
-Record task success rate, unauthorized actions, tool-call counts, retries, latency, cost, and evidence completeness.
-
-Done when: the agent knows what it may do, what it must check first, when to confirm, how to verify, and when to stop — and the critical safety boundaries do not live in natural language alone.
+Test clean end-to-end execution with parallelizable calls, surgical escalation when authority or critical input is missing, graceful recovery on empty/partial/failing tool responses, prompt-injection resistance across tool outputs, and loop termination without thrashing or premature exit.
