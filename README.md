@@ -54,7 +54,7 @@ current goal
 
 Existing documents are checked against the current goal and project state before reuse. Matching packages resume; missing or stale documents are repaired from supported decisions, and unrelated goals stay in separate directories. The five execution documents preserve `VISION.md` (outcomes and scope), `DOR.md` (readiness gaps and dependencies), `DOD.md` (acceptance and evidence), `LOOP.md` (execution judgment and completion conditions), and `PROGRESS.md` (current state and evidence history).
 
-These are responsibilities, not mandatory stages. The agent chooses work by actual dependencies and feedback, records decisions as they emerge, and verifies outcomes with commands, repeatable user procedures, or explicit human acceptance. Required regression must pass for the final state before completion; a blocked handoff remains unfinished work.
+These are responsibilities, not mandatory stages. Rather than running heavyweight reviews on every turn, execution advances from a working demo slice to implementation, functional verification, consolidating major stage work, and deep architectural review once real behavior and boundaries are proven in running code. Required regression must pass for the final state before completion; a blocked handoff remains unfinished work.
 
 ## How to use it
 
@@ -99,7 +99,7 @@ The output is a standalone Markdown note in the user's language. When Gist deliv
 - **Architecture starts with forces, not patterns.** Business outcomes, quality scenarios, constraints, and credible change determine structure and technology; every layer and extension point must pay for itself.
 - **Performance is behavior under load.** Define the workload and target, find the real constraint, then choose the transformation whose trade-offs fit the evidence.
 - **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
-- **Interaction lowers cognitive cost.** Start from users, tasks, and evidence; weigh conflicting principles by frequency, risk, reversibility, and expertise; design each action as a full state lifecycle with cheap recovery; judge the interface by walking its flows, not by its screenshot.
+- **Interaction lowers cognitive cost.** Scale capability through restraint, opinionated defaults, and contextual or command-indexed depth rather than stacking features onto the screen; design each action as a full state lifecycle with cheap recovery; dogfood live flows across density and AI slop rather than judging screenshots.
 - **Products prove themselves in live use.** Experience a running product blind before reading its code; weigh feature closure, click tax, visual hierarchy, density for the surface's mode, and unchosen AI-slop defaults from real end-to-end journeys.
 - **Learning follows mechanisms.** Trace concrete behavior through source, explain design costs as well as benefits, and extract a small exercise that tests understanding.
 - **Files carry state.** Decisions, readiness risks, completion criteria, execution rules, and progress survive across agents and context windows.
@@ -119,10 +119,10 @@ skills/
 │   ├── references/   # domain guides, model adaptation, evaluation
 │   └── templates/    # prompt delivery skeleton
 ├── interaction-design/
-│   ├── references/   # patterns, evaluation, CLI, content and localization, AI and agents
+│   ├── references/   # modern restraint cases, patterns, evaluation, CLI, i18n, AI
 │   └── templates/    # interaction spec and review skeletons
 ├── product-dogfood/
-│   ├── references/   # five critique lenses and ego-lite web exploration
+│   ├── references/   # five critique lenses and ego-lite-preferred web exploration
 │   └── templates/    # prioritized dogfood critique skeleton
 └── study-codebase/
     ├── references/   # Gist publication and verification

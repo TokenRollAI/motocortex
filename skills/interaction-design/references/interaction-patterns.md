@@ -1,100 +1,41 @@
 # Interaction Patterns
 
-Each pattern below exists to close the loop between an action, the system's response, and the next step. Adapt them to the platform's native components and the product's design system; the reasoning matters more than the exact form.
+Component-level rules for closing the loop between user input, system state, and recovery. Adapt mechanics to the product's design system while preserving the behavioral invariants below.
 
-## Controls and asynchronous actions
+## Async controls and unknown outcomes
 
-Give interactive surfaces consistent hover, focus-visible, and pressed states from one shared definition, so every control signals operability the same way. Hover only enhances; the control must be discoverable and usable without it.
+Model async controls around five states rather than boolean `isLoading`: `idle | pending | success | failure | unknown`. While `pending`, lock dimensions, block duplicate submission, and scope indicators locally rather than masking the whole screen. On `success`, confirm in place and expose undo where supported. On definite `failure`, retain user input and place recovery next to the trigger.
 
-An asynchronous button moves through pressed, pending, and then success, failure, or unknown outcome. While pending, keep its size stable, block duplicate submission, and show progress locally rather than covering the page. On success, confirm in place and offer undo when the change is reversible. On a definite failure, keep the user's input and state how to retry.
+Treat network drops and client timeouts as `unknown`: reconcile server state (or rely on a verified idempotency key / natural deduplication rule in the API) before offering retry so users never double-charge or double-send.
 
-A timeout or dropped connection is not a definite failure: the server may already have sent the message or charged the card. Treat it as an unknown outcome. Say so plainly, keep the input, and resolve the outcome by querying or reconciling state before offering a retry. Offer an immediate retry only when the existing API makes it safe, for example through an idempotency key or a natural deduplication rule; verify that support in the code or API contract rather than assuming it.
+## Save status, loading, and forms
 
-Model feedback per action rather than per mockup. A shape such as the following keeps the whole lifecycle in one place:
+Display save/sync state inline beside the edited object (`Saving…`, `Saved`, `Offline — changes safe locally, retrying on reconnect`) via a polite live region that never steals focus. Match wait indicators to system knowledge: structural skeletons when layout is stable, determinate progress when measurable, compact local spinners for brief waits, and background execution with visible status + cancel for long jobs.
 
-```ts
-type AsyncState = "idle" | "pending" | "success" | "failure" | "unknown";
+Validate forms when correction is cheap (on blur or submit, never mid-keystroke before valid input is finished), programmatically associate errors with fields, summarize failures on submit while moving focus to the first invalid control, and retain all non-secret inputs across errors.
 
-interface ActionFeedback {
-  state: AsyncState;
-  message?: string;
-  recoverAction?: "retry" | "undo" | "cancel" | "check-status";
-}
-```
+## Destructive safeguards, toasts, and empty states
 
-## Save and sync status
+Use immediate execution + undo/trash/history for reversible edits. Reserve confirmation dialogs for irreversible, high-impact mutations, naming the specific affected objects and verb on the trigger (`Delete 3 projects`, never `OK` or `Yes`).
 
-Show saving status in text next to the content it concerns: saving, saved, or failed. A failure message must say whether the work is still safe locally and what will happen next, for example that it will retry after reconnecting. Announce these changes through a polite status region so assistive technology reports them without stealing focus.
+Keep tooltips strictly supplemental and reachable on both hover and keyboard focus. Reserve toasts/snackbars for non-blocking confirmations or undo affordances with generous timeouts — never as the sole channel for errors requiring user action. Turn empty states into starting points: state what lives here, why it matters, and provide the primary creation, import, or template action directly.
 
-## Loading
+## Accelerators and drag-and-drop
 
-Choose the indicator from what the system knows. When the structure of the result is known, show a skeleton of that structure. When progress is measurable, show determinate progress. For short, uncertain waits, a small spinner near the pending region is enough. For long work, run it in the background with visible status and a way to cancel. Avoid full-page loading for a local action, since it discards context and makes small actions feel expensive.
+Expose keyboard shortcuts beside menu actions and inside a searchable command palette, keeping bulk mutations under the same undo/confirm contract as single-item actions.
 
-## Forms and errors
+Every drag-and-drop interaction requires **two** independent non-drag paths: a single-pointer click/tap alternative (move menu, up/down controls, or select-then-place — required by WCAG 2.2 SC 2.5.7) **and** full keyboard operability, with valid/invalid drop feedback shown before release.
 
-Validate at the point where a correction is cheap, show errors next to the field that caused them, and associate the message with the field programmatically. After a failed submission, also summarize the errors and move focus to the summary or the first invalid field. Pair error color with text or an icon. Keep entered values after any failure, except secrets and expiring credentials, which are cleared by convention.
+## Data tables, search, and URL state
 
-## Destructive and irreversible actions
+Lead rows with human-meaningful identifiers, pin headers (and key identity columns on wide tables) during scroll, and show active filter counts with one-click reset. State explicit selection scope on bulk actions (`25 on this page` vs `all 412 matching`). Prefer non-modal side drawers for row editing so neighboring rows stay visible for comparison. Persist filter, sort, pagination, and drawer state in the URL so refresh, sharing, and Back work predictably; choose pagination or explicit load-more whenever users compare items or need footer access, reserving infinite scroll for casual feeds. Use native `<table>` semantics unless cells require spreadsheet-style arrow-key navigation (an ARIA `grid` captures arrow keys and clashes with embedded composite controls).
 
-For reversible deletion or overwrite, act immediately and offer undo, a trash, or version history. For irreversible, high-impact actions, show the affected objects and consequences first, then require an explicit confirmation whose button names the action, such as "Delete 3 projects" rather than "OK". Avoid confirmation on routine actions; frequent dialogs train people to dismiss them unread.
+Search the broadest sensible scope first and narrow via post-search filters. Never auto-highlight late-arriving autocomplete items such that pressing `Enter` hijacks the literal typed query. On zero results, keep the query editable and offer concrete recovery (filter removal, broader scope, typo fallback with one-click revert to literal query).
 
-## Tooltips, toasts, and snackbars
+## Notifications, collaboration, mobile, and motion
 
-Tooltips explain; they do not contain essential functions or information. Show them on both hover and keyboard focus, keep them dismissible, and associate them with their trigger as a description.
+Route only genuinely time-critical events to interrupting channels; batch or inbox everything else, scoped by user-controllable category, with self-contained deep links that clear unread indicators on view.
 
-Toasts and snackbars suit brief, non-blocking confirmations, and a snackbar is a good place for an undo action. Give actionable messages enough time to be used, and never rely on a disappearing toast as the only channel for an error the user must resolve.
+Surface live presence, sharing scope, and permission bounds right where edits happen. Match concurrency resolution to data shape: property-level last-writer-wins for cheap independent fields, CRDT/OT merge for rich text, or visible expiring locks with takeover for unmergeable artifacts — surfacing unresolvable conflicts side-by-side with version history rather than silently overwriting work.
 
-## Empty states and onboarding
-
-An empty state explains what belongs here, why it is useful, and offers one clear next step, such as creating an item, importing data, or starting from a template or example. "No data" alone leaves the user stuck.
-
-Let people complete the first task directly. Introduce a feature with a contextual hint when it first becomes relevant, and keep hints skippable and dismissible. A long, mandatory product tour asks people to memorize features before they have any context for them.
-
-## Accelerators
-
-Show shortcuts in menus, tooltips, and the command palette, next to the visible action they speed up. A command palette should search commands by name and synonyms, show their shortcuts, and act on the current selection or context. Bulk actions and saved views should preserve the same undo and confirmation policies as single actions.
-
-## Drag and drop
-
-Highlight valid drop targets only while dragging over them, and give invalid targets a clear refusal signal. Show where the item will land before release. Provide two separate paths beyond dragging. First, a single-pointer path that works by clicking or tapping, such as a move menu, move-up and move-down buttons, or tap-to-select then tap-destination, for people who cannot perform precise drags; WCAG 2.2 success criterion 2.5.7 requires this, and keyboard support alone does not satisfy it. Second, keyboard operability of the same outcome for keyboard and switch users, as a distinct requirement.
-
-## Data tables and lists
-
-Lead each row with a human-readable identifier rather than a generated ID, and order columns by importance to the task. Keep headers, and usually the first column, visible while scrolling. Make filtering easy to find, fast, and clearly indicated when active, including a count of what the filter hides and a one-step way to clear it. Apply filters instantly when results return within about a second; when they may be slower, let people apply a batch of filter changes at once.
-
-Support bulk selection with checkboxes and a select-all that states its scope, such as the current page or all matching results. Let people hide and reorder columns without relying on dragging, and indicate when columns are hidden. Prefer a non-modal side panel for editing a row, since people often need to refer to other rows while they edit.
-
-Use pagination or a "load more" control when people look for specific items, compare, or need to reach content below the list; reserve infinite scroll for homogeneous feeds meant for browsing. Whatever the choice, restore the position, filters, and sort when people return. Keeping view state in the URL is a common way to make it shareable, restorable, and consistent with the back button.
-
-Use a native table for static tabular data. Use an interactive grid pattern only when cells are editable or individually actionable; it takes a single tab stop and moves between cells with arrow keys, which becomes hard to use when the cells contain controls that also need arrow keys.
-
-## Search
-
-Search the broadest sensible scope by default, show the scope that was searched, and let people narrow results afterwards with filters rather than choosing a scope before searching. Make suggestions visually distinct from the typed text, highlight the matching words, and always allow searching exactly what was typed; avoid preselecting a suggestion when suggestions can arrive late, since the enter key would then search something the person did not type.
-
-A zero-result page must say clearly that nothing matched, show what was searched, and offer a way forward, such as spelling corrections, broader scope, removing filters, or related content. Many people abandon after one failed search instead of rephrasing, so the recovery must be on the page. When correcting a query automatically, say so and offer the original.
-
-## Notifications
-
-Classify each notification by honest urgency, and let only time-critical events interrupt; route the rest to passive channels such as an inbox, badges, or scheduled digests. Give each kind of notification its own channel or category so people can control them independently, and respect platform focus and do-not-disturb modes. Ask for notification permission after showing the value, explain what will be sent, and keep promotional messages separate, opt-in, and never labeled as urgent.
-
-Make every notification actionable and self-contained, with a direct path to the relevant object and enough context to resume work there. Clear badges and indicators once the person has seen what they point to. Do not rely on a badge or a transient notification as the only channel for something that requires action.
-
-## Collaboration and concurrency
-
-Show who else is present, what they are viewing or editing, and who can see a shared object. Make sharing and permission state visible where people decide what to write, not only in a settings page. When one person follows or highlights another's view, make it visible to both and easy to decline.
-
-Choose a conflict strategy that fits the data. Property-level last-writer-wins, where the server orders changes, is simple and works when concurrent edits to the same property are rare and cheap to redo; text and structured documents usually need merging; exclusive locks suit cases where merging is meaningless or costly, as long as the lock holder, its age, and a way to take over are visible. When a conflict cannot be resolved automatically, show both values and let a person choose rather than silently discarding work, and keep a readable version history so any outcome can be inspected and restored.
-
-For offline or local-first work, show clearly what is saved locally, what has synchronized, and what is waiting, and surface conflicts after reconnecting at the objects they affect.
-
-## Mobile and touch
-
-Hidden gestures are rarely discovered and easily forgotten, even after a hint. Offer a visible control for every gesture-driven action, reserve swipe actions on list items for conventional operations such as delete or archive, and keep swipe meanings consistent across the app. Prefer system gestures to custom ones, and do not override system back navigation to run logic unrelated to the visible UI state.
-
-Size touch targets for fingers, around 44 by 44 points on iOS and comparable density-independent sizes elsewhere, with spacing around them. Touch accuracy drops toward screen edges and corners, so give edge targets extra size and keep destructive controls away from frequently used ones. People switch grips often, so avoid designs that only work for one hand position. Keep content and controls inside the platform's safe areas.
-
-## Motion
-
-Use motion to show where something came from or went, that state changed, or where attention should move. Keep it short enough not to delay information, and remove or reduce it under reduced-motion preferences.
-
+On touch devices, back every swipe or gesture with a visible control, respect platform back-navigation and safe areas, space destructive triggers away from frequent tap zones, and size targets generously (~44pt on touch, >=24px CSS minimum on pointer web). Use short motion only to clarify spatial origin, state transition, or focus shift, honoring `prefers-reduced-motion`.

@@ -1,32 +1,31 @@
 # Interaction Review Template
 
-Use this when the task calls for a written interaction review. Write it in the user's language, replace placeholders with findings, and keep only findings with a concrete user, action, and failure. Order findings by severity. Label every finding by its evidence so predictions are not mistaken for observations.
+Write in the user's language, keeping only concrete findings backed by a specific persona, action, and failure mechanism. Rank by `frequency x impact x persistence`, and label evidence class (`observed | measured | predicted`) explicitly so heuristic predictions are never passed off as runtime observations.
 
 <interaction-review-template>
-# [Feature or product]: Interaction Review
+# [Feature or Surface]: Interaction Review
 
-[Scope reviewed, build or design version, platforms, primary users and tasks assumed, and the evidence available: heuristic inspection, running build, usability sessions, analytics, or support data]
+[Reviewed scope, build/revision, platforms/viewports, target personas and tasks, and evidence basis: live walkthrough, telemetry, usability sessions, or heuristic inspection]
 
-## Summary
+## Executive judgment
 
-[The few problems that most affect task completion or risk, and the overall recommendation.]
+[The 2-3 highest-impact issues governing task completion, error risk, or operator speed, and the overarching recommendation.]
 
-## Findings
+## Ranked findings
 
-### [Short problem statement]
+### [S4 | S3 | S2 | S1] [Crisp problem statement]
 
-- Severity: [0 to 4] because [frequency, impact, persistence]
-- Evidence: [observed | measured | predicted], [what supports it]
-- Who and when: [user, task, and the situation in which it occurs]
-- What happens: [the concrete failure, confusion, or risk]
-- Likely cause: [the principle or mechanism involved]
-- Recommended fix: [change that follows existing conventions, and its cost or trade-off]
+- Evidence: [`observed` | `measured` | `predicted`] — [repro trace, screenshot/command, or metric]
+- Persona and trigger: [who hits this, during which task and state]
+- Failure and cost: [what breaks, stalls, bloats the viewport, or misleads, and whether it persists for repeat users]
+- Root mechanism: [missing state, feature-stacking bloat, density mismatch, AI slop, object mismatch, safeguard imbalance, or affordance gap]
+- Fix: [concrete change, subtraction/cut, or copy replacement reusing existing conventions, plus any trade-off accepted]
 
-## Trade-offs and open questions
+## Trade-offs and open decisions
 
-[Conflicting principles the fix must balance, decisions that need the user or stakeholders, and what evidence would settle each.]
+[Competing principles balanced by the proposed fixes, user-owned choices required, and the smallest check that settles uncertain predictions.]
 
-## Not verified
+## Unverified states
 
-[Scenarios, states, platforms, or assistive technologies that were not exercised, and how to verify them.]
+[Reachable states, input modes, viewports, or assistive paths not exercised in this pass and how to verify them.]
 </interaction-review-template>

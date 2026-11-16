@@ -1,53 +1,53 @@
 # Product Dogfood Report Template
 
-Use this skeleton when delivering a written product dogfooding critique. Write the report in the user's language with direct, unhedged judgment. Replace placeholders with concrete findings, embed or link captured screenshots and runtime artifacts by path, keep only findings backed by real usage evidence, and order findings by product and user impact.
+Write in the user's language with direct, unhedged product judgment. Strip placeholders, cite absolute or repo-relative paths to captured screenshots and runtime evidence, include only findings backed by real product operation, and rank `P0` -> `P3` by user and product impact.
 
 <dogfood-report-template>
 # [Product Name]: Product Dogfood Critique
 
-[Target URL, CLI, or build version, date, viewports and surfaces exercised, signed-in roles or personas tested, and evidence directory]
+[Target URL/CLI/version, date, viewports & surfaces exercised, signed-in roles/personas tested, and evidence directory]
 
 ## Blunt verdict
 
-[Start with the unfiltered 5-second first impression: what the product communicates at a glance, the first three elements the eye lands on, and whether the path to first value is obvious. Follow with an honest summary of whether the product closes its core user job, what works genuinely well, and the 3 highest-leverage changes — including features or chrome to cut.]
+[Open with the cold 5-second read: what the product communicates at a glance, the first 3 elements the eye hits in order, and whether first value is immediately obvious. Follow with an unvarnished verdict on whether the product closes its core user job, what genuinely works, and the top 3 highest-leverage moves — explicitly including features or chrome to cut.]
 
-## Journeys walked
+## Journeys exercised
 
-[Briefly narrate the concrete end-to-end tasks attempted as a first-time user, as a repeat operator, and on edge or failure paths. Note step counts, time or click friction, and the exact points where momentum held or broke.]
+[Concise account of end-to-end tasks run cold (first-time user), at repeat speed (10x/day operator), and across edge/failure probes — noting step/click counts and exact points where momentum held or broke.]
 
 ## Critique by lens
 
 ### Functional design
 
-[Assess whether features close the real user workflow end-to-end, which table-stakes capabilities are missing, which existing features or panels fail to earn their keep, and whether objects and navigation match the user's domain model.]
+[Loop closure from creation to payoff, missing table-stakes capabilities, hollow features/panels failing to earn their keep, and alignment between navigation/objects and user mental models.]
 
 ### Interaction and flow
 
-[Assess click and context-switch tax, modal vs inline choices, state lifecycles (empty, loading, error, timeout, reload), undo and destructive safeguards, and keyboard or bulk efficiency for repeat use.]
+[Click/modal/context-switch tax, memory bridges, state lifecycles (empty, pending, definite error, timeout, reload/Back preservation), undo vs named destructive safeguards, and keyboard/bulk speed.]
 
 ### UI and visual craft
 
-[Assess visual hierarchy, alignment and spacing rhythm, typographic scale, color and contrast discipline, interactive signifiers, cross-page consistency, and responsive behavior.]
+[Focal hierarchy, contrast discipline, cross-screen token consistency (type, spacing, radii, status colors), non-hover signifiers, and desktop/mobile layout integrity.]
 
 ### Information density
 
-[Assess signal-to-noise ratio relative to the surface's mode (operational workspace vs onboarding or persuasion): call out starvation density, overload density, wasted viewport above the fold, or missing progressive disclosure.]
+[Signal-to-noise calibrated to surface mode (operator workspace vs onboarding/persuasion): above-the-fold data yield, starvation vs overload density, and chrome density vs real data density.]
 
 ### AI slop
 
-[Call out templated visual clichés, structural filler, decorative noise, and generic or happy-talk copy observed in the product, distinguishing unedited generator defaults from deliberate brand choices, and give concrete replacements.]
+[Visual, structural, and microcopy generator tells observed vs deliberate brand craft — paired with concrete structural, typographic, or copy replacements.]
 
 ## Prioritized findings
 
-### [P0 | P1 | P2 | P3] [Short, direct problem statement]
+### [P0 | P1 | P2 | P3] [Crisp, direct problem statement]
 
-- Lens: [Functional design | Interaction | UI craft | Information density | AI slop]
-- Surface and task: [URL, screen, or command, and the user goal in progress]
-- Evidence: [observed live | observed live + source-verified], [screenshot paths, reproduction steps, or console/network output]
-- What happens and why it hurts: [the concrete behavior and its cost to comprehension, speed, completion, or trust]
-- Recommendation: [exact product, flow, layout, or copy change to make, and any trade-off]
+- Lens: [`Functional` | `Interaction` | `UI craft` | `Density` | `AI slop`]
+- Surface & task: [route, view, or command + user goal in flight]
+- Evidence: [`live` | `live + source-verified`] — [screenshot path(s), repro steps, DOM metric, or console/network output]
+- Impact: [exact behavior observed and how it blocks value, taxes speed, or erodes trust]
+- Fix: [specific feature cut/addition, flow restructure, layout/density change, or replacement copy]
 
-## Unverified surfaces and open product choices
+## Unverified surfaces and product forks
 
-[Flows, permissions, devices, or external integrations that could not be exercised live and what is needed to test them, followed by product-direction trade-offs that belong to the owner.]
+[Flows, permissions, integrations, or platforms blocked from live execution and what unlocks them, plus strategic product trade-offs reserved for the owner.]
 </dogfood-report-template>
