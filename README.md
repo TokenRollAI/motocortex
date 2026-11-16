@@ -36,9 +36,10 @@ npx skills add TokenRollAI/motocortex --global
 | `performance-optimization` | model | design, diagnose, optimize, or review performance from workload goals and evidence | task-adapted strategy, diagnosis, or verified change |
 | `better-prompt` | model | draft, diagnose, or optimize prompts with focused domain guidance | optimized prompt, runtime notes, minimal evals |
 | `interaction-design` | model | design, review, or implement interaction from user goals, mental models, and the full lifecycle of each action | task-adapted flow design, evidence-labeled review, verified UI change, or interaction spec |
+| `product-dogfood` | model | use a running product end-to-end like a real user and deliver candid feedback on functional design, interaction, UI craft, information density, and AI slop | prioritized product critique backed by live runtime evidence |
 | `study-codebase` | model | explain a project's purpose, architecture, dependencies, core implementation, and transferable lessons from source evidence | study note, proposed implementation exercise, GitHub Gist when requested |
 
-`start-a-goal` is the single user-invoked entry point. The other six are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, `better-prompt`, `interaction-design`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
+`start-a-goal` is the single user-invoked entry point. The other seven are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, `better-prompt`, `interaction-design`, `product-dogfood`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
 
 ## How start-a-goal works
 
@@ -78,6 +79,8 @@ Rewrite this prompt around intent, reasons, and judgment; give me concrete check
 
 Review this checkout flow's interaction: missing states, error recovery, undo, keyboard access, and expert shortcuts.
 
+Dogfood http://localhost:3000 end-to-end and give blunt feedback on missing workflow steps, interaction friction, UI craft, information density, and AI slop.
+
 Use study-codebase to study <repository URL or local path>, explain its core design, and publish the learning note as a GitHub Gist.
 ```
 
@@ -97,6 +100,7 @@ The output is a standalone Markdown note in the user's language. When Gist deliv
 - **Performance is behavior under load.** Define the workload and target, find the real constraint, then choose the transformation whose trade-offs fit the evidence.
 - **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
 - **Interaction lowers cognitive cost.** Start from users, tasks, and evidence; weigh conflicting principles by frequency, risk, reversibility, and expertise; design each action as a full state lifecycle with cheap recovery; judge the interface by walking its flows, not by its screenshot.
+- **Products prove themselves in live use.** Experience a running product blind before reading its code; weigh feature closure, click tax, visual hierarchy, density for the surface's mode, and unchosen AI-slop defaults from real end-to-end journeys.
 - **Learning follows mechanisms.** Trace concrete behavior through source, explain design costs as well as benefits, and extract a small exercise that tests understanding.
 - **Files carry state.** Decisions, readiness risks, completion criteria, execution rules, and progress survive across agents and context windows.
 
@@ -117,6 +121,9 @@ skills/
 ├── interaction-design/
 │   ├── references/   # patterns, evaluation, CLI, content and localization, AI and agents
 │   └── templates/    # interaction spec and review skeletons
+├── product-dogfood/
+│   ├── references/   # five critique lenses and ego-lite web exploration
+│   └── templates/    # prioritized dogfood critique skeleton
 └── study-codebase/
     ├── references/   # Gist publication and verification
     └── templates/    # source-backed study note and learning exercise
