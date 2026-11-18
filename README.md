@@ -32,6 +32,8 @@ npx skills add TokenRollAI/motocortex --global
 |---|---|---|---|
 | `start-a-goal` | user | carry a goal to verified completion with resumable execution documents and evidence | `VISION.md`, `DOR.md`, `DOD.md`, `LOOP.md`, `PROGRESS.md` |
 | `grill` | model | resolve consequential open decisions and record assumptions and deferred questions | `DECISIONS.md` |
+| `agent-orchestration` | model | coordinate or execute authorized multi-agent work with intent-locked briefs, proactive worker escalation, and functional verification without defensive bloat | worker brief, escalation/completion report, verified slice |
+| `demo-sketch-first` | model | align on new features, moderately complex UI/UX interactions, and data-pipeline architectures before coding with visual Joplo demos, Diagram traces, and live `feedback watch` | playable Joplo UI/Diagram demo with live feedback, plus sketch plan or applied decisions when applicable |
 | `architecture-design` | model | design or review architecture, technology choices, boundaries, and evolution without speculative complexity | task-adapted decision, design, or review |
 | `performance-optimization` | model | design, diagnose, optimize, or review performance from workload goals and evidence | task-adapted strategy, diagnosis, or verified change |
 | `better-prompt` | model | draft, diagnose, or optimize prompts with focused domain guidance | optimized prompt, runtime notes, minimal evals |
@@ -39,7 +41,7 @@ npx skills add TokenRollAI/motocortex --global
 | `product-dogfood` | model | use a running product end-to-end like a real user and deliver candid feedback on functional design, interaction, UI craft, information density, and AI slop | prioritized product critique backed by live runtime evidence |
 | `study-codebase` | model | explain a project's purpose, architecture, dependencies, core implementation, and transferable lessons from source evidence | study note, proposed implementation exercise, GitHub Gist when requested |
 
-`start-a-goal` is the single user-invoked entry point. The other seven are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `architecture-design`, `performance-optimization`, `better-prompt`, `interaction-design`, `product-dogfood`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
+`start-a-goal` is the single user-invoked entry point. The other nine are model-invoked disciplines: `grill` is used by `start-a-goal` when consequential decisions need clarification and also stands alone when uncertainty prevents useful progress; `agent-orchestration`, `demo-sketch-first`, `architecture-design`, `performance-optimization`, `better-prompt`, `interaction-design`, `product-dogfood`, and `study-codebase` are independent — the model selects them from their descriptions when a task genuinely needs them, and they do not call or depend on one another.
 
 ## How start-a-goal works
 
@@ -71,6 +73,10 @@ The model-invoked disciplines trigger on their own when a task matches their des
 ```text
 Use grill to settle the decisions that matter before we commit to this idea.
 
+Split this cross-module change across focused workers with shared context, resolve mid-flight contract questions yourself, and verify functionality end-to-end without premature review churn.
+
+Build a visual Joplo demo for global voice input with plain user-situation cases, trace the data pipeline with a Diagram, verify rendered storyboards, and watch my board feedback live.
+
 Review this service boundary and recommend the simplest architecture that meets these quality requirements.
 
 Diagnose this latency regression, establish a representative baseline, and keep only improvements the evidence supports.
@@ -96,6 +102,8 @@ The output is a standalone Markdown note in the user's language. When Gist deliv
 - **Look up facts; surface consequential choices.** Inspect relevant context and ask where the answer changes the work. Handle ordinary reversible choices within existing intent and authorization.
 - **Do not re-litigate settled choices.** Existing stacks and conventions are recorded and reused.
 - **Checking off means evidence.** Acceptance requires observed results from a command, repeatable user procedure, or explicit human review. Failed required regression prevents completion; weakening the goal cannot make an implementation correct.
+- **Orchestration aligns intent, not ceremony.** Gather shared context once before splitting work, have one owner align on a demo first when building from scratch or introducing a moderately complex UI/UX interaction, drive implementation slices straight to end-to-end functional verification without defensive or unit-test bloat, escalate genuine ambiguity back to the coordinator, and save heavyweight review for stage integration.
+- **Sketches show expected behavior and data flow before code.** Before building from scratch or coding moderately complex UI/UX interactions, demonstrate expected behavior visually in Joplo using plain user-situation titles, trace technical architecture and end-to-end data pipelines with Diagrams when applicable, verify rendered frames and live playback, and keep `joplo feedback watch` receiving when handing over the board.
 - **Architecture starts with forces, not patterns.** Business outcomes, quality scenarios, constraints, and credible change determine structure and technology; every layer and extension point must pay for itself.
 - **Performance is behavior under load.** Define the workload and target, find the real constraint, then choose the transformation whose trade-offs fit the evidence.
 - **Prompts are contracts, not incantations.** Keep the portable core lean, add guidance only when it changes behavior, and validate it on representative cases.
@@ -113,6 +121,12 @@ skills/
 │   └── templates/    # VISION, DOR, DOD, LOOP, PROGRESS skeletons
 ├── grill/
 │   └── templates/    # durable decision record
+├── agent-orchestration/
+│   ├── references/   # hc, subagent, and worktree dispatch mechanics
+│   └── templates/    # worker brief and escalation/completion report skeletons
+├── demo-sketch-first/
+│   ├── references/   # naming contrasts, visual stage craft, and live feedback watch
+│   └── templates/    # pre-code feature sketch plan skeleton
 ├── architecture-design/
 ├── performance-optimization/
 ├── better-prompt/

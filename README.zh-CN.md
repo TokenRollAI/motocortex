@@ -32,6 +32,8 @@ npx skills add TokenRollAI/motocortex --global
 |---|---|---|---|
 | `start-a-goal` | 用户触发 | 通过可恢复的执行文档与证据，把目标推进到验证完成 | `VISION.md`、`DOR.md`、`DOD.md`、`LOOP.md`、`PROGRESS.md` |
 | `grill` | 模型触发 | 澄清影响结果的开放决策，记录假设与延后处理的问题 | `DECISIONS.md` |
+| `agent-orchestration` | 模型触发 | 协调或执行已授权的多 agent 协作：先收敛共享上下文与真实用户意图再派工，不确定事项主动向协调者汇报裁决，以功能性验证代替防御性代码与单测内耗 | worker 派发简报、阻塞/完成汇报、已验证切片 |
+| `demo-sketch-first` | 模型触发 | 在从零开发或做较复杂 UI/UX 交互前先给可视化 Joplo 演示，用真实用户处境命名并用 Diagram 详述技术架构与数据链路，全程 `watch` 评审反馈 | 带实时反馈的可播放 UI/架构数据链路演示，按需附 Sketch 规划与已授权的评审结论 |
 | `architecture-design` | 模型触发 | 设计或审查架构、技术选型、边界与演进，排除推测性复杂度 | 按任务交付决策、设计或审查 |
 | `performance-optimization` | 模型触发 | 从负载目标与证据出发设计、诊断、优化或审查性能 | 按任务交付策略、诊断或已验证改动 |
 | `better-prompt` | 模型触发 | 用聚焦的领域指南生成、诊断或优化 prompt | 优化后的 prompt、runtime 建议、最小评测 |
@@ -39,7 +41,7 @@ npx skills add TokenRollAI/motocortex --global
 | `product-dogfood` | 模型触发 | 像真实用户一样端到端深度使用运行中的产品，从功能设计、交互、UI 质感、信息密度与 AI Slop 给出直接反馈 | 带运行态证据的优先级产品评审与改进建议 |
 | `study-codebase` | 模型触发 | 根据源码证据解释项目用途、架构、依赖、核心实现与可迁移的设计经验 | 学习笔记、小型实现练习提案、按需发布的 GitHub Gist |
 
-`start-a-goal` 是唯一的用户触发入口。其余七个是模型触发的纪律：`grill` 在关键决策需要澄清时由 `start-a-goal` 拉入，也可以在不确定性妨碍有效推进时单独使用；`architecture-design`、`performance-optimization`、`better-prompt`、`interaction-design`、`product-dogfood` 与 `study-codebase` 彼此独立——任务确实需要时，模型根据 description 选择它们，它们之间没有调用或依赖。
+`start-a-goal` 是唯一的用户触发入口。其余九个是模型触发的纪律：`grill` 在关键决策需要澄清时由 `start-a-goal` 拉入，也可以在不确定性妨碍有效推进时单独使用；`agent-orchestration`、`demo-sketch-first`、`architecture-design`、`performance-optimization`、`better-prompt`、`interaction-design`、`product-dogfood` 与 `study-codebase` 彼此独立——任务确实需要时，模型根据 description 选择它们，它们之间没有调用或依赖。
 
 ## start-a-goal 如何工作
 
@@ -71,6 +73,10 @@ npx skills add TokenRollAI/motocortex --global
 ```text
 使用 grill，在对这个想法作出承诺前，把影响结果的关键决策问清楚。
 
+先收敛共享上下文，把这个跨模块改造拆给少量 worker 推进：中间分歧由你裁决，按功能性验证收口，不在中途反复做重度 review。
+
+先用 Joplo 做一个全局语音输入法的可视化演示，用真实用户处境命名每个 Case，用 Diagram 讲清数据链路，渲染检查画面后开启 feedback watch 等我评审。
+
 审查这个服务边界，并推荐满足这些质量要求的最简单架构。
 
 诊断这次延迟回归，建立有代表性的基线，只保留证据支持的优化。
@@ -96,6 +102,8 @@ npx skills add TokenRollAI/motocortex --global
 - **事实自己查，关键选择交给用户。** 检查相关 context，只追问会改变工作的选择；普通可逆决策在已有意图与授权范围内自行处理。
 - **不重新争论已定选择。** 既有技术栈和约定直接记录并复用。
 - **勾选必须有证据。** 验收依据是命令、可重复的用户操作流程或明确人工审查的实际结果。必需回归失败就不能完成，也不能通过降低目标让实现变得正确。
+- **多 agent 调度对齐意图，而不是制造流程。** 派发前统一收集共享上下文与可观察的用户行为；从零开发或涉及较复杂的 UI/UX 交互时由唯一负责人先用一份演示对齐预期，再让实现切片直奔端到端功能性验证，不堆叠防御性代码与冗余单测；遇到不确定事项带证据回传协调者裁决，重度审查留到阶段合流。
+- **复杂交互与新功能先用可视化 Sketch 和架构图对齐。** 从零开始或涉及较复杂的 UI/UX 交互前总是先给 Joplo 演示：用直白标题与真实用户处境命名方案、场景与 Case，通过界面状态演示预期效果，按需用 Diagram 详细走通技术架构与端到端数据链路，核验渲染分镜与实机交互并在交付看板时确保 `joplo feedback watch` 持续接收反馈。
 - **架构从作用力出发，不从模式出发。** 让业务结果、质量场景、约束与可信变化决定结构和技术；每一层与每个扩展点都要证明自己的代价值得。
 - **性能是负载下的行为。** 先定义负载与目标、找到真实限制，再选择取舍与证据相符的变换。
 - **Prompt 是契约，不是咒语。** 可移植核心保持精简，只加入会改变行为的指南，并用代表性样例验证。
@@ -113,6 +121,12 @@ skills/
 │   └── templates/    # VISION、DOR、DOD、LOOP、PROGRESS 骨架
 ├── grill/
 │   └── templates/    # 持久化决策记录
+├── agent-orchestration/
+│   ├── references/   # hc、subagent 与 worktree 调度规范
+│   └── templates/    # worker 派发简报与上报/完成汇报骨架
+├── demo-sketch-first/
+│   ├── references/   # 命名正反对照、图形化舞台技法与实时反馈监听
+│   └── templates/    # 编码前功能 Sketch 规划骨架
 ├── architecture-design/
 ├── performance-optimization/
 ├── better-prompt/

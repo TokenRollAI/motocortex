@@ -1,0 +1,15 @@
+# Dispatch Channels and Workspace Isolation
+
+Choose the lightest channel authorized by the user and host that matches task lifetime, file isolation, and user visibility, and verify return-path delivery before scaling out.
+
+## Channel selection and operation
+
+- **Persistent interactive terminals (`hc` / `herdr-core`)**: Prefer `hc` when `HC_TERMINAL_ID` is present and workers benefit from live steerability, follow-up turns, or user inspection. Run `hc --skill` first. Resolve the coordinator's `$HC_TERMINAL_ID` in the launching shell and embed that **literal** `<coordinator-address>` in the worker brief (since `$HC_TERMINAL_ID` inside the worker's shell points to the worker itself). Launch interactive agents in the background with their initial task (`hc run --bg --name <role> --cwd <path> codex --no-daemon "<brief>"`), then check `first_message.sent` via the launch output or `hc get <role>` — if false or uncertain, inspect `hc read <role>`, resolve readiness within granted authorization (surfacing user-owned permission prompts rather than bypassing them), and confirm delivery before resending. Wait with `hc wait --children any` (next update) or `hc wait --children all` (stage barrier) rather than `sleep` or `hc read` polling loops; treat `message` and `timeout` wakes as check-ins.
+- **Native subagents**: Use host subagents (such as Codex `spawn_agent` or Claude `Agent`) for bounded read-only codebase surveys, focused contract checks, or self-contained slices returning a single structured result.
+- **Team and workspace harnesses**: Inside an active `jedv-team`, `superset` / `paradev`, or `herdr-task` session, follow that harness's installed `--help` / skill protocol and reuse the active team/workspace identity rather than initializing nested teams.
+
+## Reliable reporting, file fallbacks, and resource hygiene
+
+- **Pair push messages with an agreed report path when sandboxes restrict sockets**: Restrictive worker sandboxes (such as macOS Seatbelt `workspace-write`) can block UNIX socket connects for `hc send`. Agree on a report file path that the worker can write and the coordinator can read: the worker writes its report there first, then runs `hc send <coordinator-address> "<summary + path>"`; on any worker lifecycle event or check-in timeout, the coordinator reads the agreed report file before advancing dependent tasks.
+- **Isolate parallel writers**: Give concurrent editing workers separate git worktrees/branches verified against the intended base commit. Share a single checkout only for read-only work or strictly disjoint file ownership listed in each brief.
+- **Coordinate shared bottlenecks and clean up helpers**: Identify shared local databases, tmpfs mounts, ports, or rate-limited APIs up front; have workers run targeted checks during implementation and serialize heavy integration suites at coordinator consolidation. Once a helper's result is verified and its session is no longer needed, run `hc kill <worker>` if still live, confirm stop, and remove it with `hc rm <worker>`, leaving user-owned terminals untouched.
